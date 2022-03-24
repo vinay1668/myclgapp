@@ -13,7 +13,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended : false}))
 
 app.use('/posts', require('./routes/postRoutes.js'))
-
+app.use('/users', require('./routes/userRoutes.js'))
 
 app.use(errorHandler)
 app.listen(port,() => console.log(`server started on port ${port}.`))
