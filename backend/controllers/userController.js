@@ -8,7 +8,7 @@ const { use } = require('../routes/postRoutes.js');
 // @route   POST /users
 // @access  Public
 const register = asyncHandler(async(req,res) => {
-    const {username, password} = req.body;
+    const {username, password, name, pfp, branch} = req.body;
     if(!username || !password){
         res.status(400)
         throw new Error("please add the required fields")
@@ -27,12 +27,18 @@ const register = asyncHandler(async(req,res) => {
     // create user
     const user = await User.create({
         username: username,
-        password: hashedPassword
+        password: hashedPassword,
+        name: name,
+        pfp: pfp,
+        branch: branch,
     })
     if(user){
         res.status(201).json({
             id:user.id,
             username:user.username,
+            name: user.name,
+            pfp: user.pfp,
+            branch: user.branch,
             token: generateToken(user._id)
         })
     }
@@ -53,6 +59,9 @@ const login = asyncHandler(async(req,res) => {
         res.status(201).json({
             id:user.id,
             username:user.username,
+            name: user.name,
+            pfp: user.pfp,
+            branch: user.branch,
             token: generateToken(user._id)
         })
     }
@@ -68,6 +77,9 @@ const getMe = asyncHandler(async(req,res) => {
     res.status(200).json({
         id: req.user.id,
         username: req.user.username,
+        name: req.user.name,
+        pfp: req.user.pfp,
+        branch: req.user.branch,
     })
 })
 
@@ -85,6 +97,9 @@ const getUser = asyncHandler(async(req,res) => {
         res.status(200).json({
             id: user._id,
             username: user.username,
+            name: req.user.name,
+            pfp: req.user.pfp,
+            branch: req.user.branch,
         })
     }
 })

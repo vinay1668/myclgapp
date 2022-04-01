@@ -1,17 +1,37 @@
-import React,{useState} from 'react'
-// import { MdLogin } from 'react-icons/fa'
+import React,{useState, useEffect} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
+import {toast} from 'react-toastify'
+import {login,reset} from "../../features/auth/authSlice.js"
+import Spinner from '../../components/Spinner.js'
 import GoogleAuth from './GoogleAuth'
 
 function Login({addDetails}) {
 
-  const[user, setUser] = useState(true);
+  const[useri, setUser] = useState(true);
   const[disable,setDisable] = useState(true)
 
   const [formData, setFormData] = useState({
       username: '',
       password: '',
     })
+  
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
 
+  const {user, isLoading, isError, isSuccess, message} = useSelector(
+    (state) => state.auth)
+
+    useEffect(() =>{
+      if(isError) {
+        toast.error(message)
+      }
+      if(isSuccess || user) {
+        navigate('/dashboard')
+      }
+      dispatch(reset())
+    },[user,isError, isSuccess, message, navigate,dispatch])
+    
 
   const { username, password, } = formData
 
@@ -34,19 +54,28 @@ function Login({addDetails}) {
 
     }
 
+    const userData = {
+      username,
+      password,
+    }
+    dispatch(login(userData));
+
   }
   if(!user){
       setTimeout(() => setUser(true), 2000);
 
   }
 
+  if(isLoading) {
+    return <Spinner />
+  }
   return    (
        <>
   <section className='heading'>
     <h1 style={{marginTop:"100px",display:"inline-block",paddingRight:"20px"}}>
-    <i class="fa fa-sign-in" aria-hidden="true"></i>
+    <i className="fa fa-sign-in" aria-hidden="true"></i>
     </h1>
-    <h1 style={{display:"inline-block",paddingRight:"25px"}}>Log In</h1>
+    <h1 style={{display:"inline-block",paddingRight:"25px",paddingBottom:"20px"}}>Log In</h1>
   </section>
 
   <section className='form'>
@@ -88,7 +117,7 @@ function Login({addDetails}) {
        <GoogleAuth details = {details} setUser={setUser}/>
        </div>
 
-        {user ?  (null) :(<p style={{color:"red"}}>Email is not Authorized</p>) }
+        {useri ?  (null) :(<p style={{color:"red"}}>Email is not Authorized</p>) }
 
 
     </form>

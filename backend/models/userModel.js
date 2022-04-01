@@ -10,6 +10,20 @@ const userSchema = mongoose.Schema({
         type: String,
          required:[true, 'Please add password']
      },
+     name:{
+        type: String,
+        required:[true, 'Please add name']
+
+     },
+     pfp: {
+        type: String,
+        required:[true, 'Please add link to pfp']
+
+     },
+     branch: {
+        type:String,
+
+     },
 
 },{timestamps:true})
 

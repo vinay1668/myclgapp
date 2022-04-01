@@ -39,101 +39,322 @@
     }
   }
   
+
+
+  .form-group{
+    margin:10px;
+
+  }
   .text-box {
     height:50px;
-    width:30%;
+    width:20%;
     margin:auto
   
   }
   
   
+  .loadingSpinnerContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
+  .loadingSpinner {
+    width: 64px;
+    height: 64px;
+    border: 8px solid;
+    border-color: #000 transparent #555 transparent;
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite;
+  }
   
   
   /* imported */
+#poste
+{
+  background-color:white;
+  text-align: center;
+}
+
+#poste:hover {
+  background-color: #f8f9fa;
+}
   
-  p {
-    line-height: 1.5;
-    font-family: 'Open Sans', sans-serif;
-  }
-  h1,
-  h2,
-  h3 {
-    font-weight: 600;
-    margin-bottom: 10px;
-  }
-  
-  .heading {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 50px;
-    padding: 0 20px;
-  }
-  
-  .form,
-  .content {
-    width: 70%;
+
+  .topbar{
+    position: relative;
+    width: 45%;
+    height: 50px;
+    background-color: white;
+    border-radius: 10px;
+    /* padding: 10px; */
     margin: 0 auto;
-  }
-  
-  .form-group {
-    margin-bottom: 10px;
-  }
-  
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    padding: 10px;
-    /* border: 1px solid #e6e6e6; */
-    border-radius: 5px;
-    margin-bottom: 10px;
-    font-family: inherit;
-  }
-  
-  .form-group label {
-    text-align: left;
-    display: block;
-    margin: 0 0 5px 3px;
-  }
-  
-  .btn {
-    padding: 10px 20px;
-    border: 1px solid #000;
-    border-radius: 5px;
-    /* background: #000; */
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    text-align: center;
-    appearance: button;
+    margin-top: 20px;
+    display:flex;
+    align-items:center;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+  }
+  .column{
+    display: inline-block
+  }
+  .container{
+    position: relative;
+    width: 45%;
+    height: auto;
+    min-height: 300px;
+    
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin:0 auto;
+    margin-top: 20px;
+  }
+  .editcontainer {
+    position: relative;
+    width: 45%;
+    height: auto;
+    min-height: 10px;
+    background-color: white;
+    border-radius: 3px;
+    padding: 10px;
+    margin: 0 auto;
+    margin-top: 10px;
   }
   
-  .btn svg {
-    margin-right: 8px;
+  .middlesection {
+    padding-top: 6px;
+    padding-bottom: 40px;
+    justify-content: space-evenly;
+    text-align: left;
+  }
+  .image-editor {
+    min-height: 200px;
+    overflow: hidden;
+    border: 1px solid gray;
+    border-color: #DAE0E6;
+    border-radius: 5px;
+    margin:10px;
+  
+  }
+  .loader {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid black;
+    width: 50px;
+    height: 50px;
+    -webkit-animation: spin 1s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+  }
+  /* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+  .titlesection {
+    padding-top: 50px;
+    text-align: left;
+    padding-left: 0;
   }
   
-  .btn-reverse {
-    background: #fff;
-    color: #000;
-  }
+  .titledum{
+    display: inline-block;
+    padding: 0px;
+    align-items: right;
+    vertical-align: middle;
+    padding-inline: 20px;
+    
+    
   
-  .btn-block {
+  }
+  .commentsection {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 38px;
     width: 100%;
-    margin-bottom: 20px;
+    /* background-color: gray; */
+    text-align: left;
+    padding: 3px;
+    padding-left: 0;
+    justify-content: space-evenly;
+  
   }
   
-  .btn:hover {
-    transform: scale(0.98);
+  .dum {
+    /* text-shadow: 0px 0px 1px beige, 0px 0px 1px black; */
+    display: inline-block;
+    padding: 0px;
+    padding-left: 10px;
+    vertical-align: middle;
+    padding-inline: 20px;
+  }
+
+  .search-username {
+    width: 200px;
+  }
+  .topsection{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    text-align: left;
+    padding: 0;
+    justify-content: space-evenly;
+    padding-top: 10px;
+  }
+  .dummy {
+    display: inline-block;
+    padding: 0px;
+    padding-left: 10px;
+    vertical-align: middle;
+    padding-inline: 5px;
+    font-family: 'Poppins', sans-serif;
+  }
+  .name{
+    font-family: 'Open Sans', sans-serif;
+    font-weight:"800"
+  }
+  .rollno{
+  
   }
   
-  @media (max-width: 600px) {
+  .title-box {
+    margin:10px;
+    /* width: 90%; */
+  }
+  .editor {
+    margin: 10px;
+    margin-bottom: 45px;
+  }
+  /* .post{
+
+    position: relative;
+    left: 40%;
+    margin: 10px;
+    width: 10%;
+    min-width: 60px;
+  } */
+  .jodit-container {
+    text-align: left;
+  }
+  .jodit-status-bar {
+    visibility: hidden;
+  }
+  
+  
+  
+  
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  
+  /* mobile devices */
+  
+  @media only screen and (max-width: 600px) {
+    .editcontainer{
+      width: 95%;
+    }
+    .container{
+      width: 95%;
+    }
+    .topbar{
+      width: 95%;
+    }
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .editcontainer{
+      width: 95%;
+    }
+    .container{
+      width: 100%;
+    }
+    .topbar{
+      width: 95%;
+    }
+    .dum{
+      padding-inline: 15px;
+
+    }
     .text-box {
-      width: 90%;
+      height:50px;
+      width:80%;
+      margin:auto;
+    }
+
+  
+  }
+  @media only screen and (max-width: 988px) {
+    .editcontainer{
+      width: 95%;
+    }
+    .container{
+      width: 95%;
+    }
+    .topbar{
+      width: 95%;
+    }
+    .logout {
+      display: none;
+    }
+    .dum{
+      padding-inline: 10px;
+
+    }
+    .search-username {
+      width: 130px;
+      display: inline-block
+    }
+    .text-box {
+      height:50px;
+      width:60%;
+      margin:auto
+    
     }
   
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+  previous app.css */
+
+
+
+
+
   

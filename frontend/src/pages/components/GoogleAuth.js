@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 
-const clientId = "238335891416-t4nmmqpv12l36hvlpg59kqs68n0pdvr2.apps.googleusercontent.com";
+const clientId = process.env.REACT_APP_GOOGLE_ID;
 
 function GoogleAuth({details,setUser}) {
 
@@ -38,7 +38,7 @@ function GoogleAuth({details,setUser}) {
                     onSuccess={onLoginSuccess}
                     onFailure={onLoginFailure}
                     cookiePolicy={'single_host_origin'}
-                    isSignedIn={true}
+                    isSignedIn={false}
                     
                 /> 
         </div>

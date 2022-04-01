@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 
 function Main() {
-  const[details,setDetails] = useState();
+  const[details,setDetails] = useState('');
   const addDetails = (e) =>{
        setDetails(e)
   }

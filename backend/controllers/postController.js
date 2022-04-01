@@ -7,7 +7,27 @@ const Post = require('../models/postModel.js')
 
 const getPosts = asyncHandler(async (req,res) => {
     const post = await Post.find();
-    res.status(200).json(post)
+    var newPosts = post.map(function(post) {
+        var temPost = post.toObject();
+        if(temPost.upvotedBy.includes(req.user.id)){
+            temPost.upvoted = 1;
+            temPost.downvoted = 0
+        }
+        else if(temPost.downvotedBy.includes(req.user.id)){
+            temPost.downvoted = 1;
+            temPost.upvoted = 0;
+        }
+        else {
+            temPost.upvoted = 0;
+            temPost.downvoted = 0;
+        }
+        delete temPost.upvotedBy;
+        delete temPost.downvotedBy;
+        return temPost;
+    })
+
+   //return new post
+    res.status(200).json(newPosts);
 });
 // @desc    Create a Post
 // @route   CREATE /posts
@@ -18,11 +38,21 @@ const createPost = asyncHandler(async (req,res) => {
         res.status(400)
         throw new Error('please add a text field')
     }
+    console.log(req.user);
     const post = await Post.create({
         title: req.body.title,
         text: req.body.text,
+        imgHash: req.body.imgHash,
+        videoHash: req.body.videoHash,
+        fileHash:req.body.fileHash,
+        upvotes:0,
+        downvotes:0,
         user: req.user.id,
+        name: req.user.name,
+        username:req.user.username,
+        pfp: req.user.pfp,
     })
+    console.log(post)
     res.status(200).json({post})
 });
 
@@ -30,8 +60,9 @@ const createPost = asyncHandler(async (req,res) => {
 // @route   UPDATE /posts/:id
 // @access   Private
 
-const updatePost = asyncHandler(async (req,res) => {
+const updatePostVotes = asyncHandler(async (req,res) => {
     
+    const postId = req.params.id;
     const post = await Post.findById(req.params.id)
     if(!post) {
         res.status(400)
@@ -45,12 +76,76 @@ const updatePost = asyncHandler(async (req,res) => {
         throw new Error('User not found')
     }
     // Make sure the logged in user matches the goal User
-    if(post.user.toString() !== user.id){
-        res.status(401)
-        throw new Error('User not authorized')
+    // if(post.user.toString() !== user.id){
+    //     res.status(401)
+    //     throw new Error('User not authorized')
+    // }
+    var updatedPost;
+    if(req.body.vote == "upvote"){
+        const post = await Post.findById(postId);
+        if(post.downvotedBy.includes(req.user.id)){
+            updatedPost = await Post.findOneAndUpdate( 
+                {_id: postId},
+                {
+                    $push:{upvotedBy:req.user.id},
+                    $pull: { downvotedBy: req.user.id },
+                    $inc: { votes: 2 } 
+               },
+               {new: true}
+                
+            )
+        }
+        else {
+            if(post.upvotedBy.includes(req.user.id))
+            {
+                throw new Error('Already Upvoted')
+            }
+            else {
+                updatedPost = await Post.findOneAndUpdate( 
+                    {_id: postId},
+                    {
+                        $push:  {upvotedBy:req.user.id} ,
+                        $inc: { votes: 1 } 
+                    },
+                    {new: true}
+    
+                ) 
+            } 
+        }
     }
-    const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {new:true})
+    if(req.body.vote == "downvote") {
+        const post = await Post.findById(postId);
+        if(post.upvotedBy.includes(req.user.id)){
+            updatedPost = await Post.findOneAndUpdate( 
+                {_id: postId},
+                {
+                    $push:{downvotedBy:req.user.id},
+                    $pull: { upvotedBy: req.user.id },
+                    $inc: { votes: -2 } 
+                },
+                {new: true}
+             
+            )
+        }
+        else {
+            if(post.downvotedBy.includes(req.user.id))
+            { 
+                throw new Error('Already downvoted')
 
+            }
+            else {
+                updatedPost = await Post.findOneAndUpdate( 
+                    {_id: postId},
+                    {
+                        $push:{downvotedBy:req.user.id},
+                        $inc: { votes: -1 } 
+                    },
+                    {new: true}
+                )
+            }
+        }
+    }
+    updatedPost = modifyVotesArray(updatedPost,req.user.id)
     res.status(200).json(updatedPost)
 });
 
@@ -86,10 +181,31 @@ const deletePost = asyncHandler(async (req,res) => {
 
 
 const getUserPosts = asyncHandler(async (req,res) => {
-    user = req.params.id;
+    const user = req.params.id;
     const post = await Post.find({user});
     res.status(200).json(post)
 });
+
+
+const modifyVotesArray = (post,id) =>{
+        var temPost = post.toObject();
+        if(temPost.upvotedBy.includes(id)){
+            temPost.upvoted = 1;
+            temPost.downvoted = 0
+        }
+        else if(temPost.downvotedBy.includes(id)){
+            temPost.downvoted = 1;
+            temPost.upvoted = 0;
+        }
+        else {
+            temPost.upvoted = 0;
+            temPost.downvoted = 0;
+        }
+        delete temPost.upvotedBy;
+        delete temPost.downvotedBy;
+        return temPost;
+
+} 
 
 
 
@@ -97,6 +213,6 @@ module.exports ={
     getPosts,
     createPost,
     deletePost,
-    updatePost,
+    updatePostVotes,
     getUserPosts
 }
