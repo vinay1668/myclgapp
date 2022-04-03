@@ -44,13 +44,26 @@ const getPosts = async(page,token) =>{
     }
 
     const response = await axios.post(`${API_URL}/get`,page,config);
-    return response.data
-    
+    return response.data   
+}
+
+
+//get User posts
+
+const getUserPosts = async(page,token) =>{
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.post(`${API_URL}/getMe`,page,config);
+    return response.data   
 }
 
 const postService = {
     createPost,
     getPosts,
+    getUserPosts,
     updatePostVotes,
 }
 

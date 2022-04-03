@@ -6,7 +6,7 @@ const {getPosts, getUserPosts , createPost,deletePost,updatePostVotes}  = requir
 const {protect} = require('../middleware/authMiddleware.js')
 router.route('/').post(protect, createPost);
 router.route('/get').post(protect, getPosts);
-router.route('/:id').get(protect, getUserPosts);
+router.route('/getMe').post(protect, getUserPosts);
 router.route('/:id').put(protect, updatePostVotes).delete(protect, deletePost)
 
 module.exports = router;

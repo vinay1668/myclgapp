@@ -182,10 +182,34 @@ const deletePost = asyncHandler(async (req,res) => {
 
 
 const getUserPosts = asyncHandler(async (req,res) => {
-    const user = req.params.id;
-    const post = await Post.find({user});
-    res.status(200).json(post)
+    const userId = req.user.id;
+    const post = await Post.find({"user": userId}).sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
+    
+    var newPosts = post.map(function(post) {
+        var temPost = post.toObject();
+        if(temPost.upvotedBy.includes(req.user.id)){
+            temPost.upvoted = 1;
+            temPost.downvoted = 0
+        }
+        else if(temPost.downvotedBy.includes(req.user.id)){
+            temPost.downvoted = 1;
+            temPost.upvoted = 0;
+        }
+        else {
+            temPost.upvoted = 0;
+            temPost.downvoted = 0;
+        }
+        delete temPost.upvotedBy;
+        delete temPost.downvotedBy;
+        return temPost;
+    })
+
+   //return new post
+    res.status(200).json(newPosts);
+    
 });
+
+
 
 
 const modifyVotesArray = (post,id) =>{

@@ -29,7 +29,7 @@ function Dashboard() {
         const navigate = useNavigate()
         const dispatch = useDispatch()
 
-        const {user,} = useSelector((state) => state.auth);
+        const {user} = useSelector((state) => state.auth);
         const {posts,isLoading,isError,message,isSuccess} = useSelector((state) => state.posts);
 
         const [posty,setPosty] = useState({
@@ -184,17 +184,19 @@ function Dashboard() {
             <input  style ={{height:"30px", paddingRight:"0px"}} className="form-control input-sm search-username" id="inputsm" placeholder = "search" type="search"/>
         </div>
         <div className='column' style={{}}>
+        <Link style={{ textDecoration: 'none', color: 'black' }} to = "/me" >
            <div style={{paddingRight:"10px",paddingLeft:"0px",display:"inline-block"}}>
                <img style={{borderRadius:"50%", width:"30px",paddingRight:"0px"}} src={user && user.pfp } />
                <div className='dummy'>
-                    <span style={{fontSize:"12px",display:"block"}} className='name'><b>{user ? `u/${user.username}` : "null"}</b> </span>
+                    <span style={{curser:"pointer",fontSize:"12px",display:"block"}} className='name'><b>{user ? `u/${user.username}` : "null"}</b> </span>
                     <span style={{fontSize:"10px",display:"block"}} className="rollno" ><b>{user ? `${user.name}` : 'null'}</b></span>
                </div>
            </div>
+        </Link>
            <div style={{pointer:'cursor', display:"inline-block", paddingRight:"10px"}}>
-               <Link to = "/login"> 
-               <i onClick = {onLogout} style={{color:"red",marginRight:"6px"}} class="fa-solid fa-arrow-right-from-bracket fa-lg"></i>
-               </Link>
+             <Link to="/login">
+                 <i onClick = {onLogout} style={{color:"red",marginRight:"6px"}} class="fa-solid fa-arrow-right-from-bracket fa-lg"></i>
+            </Link>
               
               {/* <span onClick = {onLogout}  style={{pointer:'cursor'}} className='logout'></span> */}
            </div>

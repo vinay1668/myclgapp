@@ -4,7 +4,8 @@ import {useSelector, useDispatch} from 'react-redux'
 import { updatePostVotes } from '../features/posts/postSlice'
 import { configureStore } from '@reduxjs/toolkit'
 import pdf from "../pages/components/editors/pdfico.png";
-import {logout, reset} from "../features/auth/authSlice.js"
+import {logout, reset} from "../features/auth/authSlice.js";
+import { Link } from 'react-router-dom';
 function PostItem({post}) {
 
     const [voteData,setVoteData] = useState({
@@ -58,20 +59,28 @@ function PostItem({post}) {
     {/* top section */}
 
     <div className='topsection'>
-        <img className="dummy" style={{borderRadius:"50%", width:"40px"}} src={post.pfp} />
-        <div className='dummy'>
-            <span style={{fontSize:"13px",display:"block"}} className='name'><b>{`u/${post.username}`}</b> </span>
-            <span style={{fontSize:"10px",display:"block"}} className="rollno" ><b>{post.name}</b></span>
+     
+        <div>
+          <Link to = "/user" style={{textDecoration:"none",color:"black"}}>
+          <img className="dummy" style={{borderRadius:"50%", width:"40px"}} src={post.pfp} />
+          <div className='dummy'>
+              <span style={{fontSize:"13px",display:"block"}} className='name'><b>{`u/${post.username}`}</b> </span>
+              <span style={{fontSize:"10px",display:"block"}} className="rollno" ><b>{post.name}</b></span>
+          </div>
+          </Link>
         </div>
+    
+
+      
     </div>
 
 
     {/* title section */}
 
     <div className='titlesection'>
-        <h3 style={{fontFamily:"Arial"}}>
+        <span style={{fontFamily:"Arial",fontSize:"23px"}}>
         {post.title}
-        </h3>
+        </span>
         
         
     </div>

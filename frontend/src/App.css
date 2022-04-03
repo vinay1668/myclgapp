@@ -82,6 +82,16 @@
 #poste:hover {
   background-color: #f8f9fa;
 }
+.usertopbar{
+  position: relative;
+  width: 45%;
+  height: 50px;
+  background-color: white;
+  border-radius: 10px;
+  margin: 0 auto;
+  margin-top: 20px;
+  align-items: center;
+}
   
 
   .topbar{
@@ -303,6 +313,9 @@
     .topbar{
       width: 95%;
     }
+    .usertopbar{
+      width: 95%;
+    }
     .dum{
       padding-inline: 20px;
 
@@ -323,6 +336,9 @@
       width: 95%;
     }
     .topbar{
+      width: 95%;
+    }
+    .usertopbar{
       width: 95%;
     }
     .logout {

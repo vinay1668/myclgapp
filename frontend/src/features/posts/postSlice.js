@@ -50,6 +50,27 @@ export const createPost = createAsyncThunk('posts/create', async(postData, thunk
       }
   })
 
+  //deleting all posts
+
+
+
+  // get current user posts
+
+  export const getUserPosts = createAsyncThunk('posts/getUserPosts', async(page, thunkAPI) =>{
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await postService.getUserPosts(page,token);
+        
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+        
+    }
+})
+
+
+
+
 export const postSlice = createSlice ({
     name: 'post',
     initialState,
@@ -88,6 +109,27 @@ export const postSlice = createSlice ({
                     state.message = action.payload
                     state.isLoading = false
                 })
+
+
+
+
+        // getting current user posts
+
+                .addCase(getUserPosts.pending, (state) => {
+                    state.isLoading = true
+                })
+                .addCase(getUserPosts.fulfilled, (state, action) =>{
+                    state.isSuccess = true
+                    state.isLoading = false
+                    state.posts.push(...action.payload)
+                })
+                .addCase(getUserPosts.rejected, (state,action) => {
+                    state.isError = true
+                    state.message = action.payload
+                    state.isLoading = false
+                })
+
+
             //updating post votes
 
             .addCase(updatePostVotes.pending, (state) => {
