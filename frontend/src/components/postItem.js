@@ -14,21 +14,20 @@ function PostItem({post}) {
     const dispatch = useDispatch()
 
     useEffect(()=>{
-        console.log(post)
-        if(voteData.vote !== ""){
+        
+        if(voteData.vote !== "") {
+          // console.log(voteData)
           dispatch(updatePostVotes({postId:post._id,voteData}))
-        }
-    
+        }   
         return () => {
             dispatch(reset())
           }
-
-    },[voteData,dispatch,post])
+    },[voteData,dispatch])
 
     const[upvote,setUpvote] = useState(false)
     const[downvote,setDownvote] = useState(false)
 
-    const text = parse(post.text);
+
 
 
 
@@ -55,7 +54,7 @@ function PostItem({post}) {
 
 
   return (
-    <div className='editcontainer'>
+    <div  className='editcontainer'>
     {/* top section */}
 
     <div className='topsection'>
@@ -81,19 +80,36 @@ function PostItem({post}) {
     {/* middle section */}
     <div className='middlesection'>
 
-        {post.text ? (<p style={{fontFamily:"Open Sans"}}>{post.text}</p>) : (null)}
-        {post.videoHash.length > 0 ? (<video style={{width:"100%"}} controls>  
-           <source src={post.videoHash} />
-               Your browser does not support HTML video.
-           </video>) : (null)}
-        {post.imgHash.length > 0 ? (<img style={{width:"100%"}} src={post.imgHash}/>) : (null) }
+        {post.text !== "" ? (<p style={{fontFamily:"Open Sans"}}>{parse(post.text)}</p>) : (null)}
+
+        {post.imgHash.length > 0 ? (  
+          post.imgHash.map((img,index) => (
+            <div key={index}>
+               <img style={{width:"100%", paddingBottom:"10px"}} src={img}/>
+            </div>
+        ))) : (null) }
+
+        {post.videoHash.length > 0 ? (
+           post.videoHash.map((video,index) => (
+                <div  key={index} >
+                    <video style={{width:"100%",paddingBottom:"10px"}} controls>  
+                    <source src={video} />
+                        Your browser does not support HTML video.
+                    </video>
+                </div>
+        ))) : (null) }
+
          {post.fileHash .length > 0 ? 
-         ( <a style={{color: "inherit"}} href={post.fileHash.hash} target="blank">
+         ( post.fileHash.map((file, index) => (
+           <div key={index}>
+             <a style={{color: "inherit", paddingBottom:"10px"}} href={file.hash} target="blank">
                 <figure>
                   <img src={pdf} height="200px" width="200px"/>
-                  <figcaption style={{paddingLeft:"30px",color:"gray"}}><b>{post.fileHash.name}</b></figcaption>
+                  <figcaption style={{paddingLeft:"30px",color:"gray"}}><b>{file.name}</b></figcaption>
                 </figure>
-        </a>) : (null)
+              </a>
+           </div>
+         )) ) : (null)
          }
 
       
@@ -133,16 +149,14 @@ function PostItem({post}) {
                 onClick={downvoteClicked }
                 >
             </i>
-                <span className='dum'>
+                {/* <span className='dum'>
                 
                 <i style={{display:"inline-block", paddingInline:"5px",color:"gray"}} className="fa-solid fa-share-from-square fa-lg"></i>
-                {/* <span style={{display:"inline-block", paddingInline:"5px"}} >share</span> */}
                 </span>
                 <span className='dum'>
                 <i style={{display:"inline-block", paddingInline:"5px",color:"gray"}} className="fa-regular fa-message fa-lg"></i>
                 <span style={{display:"inline-block", paddingInline:"5px",color:"gray"}}>5654</span>
-                {/* <span style={{display:"inline-block", paddingInline:"0px"}}>comments</span> */}
-                </span>
+                </span> */}
         </div>
      </div>
   )

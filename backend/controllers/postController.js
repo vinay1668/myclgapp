@@ -6,7 +6,8 @@ const Post = require('../models/postModel.js')
 // @access   Private
 
 const getPosts = asyncHandler(async (req,res) => {
-    const post = await Post.find();
+
+    const post = await Post.find().sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
     var newPosts = post.map(function(post) {
         var temPost = post.toObject();
         if(temPost.upvotedBy.includes(req.user.id)){
@@ -34,26 +35,26 @@ const getPosts = asyncHandler(async (req,res) => {
 // @access   Private
 
 const createPost = asyncHandler(async (req,res) => {
-    if(!req.body.text)  {
+    
+
+    if(!req.body.title)  {
         res.status(400)
-        throw new Error('please add a text field')
+        throw new Error('please add a title field')
     }
-    console.log(req.user);
     const post = await Post.create({
         title: req.body.title,
         text: req.body.text,
         imgHash: req.body.imgHash,
         videoHash: req.body.videoHash,
         fileHash:req.body.fileHash,
-        upvotes:0,
-        downvotes:0,
+        votes:0,
         user: req.user.id,
         name: req.user.name,
         username:req.user.username,
         pfp: req.user.pfp,
     })
-    console.log(post)
-    res.status(200).json({post})
+
+    res.status(200).json(post);
 });
 
 // @desc    Update a Post

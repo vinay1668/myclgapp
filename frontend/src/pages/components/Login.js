@@ -27,7 +27,7 @@ function Login({addDetails}) {
         toast.error(message)
       }
       if(isSuccess || user) {
-        navigate('/dashboard')
+        navigate('/')
       }
       dispatch(reset())
     },[user,isError, isSuccess, message, navigate,dispatch])
@@ -80,7 +80,7 @@ function Login({addDetails}) {
 
   <section className='form'>
 
-    <form onSubmit={onSubmit} style={{paddingTop:"0px"}}>
+    <form onSubmit={onSubmit} style={{paddingTop:"30px"}}>
       <div className='form-group'>
         <input
           type='text'

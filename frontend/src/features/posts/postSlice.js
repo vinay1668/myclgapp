@@ -12,6 +12,7 @@ const initialState = {
 // create a new post
 
 export const createPost = createAsyncThunk('posts/create', async(postData, thunkAPI) => {
+    
     try {
         const token = thunkAPI.getState().auth.user.token;
         return await postService.createPost(postData,token)
@@ -26,6 +27,7 @@ export const createPost = createAsyncThunk('posts/create', async(postData, thunk
   export const updatePostVotes = createAsyncThunk('/post/updatePostVotes', async({postId, voteData}, thunkAPI) => {
       try {
         const token = thunkAPI.getState().auth.user.token;
+        
         return await postService.updatePostVotes(postId, voteData,token);
           
       } catch (error) {
@@ -36,10 +38,10 @@ export const createPost = createAsyncThunk('posts/create', async(postData, thunk
 
 
   // get all posts
-  export const getPosts = createAsyncThunk('posts/getAll', async(_, thunkAPI) =>{
+  export const getPosts = createAsyncThunk('posts/getAll', async(page, thunkAPI) =>{
       try {
           const token = thunkAPI.getState().auth.user.token;
-          return await postService.getPosts(token);
+          return await postService.getPosts(page,token);
           
       } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -75,12 +77,11 @@ export const postSlice = createSlice ({
 
                 .addCase(getPosts.pending, (state) => {
                     state.isLoading = true
-
                 })
                 .addCase(getPosts.fulfilled, (state, action) =>{
                     state.isSuccess = true
                     state.isLoading = false
-                    state.posts = action.payload
+                    state.posts.push(...action.payload)
                 })
                 .addCase(getPosts.rejected, (state,action) => {
                     state.isError = true
@@ -96,12 +97,13 @@ export const postSlice = createSlice ({
             .addCase(updatePostVotes.fulfilled, (state, action) =>{
                 state.isSuccess = true
                 state.isLoading = false
+
                 state.posts.filter(post => {
-                    if(post._id == action.payload.data._id){
+                    if(post._id == action.payload._id){
                           return (
-                              post.votes= action.payload.data.votes,
-                              post.upvoted = action.payload.data.upvoted,
-                              post.downvoted = action.payload.data.downvoted
+                              post.votes= action.payload.votes,
+                              post.upvoted = action.payload.upvoted,
+                              post.downvoted = action.payload.downvoted
 
                           );
                     }

@@ -1,4 +1,4 @@
-import { configureStore,thunk } from '@reduxjs/toolkit';
+import { configureStore,getDefaultMiddleware } from '@reduxjs/toolkit';
 import authReducer from "../features/auth/authSlice.js"
 import postReducer from "../features/posts/postSlice.js";
 
@@ -7,9 +7,8 @@ export const store = configureStore({
       auth : authReducer,
       posts: postReducer,
   },
-  middleware: getDefaultMiddleware =>
-  getDefaultMiddleware({
-    serializableCheck: false,
-  })
-
+  middleware: [
+    ...getDefaultMiddleware(),
+  ]
+  
 });

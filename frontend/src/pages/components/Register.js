@@ -101,7 +101,7 @@ function Register({details}) {
     <>
       <section className='heading' style={{marginBottom:""}}>
 
-        <h1 style={{marginTop:"50px",display:"inline-block",paddingRight:"20px"}}>
+        <h1 style={{marginTop:"30px",display:"inline-block",paddingRight:"20px"}}>
             <i className="fa fa-solid fa-id-card"></i>
          </h1>
          <h1 style={{display:"inline-block",paddingRight:"25px"}}>Registration</h1>
@@ -114,7 +114,7 @@ function Register({details}) {
           <div>
             <img src={pfp}
                   width="100px"
-                  style={{borderRadius:"50%"}}
+                  style={{borderRadius:"50%",marginTop:"20px"}}
             />
           </div>
          
@@ -170,15 +170,15 @@ function Register({details}) {
             
             
             <div className='form-group text-box' style={{display:"flex",justifyContent:'space-between',paddingTop:"20px"}}>
-              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white"}} type="button" className="btn btn-secondary">CSE</button>
-              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white"}} type="button" className="btn btn-secondary">ECE</button>
-              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white"}} type="button" className="btn btn-secondary">EEE</button>
-              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white"}} type="button" className="btn btn-secondary">MEC</button>
+              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary"><span>CSE</span></button>
+              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary"><span>ECE</span></button>
+              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary"><span>EEE</span></button>
+              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary"><span>MEC</span></button>
             </div>
 
               <div className='form-group text-box' style={{paddingTop:"50px", display:"flex",justifyContent:"flex-end"}}>
               <button style={{width:"80px", height:"40px",borderColor:"white"}} className="btn btn-primary">
-                   <span>submit</span>
+                   <span>Submit</span>
                   </button>
               </div>
           </>

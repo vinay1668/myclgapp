@@ -17,10 +17,13 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-google-login": "^5.2.2",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
-    "react-toastify": "^8.2.0"
+    "react-toastify": "^8.2.0",
+    "redux": "^4.1.2",
+    "redux-thunk": "^2.4.1"
   },
   "scripts": {
     "start": "react-scripts start",

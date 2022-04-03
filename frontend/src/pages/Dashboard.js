@@ -4,7 +4,6 @@ import VideoEditor from './components/editors/VideoEditor';
 import ImageEditor from './components/editors/ImageEditor';
 import File from './components/editors/File';
 import { create } from 'ipfs-http-client';
-
 import {useSelector, useDispatch} from "react-redux"
 import {logout, reset} from "../features/auth/authSlice.js"
 import {createPost, getPosts} from "../features/posts/postSlice.js";
@@ -12,8 +11,12 @@ import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import PostItem from '../components/postItem';
 import "../App.css";
+import InfiniteScroll from 'react-infinite-scroll-component';
+
+import { Link } from 'react-router-dom';
 /* Create an instance of the client */
 const client = create('https://ipfs.infura.io:5001/api/v0')
+// import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 
@@ -26,10 +29,10 @@ function Dashboard() {
         const navigate = useNavigate()
         const dispatch = useDispatch()
 
-        const {user} = useSelector((state) => state.auth);
-        const {posts,isLoading,isError,message} = useSelector((state) => state.posts);
+        const {user,} = useSelector((state) => state.auth);
+        const {posts,isLoading,isError,message,isSuccess} = useSelector((state) => state.posts);
 
-        const [post,setPost] = useState({
+        const [posty,setPosty] = useState({
           title:'',
           text:'',
           imgHash:[],
@@ -37,71 +40,81 @@ function Dashboard() {
           fileHash:[],
         })
 
+        const [page,setPage] = useState({
+          limit: 5,
+          skip: 5
+        });
 
         useEffect(() => {
  
-          if(isError){
+          if(isError) {
             console.log(message)
           }
-
+        
           if(!user){
-            navigate('/');
-            console.log("user logged out")
+            navigate('/login');
+            
           }
 
-          dispatch(getPosts())
-
-          return () => {
+          dispatch(getPosts({limit:5,skip:0}))
+          
+          return () => { 
             dispatch(reset())
           }
-        },[user, isError,message,dispatch,navigate])
+        },[user, isError,message,dispatch,navigate,user])
 
-       useEffect(()=>{
-         console.log(post)
 
-       },[post])
- 
+     
+        function fetchImages() {
+          setPage({
+            limit:page.limit,
+            skip: page.skip + page.limit,
+          })
+          dispatch(getPosts(page))
+        }
+
+
+
 
 
         const getValue = (e) => {
-          setPost((prevState) => ({
+          setPosty((prevState) => ({
             ...prevState,
             text: String(e)
           }))
 
         };
         function changeHeading(e) {
-          setPost((prevState) => ({
+          setPosty((prevState) => ({
             ...prevState,
             title: e.target.value
           }))
         }
 
-        function postClick() {
-          console.log(post.imgHash)
-            // dispatch(createPost(post))
-        }
+    
         
         const onLogout = () => {
+
           dispatch(logout())
-          dispatch(reset())
+           
+    
         }
 
 
         function imageInput(imgHash) {
-          setPost(prevState => ({
+          setPosty(prevState => ({
             ...prevState,
             imgHash:[...prevState.imgHash,imgHash],
           }))
         }
         function videoInput(videoHash) {
-          setPost(prevState => ({
+          setPosty(prevState => ({
             ...prevState,
             videoHash:[...prevState.videoHash, videoHash],
           }))
         }
         function fileInput(fileHash) {
-          setPost(prevState => ({
+          setPosty(prevState => ({
             ...prevState,
             fileHash: [...prevState.fileHash, {name: fileHash.name, hash: fileHash.hash}],
           }))
@@ -112,7 +125,7 @@ function Dashboard() {
         }
         function reset(){
           setEditor("discard")
-          setPost({
+          setPosty({
             title:'',
             text:'',
             imgHash:[],
@@ -126,6 +139,33 @@ function Dashboard() {
         }
 
 
+        function postToDb() {
+          if(posty.title == ""){
+             setEditor("notitle");
+             setTimeout(function () {
+              setEditor("post")
+            }, 1000)
+          }
+          else{
+            dispatch(createPost(posty));
+            setEditor("postSuccess")
+            setPosty({
+              title:'',
+              text:'',
+              imgHash:[],
+              videoHash:[],
+              fileHash:[],
+            });
+            
+            setTimeout(function () {
+              setEditor("post")
+            }, 1000)
+          }
+
+
+        }
+
+
         // if(isLoading) {
         //   return <Spinner />
         // }
@@ -133,6 +173,7 @@ function Dashboard() {
 
   return (
     <>
+
     <div className="">
 
       {/* top profile */}
@@ -151,8 +192,11 @@ function Dashboard() {
                </div>
            </div>
            <div style={{pointer:'cursor', display:"inline-block", paddingRight:"10px"}}>
-              <i onClick = {onLogout} style={{color:"red",marginRight:"6px"}} class="fa-solid fa-arrow-right-from-bracket fa-lg"></i>
-              <span onClick = {onLogout}  style={{pointer:'cursor'}} className='logout'>Logout</span>
+               <Link to = "/login"> 
+               <i onClick = {onLogout} style={{color:"red",marginRight:"6px"}} class="fa-solid fa-arrow-right-from-bracket fa-lg"></i>
+               </Link>
+              
+              {/* <span onClick = {onLogout}  style={{pointer:'cursor'}} className='logout'></span> */}
            </div>
         </div> 
     </div>
@@ -192,23 +236,25 @@ function Dashboard() {
 
     <div className="editcontainer" style={{minHeight:"330px",position:"relative",borderRadius:"10px", marginTop:'5px'}}>
               <div class="input-group mb-3">
-                <input onChange={changeHeading}  type="text" class="form-control title-box" placeholder="An interesting title" aria-label="Username" aria-describedby="basic-addon1" />
+              <textarea  value={posty.title} style={{height:"40px"}} type="text" class="form-control title-box" placeholder="An interesting title" aria-label="Username" aria-describedby="basic-addon1" onChange={changeHeading} > </textarea>
               </div>
               <div>
               
               {editor == "post"  ? 
-              ( <RichTextEditor initialValue={post.text} altered={getValue}/>) : 
-              (editor == "image" ? (<ImageEditor imageInput={imageInput} images={post.imgHash}/>): 
-              (editor == "video" ?  (<VideoEditor videoInput={videoInput} videos={post.videoHash}/>) : 
+              ( <RichTextEditor initialValue={posty.text} altered={getValue}/>) : 
+              (editor == "image" ? (<ImageEditor imageInput={imageInput} images={posty.imgHash}/>): 
+              (editor == "video" ?  (<VideoEditor videoInput={videoInput} videos={posty.videoHash}/>) : 
               (editor == "discard" ? (<div style={{textAlign:"center",padding:"50px 0"}} className='image-editor'><h5 style={{color:"gray"}}>Discarding the post..</h5></div>) :  
-              (<File fileInput={fileInput} files={post.fileHash}/>) ) )) }
+              (editor == "postSuccess" ? (<div style={{textAlign:"center",padding:"50px 0"}} className='image-editor'><h5 style={{color:"#6BCB77"}}><i class="fa fa-solid fa-square-check"></i> posted!</h5></div>):
+              (editor == "notitle" ? (<div style={{textAlign:"center",padding:"50px 0"}} className='image-editor'><h5 style={{color:"#FC4F4F"}}><i class="fa-solid fa-xmark"></i> Please add the title.</h5></div>) :
+              (<File fileInput={fileInput} files={posty.fileHash}/>) ) )) ))}
 
 
 
               </div>  
               <div style={{marginTop:"50px"}}>
               <button type="button"style={{position:"absolute",right:"90px", bottom:"10px"}} onClick ={reset} class="btn btn-secondary"> Discard</button>
-              <button type="button"style={{position:"absolute",right:"20px", bottom:"10px",width:"fit-content"}} onClick={postClick} class="btn btn-primary"> Post </button>
+              <button type="button"style={{position:"absolute",right:"20px", bottom:"10px",width:"fit-content"}} class="btn btn-primary" onClick={postToDb} > Post </button>
               </div>
      </div>
 
@@ -216,16 +262,30 @@ function Dashboard() {
 {/*  
     posts */}
 
-
+{/* 
     {/* {posts && } */}
 
-    
-     {posts && <div>
-                  {posts.map((post) => (
-                    <PostItem key ={post._id} post={post}/>
-                  ))}
-               </div>
-     }
+    <InfiniteScroll
+    dataLength={posts.length} //This is important field to render the next data
+    next={fetchImages}
+    hasMore={true}
+    endMessage={
+      <p style={{ textAlign: 'center' }}>
+        <b>Yay! You have seen it all</b>
+      </p>
+    }
+    >
+          {posts.map((post,index) => (
+            <PostItem key ={index} post={post}/>
+          ))}
+    </InfiniteScroll>
+
+    {/* {posts && <div>
+          {posts.map((post,index) => (
+            <PostItem key ={index} post={post}/>
+          ))}
+        </div>
+    } */}
 
      {/* <div className='editcontainer'>
             
