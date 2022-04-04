@@ -1,6 +1,7 @@
 body{
     background-color: #DAE0E6;
     margin: 0;
+    overflow-x: hidden;
 }
 
 

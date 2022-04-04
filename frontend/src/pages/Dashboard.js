@@ -28,7 +28,7 @@ function Dashboard() {
 
         const navigate = useNavigate()
         const dispatch = useDispatch()
-
+        const firstTime = true;
         const {user} = useSelector((state) => state.auth);
         const {posts,isLoading,isError,message,isSuccess} = useSelector((state) => state.posts);
 
@@ -38,7 +38,8 @@ function Dashboard() {
           imgHash:[],
           videoHash:[],
           fileHash:[],
-        })
+        }) 
+        
 
         const [page,setPage] = useState({
           limit: 5,
@@ -50,18 +51,20 @@ function Dashboard() {
           if(isError) {
             console.log(message)
           }
+          dispatch(getPosts({limit:5,skip:0}))
         
           if(!user){
             navigate('/login');
             
           }
 
-          dispatch(getPosts({limit:5,skip:0}))
+          
           
           return () => { 
-            dispatch(reset())
+            // dispatch(reset())
           }
         },[user, isError,message,dispatch,navigate,user])
+
 
 
      
@@ -181,14 +184,14 @@ function Dashboard() {
 
     <div className='topbar'>
         <div className='column' style={{paddingLeft:"20px"}}>
-            <input  style ={{height:"30px", paddingRight:"0px"}} className="form-control input-sm search-username" id="inputsm" placeholder = "search" type="search"/>
+            <input  style ={{height:"30px", paddingRight:"0px"}} className="form-control input-sm search-username" id="inputsm" placeholder = "Search" type="search"/>
         </div>
         <div className='column' style={{}}>
         <Link style={{ textDecoration: 'none', color: 'black' }} to = "/me" >
            <div style={{paddingRight:"10px",paddingLeft:"0px",display:"inline-block"}}>
                <img style={{borderRadius:"50%", width:"30px",paddingRight:"0px"}} src={user && user.pfp } />
                <div className='dummy'>
-                    <span style={{curser:"pointer",fontSize:"12px",display:"block"}} className='name'><b>{user ? `u/${user.username}` : "null"}</b> </span>
+                    <span style={{curser:"pointer",fontSize:"12px",display:"block"}} className='name'><b>{user ? user.username : "null"}</b> </span>
                     <span style={{fontSize:"10px",display:"block"}} className="rollno" ><b>{user ? `${user.name}` : 'null'}</b></span>
                </div>
            </div>
@@ -261,6 +264,62 @@ function Dashboard() {
      </div>
 
 
+    
+     
+     <div  className='topbar' style={{marginTop:"30px",display:"flex",borderRadius:"10px"}} >
+
+       <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+          <div class="dropdown">
+            <b class="dropdown-toggle" type="button" id="dropdownMenuButton" style={{color:"gray"}} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              All
+            </b>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">All</a>
+              <a class="dropdown-item" href="#">CSE</a>
+              <a class="dropdown-item" href="#">ECE</a>
+              <a class="dropdown-item" href="#">EEE</a>
+            </div>
+          </div>
+       </button>
+
+        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+                  <b style={{paddingLeft:"8px",color:"gray"}}>New</b>
+        </button>
+
+        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+                  <b style={{paddingLeft:"8px",color:"gray"}}>Hot</b>
+        </button>
+
+        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+          <div class="dropdown">
+            <b class="dropdown-toggle" type="button" id="dropdownMenuButton" style={{color:"gray"}} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Top
+            </b>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Today</a>
+              <a class="dropdown-item" href="#">This month</a>
+              <a class="dropdown-item" href="#">This Year</a>
+              <a class="dropdown-item" href="#">All Time</a>
+            </div>
+        </div>
+       </button>
+    
+
+       <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+                  <input className='form-control' type="text" placeholder="2022/3" style={{width:"80px",borderWidth:"2px"}}/>
+                  
+        </button>
+       
+  
+    
+    
+    </div>
+
+
+
+
+
+
 {/*  
     posts */}
 
@@ -271,6 +330,7 @@ function Dashboard() {
     dataLength={posts.length} //This is important field to render the next data
     next={fetchImages}
     hasMore={true}
+    // loader={<h6 style={{color:"gray",margin:"0 auto"}}>Loading...</h6>}
     endMessage={
       <p style={{ textAlign: 'center' }}>
         <b>Yay! You have seen it all</b>

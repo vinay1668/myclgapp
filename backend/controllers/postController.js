@@ -182,7 +182,13 @@ const deletePost = asyncHandler(async (req,res) => {
 
 
 const getUserPosts = asyncHandler(async (req,res) => {
-    const userId = req.user.id;
+    var userId;
+    if(req.body.id == req.user.id){
+        userId = req.user.id;
+    }
+    else{
+        userId = req.body.id;
+    }
     const post = await Post.find({"user": userId}).sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
     
     var newPosts = post.map(function(post) {

@@ -15,6 +15,7 @@ function PostItem({post}) {
     const dispatch = useDispatch()
 
     useEffect(()=>{
+      
         
         if(voteData.vote !== "") {
           // console.log(voteData)
@@ -55,16 +56,19 @@ function PostItem({post}) {
 
 
   return (
-    <div  className='editcontainer'>
+    <div className='editcontainer'>
     {/* top section */}
 
     <div className='topsection'>
      
         <div>
-          <Link to = "/user" style={{textDecoration:"none",color:"black"}}>
+        <Link  
+           to={"/user"}
+           state= {post}
+          style={{textDecoration:"none",color:"black"}} >
           <img className="dummy" style={{borderRadius:"50%", width:"40px"}} src={post.pfp} />
           <div className='dummy'>
-              <span style={{fontSize:"13px",display:"block"}} className='name'><b>{`u/${post.username}`}</b> </span>
+              <span style={{fontSize:"13px",display:"block"}} className='name'><b>{post.username}</b> </span>
               <span style={{fontSize:"10px",display:"block"}} className="rollno" ><b>{post.name}</b></span>
           </div>
           </Link>
@@ -78,7 +82,7 @@ function PostItem({post}) {
     {/* title section */}
 
     <div className='titlesection'>
-        <span style={{fontFamily:"Arial",fontSize:"23px"}}>
+        <span style={{fontFamily:"Arial",fontSize:"23px",lineHeight:"1.2"}}>
         {post.title}
         </span>
         
@@ -87,7 +91,7 @@ function PostItem({post}) {
 
 
     {/* middle section */}
-    <div className='middlesection'>
+    <div style={{paddingBottom:"25px"}} className='middlesection'>
 
         {post.text !== "" ? (<p style={{fontFamily:"Open Sans"}}>{parse(post.text)}</p>) : (null)}
 
@@ -146,7 +150,7 @@ function PostItem({post}) {
 
     </div>
   {/* bootom section */}
-    <div className='commentsection'>
+    <div  className='commentsection'>
         <i  style ={{color: post.upvoted ? "red" : "gray"}}
                 className="fa-solid fa-arrow-up fa-lg dum"
                 onClick={upvoteClicked}

@@ -9,6 +9,9 @@ const initialState = {
     message:""
 }
 
+
+
+
 // create a new post
 
 export const createPost = createAsyncThunk('posts/create', async(postData, thunkAPI) => {
@@ -50,6 +53,9 @@ export const createPost = createAsyncThunk('posts/create', async(postData, thunk
       }
   })
 
+
+
+
   //deleting all posts
 
 
@@ -66,7 +72,11 @@ export const createPost = createAsyncThunk('posts/create', async(postData, thunk
       return thunkAPI.rejectWithValue(message)
         
     }
-})
+  })
+
+
+
+  
 
 
 
@@ -74,9 +84,11 @@ export const createPost = createAsyncThunk('posts/create', async(postData, thunk
 export const postSlice = createSlice ({
     name: 'post',
     initialState,
-    reducers :{
-        reset: (state) => initialState
+    reducers : {
+        reset: (state) => initialState,
+        
     },
+
     extraReducers: (builder) => {
         builder 
           //creating posts
@@ -129,6 +141,7 @@ export const postSlice = createSlice ({
                     state.isLoading = false
                 })
 
+  
 
             //updating post votes
 

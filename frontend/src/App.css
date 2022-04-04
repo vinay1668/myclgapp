@@ -1,5 +1,6 @@
 .App {
     text-align: center;
+    overflow-x: "hidden";
   
   }
   
@@ -224,6 +225,11 @@
   .search-username {
     width: 200px;
   }
+
+  #yese::-moz-placeholder {
+    color:"gray";
+    font-weight: bold;
+}
  
   .topsection{
     position: absolute;

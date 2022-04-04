@@ -1,29 +1,31 @@
 import { useEffect,useState } from "react"
+import {BrowserRouter as Router,Switch,useLocation} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux"
 import { getUserPosts } from "../features/posts/postSlice";
-import { reset } from "../features/posts/postSlice"
+import { reset, otherPostsReset } from "../features/posts/postSlice"
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostItem from "../components/postItem";
 
-function User({id,username}) {
-    console.log(id);
-    console.log(username);
+function User() {
+    const location = useLocation();
     const dispatch = useDispatch()
 
     const {user} = useSelector((state) => state.auth);
     const {posts,isLoading,isError,message,isSuccess} = useSelector((state) => state.posts);
     const [page,setPage] = useState({
         limit: 5,
-        skip: 5
+        skip: 5,
+        id:location.state.user
       });
 
-    useEffect(() => {
-        dispatch(reset())
-        dispatch(getUserPosts({limit:5,skip:0}))
+    useEffect(() => {   
+        // console.log(location.state.user);
+        dispatch(reset()) 
+        dispatch(getUserPosts({limit:5,skip:0,id:location.state.user}))
         
       return () => {   
-        
-          
+        dispatch(reset()) 
+         
       }
     }, [dispatch])
 
@@ -31,6 +33,7 @@ function User({id,username}) {
         setPage({
           limit:page.limit,
           skip: page.skip + page.limit,
+          id:location.state.user
         })
         dispatch(getUserPosts(page))
       }
@@ -45,11 +48,11 @@ function User({id,username}) {
         <div style={{minHeight:"280px",zIndex:"-2"}} className='usertopbar'>
         
             <div style={{textAlign:"center", margin:"0 auto"}}>
-            <button type="button" style={{position:"absolute", top:"81px",left:"0",width:"50px",height:"30px",fontSize:"12px"}} class="btn btn-dark">{user.branch}</button>
+            <button type="button" style={{position:"absolute", top:"81px",left:"0",width:"50px",height:"30px",fontSize:"12px"}} class="btn btn-dark">{location.state.branch}</button>
             <div style={{position:"absolute",left:"0",top:"0" , width:"100%" ,backgroundColor:"#33a8ff",height:"80px",zIndex:"-1",borderTopLeftRadius:"10px",borderTopRightRadius:"10px"}}></div>
-                <img style={{marginTop:"15px",borderRadius:"50%", width:"100px"}} src={user.pfp} />
-                <h4 style={{}}>{user.name}</h4>
-                <span style={{color:"gray",fontWeight:"bold",display:"inline"}}>{`u/${user.username}`}</span>
+                <img style={{marginTop:"15px",borderRadius:"50%", width:"100px"}} src={location.state.pfp} />
+                <h4 style={{}}>{location.state.name}</h4>
+                <span style={{color:"gray",fontWeight:"bold",display:"inline"}}>{location.state.username}</span>
                 {/* <div style={{width:"90%",margin:"auto",marginTop:"10px"}}>
                 <h6 style={{display:"inline"}}>my name is vinay kumar. currently studying final year. I will be graduating in 2022</h6>
                 </div> */}

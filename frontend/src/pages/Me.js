@@ -5,7 +5,7 @@ import { reset } from "../features/posts/postSlice"
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostItem from "../components/postItem";
 
-function User() {
+function Me() {
     
     const dispatch = useDispatch()
 
@@ -13,14 +13,17 @@ function User() {
     const {posts,isLoading,isError,message,isSuccess} = useSelector((state) => state.posts);
     const [page,setPage] = useState({
         limit: 5,
-        skip: 5
+        skip: 5,
+        id:user.id
+        
       });
 
     useEffect(() => {
         dispatch(reset())
-        dispatch(getUserPosts({limit:5,skip:0}))
+        dispatch(getUserPosts({limit:5,skip:0,id:user.id}))
         
       return () => {   
+        dispatch(reset())
         
           
       }
@@ -30,6 +33,7 @@ function User() {
         setPage({
           limit:page.limit,
           skip: page.skip + page.limit,
+          id:user.id
         })
         dispatch(getUserPosts(page))
       }
@@ -48,7 +52,7 @@ function User() {
             <div style={{position:"absolute",left:"0",top:"0" , width:"100%" ,backgroundColor:"#33a8ff",height:"80px",zIndex:"-1",borderTopLeftRadius:"10px",borderTopRightRadius:"10px"}}></div>
                 <img style={{marginTop:"15px",borderRadius:"50%", width:"100px"}} src={user.pfp} />
                 <h4 style={{}}>{user.name}</h4>
-                <span style={{color:"gray",fontWeight:"bold",display:"inline"}}>{`u/${user.username}`}</span>
+                <span style={{color:"gray",fontWeight:"bold",display:"inline"}}>{user.username}</span>
                 {/* <div style={{width:"90%",margin:"auto",marginTop:"10px"}}>
                 <h6 style={{display:"inline"}}>my name is vinay kumar. currently studying final year. I will be graduating in 2022</h6>
                 </div> */}
@@ -62,6 +66,30 @@ function User() {
         </div>
 
 
+
+  <div  className='topbar' style={{marginTop:"30px",display:"flex",borderRadius:"10px"}} >
+
+ <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: "1px solid #DAE0E6"}}>
+           <b style={{paddingLeft:"8px",color:"gray"}}>New</b>
+ </button>
+
+ <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom:"1px solid #DAE0E6"}}>
+           <b style={{paddingLeft:"8px",color:"gray"}}>Old</b>
+ </button>
+
+<button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom:"1px solid #DAE0E6"}}>
+<b style={{paddingLeft:"8px",color:"gray"}}>Top</b>
+           
+ </button>
+
+ <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: "1px solid #DAE0E6"}}>
+        <input className='form-control' type="text" placeholder="2022/3" style={{width:"80px",marginLeft:"15px",borderWidth:"2px"}}/>
+ </button>
+
+
+
+
+</div>
 
 
 
@@ -88,4 +116,4 @@ function User() {
   )
 }
 
-export default User
+export default Me;
