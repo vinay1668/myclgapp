@@ -1,15 +1,29 @@
 const asyncHandler = require('express-async-handler')
 const User = require("../models/userModel.js")
 const Post = require('../models/postModel.js')
+const Comment = require('../models/commentModel.js');
 // @desc    Get all Posts
 // @route   GET /posts
 // @access   Private
 
 const getPosts = asyncHandler(async (req,res) => {
+    await Post.find().sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
+
+    
 
     const post = await Post.find().sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
-    var newPosts = post.map(function(post) {
-        var temPost = post.toObject();
+
+
+    var getCommentCountOfPost = await Promise.all(post.map(async(post)=>{
+        var count = await Comment.find({'postId': post._id }).count();
+        var modifiedCount = post.toObject();
+        modifiedCount.commentCount = count;
+        return modifiedCount;
+  }))
+  
+
+    var newPosts = getCommentCountOfPost.map(function(post) {
+        var temPost = post;
         if(temPost.upvotedBy.includes(req.user.id)){
             temPost.upvoted = 1;
             temPost.downvoted = 0

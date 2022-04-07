@@ -47,11 +47,11 @@ function Dashboard() {
         });
 
         useEffect(() => {
- 
           if(isError) {
             console.log(message)
           }
           dispatch(getPosts({limit:5,skip:0}))
+          
         
           if(!user){
             navigate('/login');
@@ -61,9 +61,12 @@ function Dashboard() {
           
           
           return () => { 
-            // dispatch(reset())
+            dispatch(reset())
           }
         },[user, isError,message,dispatch,navigate,user])
+
+
+
 
 
 
@@ -264,7 +267,7 @@ function Dashboard() {
      </div>
 
 
-    
+    {/* search filters */}
      
      <div  className='topbar' style={{marginTop:"30px",display:"flex",borderRadius:"10px"}} >
 
@@ -282,7 +285,7 @@ function Dashboard() {
           </div>
        </button>
 
-        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto", borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
                   <b style={{paddingLeft:"8px",color:"gray"}}>New</b>
         </button>
 

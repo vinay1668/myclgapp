@@ -109,6 +109,9 @@
     display: flex;
     justify-content: space-between;
   }
+
+
+
   .column{
     display: inline-block
   }
@@ -117,7 +120,6 @@
     width: 45%;
     height: auto;
     min-height: 300px;
-    
     background-color: white;
     border-radius: 10px;
     padding: 10px;
@@ -125,7 +127,6 @@
     margin-top: 20px;
   }
   .editcontainer {
-
     position: relative;
     width: 45%;
     height: auto;
@@ -281,6 +282,47 @@
   .jodit-status-bar {
     visibility: hidden;
   }
+
+
+ /* post.js page for comments */
+
+  .postcommentbar{
+    position: fixed;
+    /* top: 96%; */
+    top:96%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 45%;
+    height: 40px;
+    border-radius: 5px;
+    float: left;
+    margin-bottom: 30px;   
+  }
+
+  .viewcommentbar {
+    position: relative;
+    width: 45%;
+    
+  
+    height: auto;
+    background-color: white;
+    border-radius: 3px;
+    padding: 10px;
+    margin: 0 auto;
+    margin-top: 10px;
+
+  }
+  .dumer {
+    /* text-shadow: 0px 0px 1px beige, 0px 0px 1px black; */
+    display: inline-block;
+    padding: 0px;
+    padding-left: 10px;
+    vertical-align: middle;
+    padding-inline: 10px;
+  }
+
+  .showreply:focus{color:black;}
+  
   
   
   
@@ -313,10 +355,16 @@
     .editcontainer{
       width: 95%;
     }
+    .viewcommentbar{
+      width: 95%;
+    }
     .container{
       width: 100%;
     }
     .topbar{
+      width: 95%;
+    }
+    .postcommentbar {
       width: 95%;
     }
     .usertopbar{
@@ -338,10 +386,16 @@
     .editcontainer{
       width: 95%;
     }
+    .viewcommentbar{
+      width: 95%;
+    }
     .container{
       width: 95%;
     }
     .topbar{
+      width: 95%;
+    }
+    .postcommentbar {
       width: 95%;
     }
     .usertopbar{

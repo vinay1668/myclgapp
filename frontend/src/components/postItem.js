@@ -6,7 +6,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import pdf from "../pages/components/editors/pdfico.png";
 import {logout, reset} from "../features/auth/authSlice.js";
 import { Link } from 'react-router-dom';
-function PostItem({post}) {
+function PostItem({post,alterSizey}) {
 
     const [voteData,setVoteData] = useState({
         vote:""
@@ -21,6 +21,7 @@ function PostItem({post}) {
           // console.log(voteData)
           dispatch(updatePostVotes({postId:post._id,voteData}))
         }   
+       
         return () => {
             dispatch(reset())
           }
@@ -38,10 +39,6 @@ function PostItem({post}) {
         setVoteData(() => ({
             vote:"upvote"
         }))
-        
-      
-        
-
 
       }
       const downvoteClicked = () => {
@@ -151,7 +148,7 @@ function PostItem({post}) {
     </div>
   {/* bootom section */}
     <div  className='commentsection'>
-        <i  style ={{color: post.upvoted ? "red" : "gray"}}
+        <i  style ={{color: post.upvoted ? "red" : "gray",paddingLeft:"10px"}}
                 className="fa-solid fa-arrow-up fa-lg dum"
                 onClick={upvoteClicked}
                 >
@@ -163,13 +160,17 @@ function PostItem({post}) {
                 >
             </i>
                 {/* <span className='dum'>
-                
                 <i style={{display:"inline-block", paddingInline:"5px",color:"gray"}} className="fa-solid fa-share-from-square fa-lg"></i>
-                </span>
-                <span className='dum'>
-                <i style={{display:"inline-block", paddingInline:"5px",color:"gray"}} className="fa-regular fa-message fa-lg"></i>
-                <span style={{display:"inline-block", paddingInline:"5px",color:"gray"}}>5654</span>
                 </span> */}
+              <Link  
+                  to={"/post"}
+                  state= {post}
+                  style={{textDecoration:"none",color:"black"}} >
+                  <span className='dum'>
+                    <i onClick={()=>alterSizey()} style={{display:"inline-block", paddingInline:"5px",color:"gray"}} className="fa-regular fa-message fa-lg"></i>
+                    <span style={{display:"inline-block", paddingInline:"5px",color:"gray"}}>{post.commentCount}</span>
+                  </span>
+              </Link>
         </div>
      </div>
   )

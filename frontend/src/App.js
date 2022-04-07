@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard.js';
 import Main from './pages/Main.js';
 import Me from "./pages/Me.js"
 import User from "./pages/User.js"
+import Post from './pages/Post.js';
 
 import './App.css';
 function App() {
@@ -18,6 +19,7 @@ function App() {
               <Route path="/login" element ={<Main />}/>
               <Route path ="/me" element={<Me />}/>
               <Route path ="/user" element={<User />}/>
+              <Route path ="/post" element={<Post />}/>
             </Routes>
           </div>
       </Router>
