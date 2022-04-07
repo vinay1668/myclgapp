@@ -64,12 +64,6 @@ function Dashboard() {
             dispatch(reset())
           }
         },[user, isError,message,dispatch,navigate,user])
-
-
-
-
-
-
      
         function fetchImages() {
           setPage({
@@ -321,7 +315,7 @@ function Dashboard() {
 
 
 
-   
+
 
 {/*  
     posts */}
@@ -333,7 +327,7 @@ function Dashboard() {
     dataLength={posts.length} //This is important field to render the next data
     next={fetchImages}
     hasMore={true}
-    loader={<div style={{margin:"0 auto",marginTop:"10px"}} className='loader'></div>}
+    loader={<div style={{display:"flex",justifyContent:"center",alignItems:"center",marginTop:"10px"}}><h6 style={{color:"gray"}}>Loading...</h6></div>}
     endMessage={
       <p style={{ textAlign: 'center' }}>
         <b>Yay! You have seen it all</b>
