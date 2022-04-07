@@ -321,7 +321,7 @@ function Dashboard() {
 
 
 
-
+   
 
 {/*  
     posts */}
@@ -333,7 +333,8 @@ function Dashboard() {
     dataLength={posts.length} //This is important field to render the next data
     next={fetchImages}
     hasMore={true}
-    // loader={<h6 style={{color:"gray",margin:"0 auto"}}>Loading...</h6>}
+    loader={<div style={{margin:"0 auto",marginTop:"10px"}} className='loader'></div>}
+    
     endMessage={
       <p style={{ textAlign: 'center' }}>
         <b>Yay! You have seen it all</b>
