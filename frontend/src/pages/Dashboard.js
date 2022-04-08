@@ -5,8 +5,9 @@ import ImageEditor from './components/editors/ImageEditor';
 import File from './components/editors/File';
 import { create } from 'ipfs-http-client';
 import {useSelector, useDispatch} from "react-redux"
-import {logout, reset} from "../features/auth/authSlice.js"
+import {logout} from "../features/auth/authSlice.js"
 import {createPost, getPosts} from "../features/posts/postSlice.js";
+import {modifyPage,reset} from "../features/page/pageSlice.js";
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import PostItem from '../components/postItem';
@@ -31,6 +32,7 @@ function Dashboard() {
         const firstTime = true;
         const {user} = useSelector((state) => state.auth);
         const {posts,isLoading,isError,message,isSuccess} = useSelector((state) => state.posts);
+        const {limit,skip} = useSelector((state) => state.page);
 
         const [posty,setPosty] = useState({
           title:'',
@@ -50,8 +52,8 @@ function Dashboard() {
           if(isError) {
             console.log(message)
           }
-          dispatch(getPosts({limit:20,skip:0}))
-          
+          dispatch(getPosts({limit,skip}))
+          dispatch(modifyPage({limit,skip}));
         
           if(!user){
             navigate('/login');
@@ -61,16 +63,18 @@ function Dashboard() {
           
           
           return () => { 
-            dispatch(reset())
+            // dispatch(reset())
           }
         },[user, isError,message,dispatch,navigate,user])
+
+        // if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+        //   dispatch(reset())
+        // }
      
+
         function fetchImages() {
-          setPage({
-            limit:page.limit,
-            skip: page.skip + page.limit,
-          })
-          dispatch(getPosts(page))
+          dispatch(getPosts({limit,skip}))
+          dispatch(modifyPage({limit,skip}));
         }
 
 
@@ -163,6 +167,12 @@ function Dashboard() {
           }
 
 
+        }
+
+
+        const[buttonName,setButtonName] = useState('All');
+        function changeBranch(e){
+          setButtonName(e);
         }
 
 
@@ -262,20 +272,22 @@ function Dashboard() {
 
 
     {/* search filters */}
+    
      
      <div  className='topbar' style={{marginTop:"30px",display:"flex",borderRadius:"10px"}} >
 
-       <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+       <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
           <div class="dropdown">
             <b class="dropdown-toggle" type="button" id="dropdownMenuButton" style={{color:"gray"}} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              All
+              {buttonName}
             </b>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#">All</a>
-              <a class="dropdown-item" href="#">CSE</a>
-              <a class="dropdown-item" href="#">ECE</a>
-              <a class="dropdown-item" href="#">EEE</a>
-            </div>
+              <a onClick={()=>changeBranch('ALL')} class="dropdown-item" href="#">ALL</a>
+              <a onClick={()=>changeBranch('CSE')} class="dropdown-item" href="#">CSE</a>
+              <a onClick={()=>changeBranch('ECE')} class="dropdown-item" href="#">ECE</a>
+              <a onClick={()=>changeBranch('EEE')} class="dropdown-item" href="#">EEE</a>
+             
+            </div> 
           </div>
        </button>
 

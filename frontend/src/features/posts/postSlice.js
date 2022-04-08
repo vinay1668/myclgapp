@@ -3,6 +3,7 @@ import postService from "./postService.js"
 
 const initialState = {
     posts: [],
+    userPosts:[],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -133,7 +134,7 @@ export const postSlice = createSlice ({
                 .addCase(getUserPosts.fulfilled, (state, action) =>{
                     state.isSuccess = true
                     state.isLoading = false
-                    state.posts.push(...action.payload)
+                    state.userPosts.push(...action.payload)
                 })
                 .addCase(getUserPosts.rejected, (state,action) => {
                     state.isError = true

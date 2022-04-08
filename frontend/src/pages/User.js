@@ -11,7 +11,7 @@ function User() {
     const dispatch = useDispatch()
 
     const {user} = useSelector((state) => state.auth);
-    const {posts,isLoading,isError,message,isSuccess} = useSelector((state) => state.posts);
+    const {userPosts,isLoading,isError,message,isSuccess} = useSelector((state) => state.posts);
     const [page,setPage] = useState({
         limit: 5,
         skip: 5,
@@ -20,11 +20,11 @@ function User() {
 
     useEffect(() => {   
         // console.log(location.state.user);
-        dispatch(reset()) 
+        //dispatch(reset()) 
         dispatch(getUserPosts({limit:5,skip:0,id:location.state.user}))
         
       return () => {   
-        dispatch(reset()) 
+        //dispatch(reset()) 
          
       }
     }, [dispatch])
@@ -70,7 +70,7 @@ function User() {
 
 
         <InfiniteScroll
-    dataLength={posts.length} //This is important field to render the next data
+    dataLength={userPosts.length} //This is important field to render the next data
     next={fetchImages}
     hasMore={true}
     endMessage={
@@ -79,7 +79,7 @@ function User() {
       </p>
     }
     >
-          {posts.map((post,index) => (
+          {userPosts.map((post,index) => (
             <PostItem key ={index} post={post}/>
           ))}
     </InfiniteScroll>
