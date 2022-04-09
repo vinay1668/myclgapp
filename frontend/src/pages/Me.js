@@ -2,6 +2,7 @@ import { useEffect,useState } from "react"
 import {useSelector, useDispatch} from "react-redux"
 import { getUserPosts } from "../features/posts/postSlice";
 import { reset } from "../features/posts/postSlice"
+import {reset as resetPage} from '../features/page/pageSlice';
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostItem from "../components/postItem";
 
@@ -10,20 +11,22 @@ function Me() {
     const dispatch = useDispatch()
 
     const {user} = useSelector((state) => state.auth);
-    const {posts,isLoading,isError,message,isSuccess} = useSelector((state) => state.posts);
+    const {userPosts} = useSelector((state) => state.posts);
     const [page,setPage] = useState({
-        limit: 5,
-        skip: 5,
+        limit: 20,
+        skip: 20,
         id:user.id
         
       });
 
     useEffect(() => {
         dispatch(reset())
-        dispatch(getUserPosts({limit:5,skip:0,id:user.id}))
-        
+        dispatch(resetPage());
+        dispatch(getUserPosts({limit:20,skip:0,id:user.id}))
+   
       return () => {   
-        dispatch(reset())
+       dispatch(reset())
+       dispatch(resetPage());
         
           
       }
@@ -69,32 +72,29 @@ function Me() {
 
   <div  className='topbar' style={{marginTop:"30px",display:"flex",borderRadius:"10px"}} >
 
- <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: "1px solid #DAE0E6"}}>
-           <b style={{paddingLeft:"8px",color:"gray"}}>New</b>
- </button>
+      <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: "1px solid #DAE0E6"}}>
+                <b style={{paddingLeft:"8px",color:"gray"}}>New</b>
+      </button>
 
- <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom:"1px solid #DAE0E6"}}>
-           <b style={{paddingLeft:"8px",color:"gray"}}>Old</b>
- </button>
+      <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto",borderBottom:"1px solid #DAE0E6"}}>
+                <b style={{paddingLeft:"8px",color:"gray"}}>Old</b>
+      </button>
 
-<button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom:"1px solid #DAE0E6"}}>
-<b style={{paddingLeft:"8px",color:"gray"}}>Top</b>
-           
- </button>
+      <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto",borderBottom:"1px solid #DAE0E6"}}>
+      <b style={{paddingLeft:"8px",color:"gray"}}>Top</b>
+                
+      </button>
 
- <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: "1px solid #DAE0E6"}}>
-        <input className='form-control' type="text" placeholder="2022/3" style={{width:"80px",marginLeft:"15px",borderWidth:"2px"}}/>
- </button>
+      <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",height: "50px", flex:"auto",borderBottom: "1px solid #DAE0E6"}}>
+              <input className='form-control' type="text" placeholder="2022/3" style={{width:"80px",marginLeft:"15px",borderWidth:"2px"}}/>
+      </button>
 
-
-
-
-</div>
+  </div>
 
 
 
         <InfiniteScroll
-    dataLength={posts.length} //This is important field to render the next data
+    dataLength={userPosts.length} //This is important field to render the next data
     next={fetchImages}
     hasMore={true}
     endMessage={
@@ -103,8 +103,8 @@ function Me() {
       </p>
     }
     >
-          {posts.map((post,index) => (
-            <PostItem key ={index} post={post}/>
+          {userPosts.map((post,index) => (
+            <PostItem key = {index} post={post} component = "user"/>
           ))}
     </InfiniteScroll>
 

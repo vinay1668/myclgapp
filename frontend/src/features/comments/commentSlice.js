@@ -96,6 +96,19 @@ export const updateReplyVotes = createAsyncThunk('comments/updateReplyVotes', as
     }
 })
 
+//resetting comments to empty array
+
+export const resetComment = createAsyncThunk('comments/resetComment', async(_, thunkAPI) =>{
+    try {
+        return [];
+        
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+        
+    }
+})
+
 
 
 
@@ -237,6 +250,25 @@ export const commentSlice = createSlice ({
                 state.message = action.payload
                 state.isLoading = false
             })
+
+
+        //resetting comments
+            .addCase(resetComment.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(resetComment.fulfilled, (state, action) =>{
+                state.isSuccess = true
+                state.isLoading = false
+                state.comments = action.payload
+            })
+            .addCase(resetComment.rejected, (state,action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+
+
+
 
 
 

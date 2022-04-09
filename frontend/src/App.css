@@ -275,12 +275,9 @@
   .viewcommentbar {
     position: relative;
     width: 45%;
-    
-  
     height: auto;
     background-color: white;
     border-radius: 3px;
-    padding: 10px;
     margin: 0 auto;
     margin-top: 10px;
 

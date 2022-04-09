@@ -74,6 +74,21 @@ export const createPost = createAsyncThunk('posts/create', async(postData, thunk
         
     }
   })
+  
+
+  //Resetting user posts
+
+  export const resetUserPosts = createAsyncThunk('posts/resetUserPosts', async(_, thunkAPI) =>{
+    try {
+        return [];
+        
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+        
+    }
+  })
+
 
 
 
@@ -142,6 +157,22 @@ export const postSlice = createSlice ({
                     state.isLoading = false
                 })
 
+        // getting current user posts
+
+                .addCase(resetUserPosts.pending, (state) => {
+                    state.isLoading = true
+                })
+                .addCase(resetUserPosts.fulfilled, (state, action) =>{
+                    state.isSuccess = true
+                    state.isLoading = false
+                    state.userPosts = action.payload
+                })
+                .addCase(resetUserPosts.rejected, (state,action) => {
+                    state.isError = true
+                    state.message = action.payload
+                    state.isLoading = false
+                })
+
   
 
             //updating post votes
@@ -165,6 +196,20 @@ export const postSlice = createSlice ({
                     }
                     return post;
                 })
+
+
+                state.userPosts.filter(post => {
+                    if(post._id == action.payload._id){
+                          return (
+                              post.votes= action.payload.votes,
+                              post.upvoted = action.payload.upvoted,
+                              post.downvoted = action.payload.downvoted
+
+                          );
+                    }
+                    return post;
+                })
+
             })
             .addCase(updatePostVotes.rejected, (state,action) => {
                 state.isError = true

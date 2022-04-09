@@ -10,9 +10,16 @@ import CommentItem from "../components/commentItem.js";
 function Post() {
 
   const {comments,isLoading,isError,message,isSuccess} = useSelector((state) => state.comments);
+  const {posts,userPosts} = useSelector((state) => state.posts);
+ 
     const location = useLocation();
     const dispatch = useDispatch()
-    const post = location.state;    
+    const stateData = location.state; 
+    const post = stateData['post']
+    const component = stateData['component'];
+  
+
+
   
     const [page,setPage] = useState({
       postId:post._id,
@@ -25,9 +32,10 @@ function Post() {
     })
 
     useEffect(() =>{
+     
         dispatch(getComment(page));
         return () => { 
-            dispatch(reset())
+            // dispatch(reset())
             
           }
 
@@ -77,20 +85,45 @@ function Post() {
     }
 
   return (
-      <div>
-       <PostItem post={post} alterSizey={alterSizey}/>
+      <div style={{paddingBottom:"30px"}}>
+       <PostItem post={post} alterSizey={alterSizey} component={component}/>
 
-       <div className="viewcommentbar" style={{paddingBottom: "60px"}}>
-       {comments.map((comment,index) => (
-            <CommentItem comment={comment} key={index} alterSize={alterSize} />
-          ))}
-        </div>
-       <div className="postcommentbar" style={{display:"flex",paddingLeft : subReply ? "75px" :"0px"}}>
-        <input type="text" style={{flex:"auto",marginRight:"10px",height:"40px"}} placeholder="Add a comment" value= {commentData.text} className="form-control input-sm" onChange={commenting}/>
-        <button type="button" style={{flex:"auto",height:"38px"}} class="btn btn-primary" onClick={send}>send</button>
+       {/* filter */}
+       <div className="viewcommentbar"style={{backgroundColor:"#DAE0E6"}}>
+       <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"5px",height: "40px", marginLeft:"0"}}>
+          <div class="dropdown">
+            <b class="dropdown-toggle" type="button" id="dropdownMenuButton" style={{color:"gray"}} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Top comments
+            </b>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a  class="dropdown-item" href="#">Top comments</a>
+              <a  class="dropdown-item" href="#">Best comments</a>
+              <a  class="dropdown-item" href="#">Most replied</a>
+              <a  class="dropdown-item" href="#">Most downvoted</a>    
+            </div> 
+          </div>
+       </button>
        </div>
 
-    </div>
+
+      {comments.length > 0 &&
+        <div className="viewcommentbar" style={{padding:"10px" ,minHeight:'0'}}>
+        {comments.map((comment,index) => (
+              <CommentItem comment={comment} key={index} alterSize={alterSize} />
+            ))}
+          </div> 
+      }
+      
+
+
+      <div className="postcommentbar" style={{display:"flex",paddingLeft : subReply ? "75px" :"0px"}}>
+        <input type="text" style={{flex:"auto",marginRight:"10px",height:"40px"}} placeholder="Add a comment" value= {commentData.text} className="form-control input-sm" onChange={commenting}/>
+        <button type="button" style={{flex:"auto",height:"38px"}} class="btn btn-primary" onClick={send}>
+        <i style={{fontSize:"20px"}} class="fa-solid fa-arrow-up-from-bracket"></i>
+        </button>
+      </div> 
+
+    </div> 
     
   )
 }

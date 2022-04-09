@@ -4,9 +4,9 @@ import {useSelector, useDispatch} from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { Link } from 'react-router-dom';
 import {reset} from "../features/comments/commentSlice.js";
-import { updateCommentVotes,updateReplyVotes } from '../features/comments/commentSlice'
+import { updateCommentVotes,updateReplyVotes, resetComment} from '../features/comments/commentSlice'
 import { getReply } from '../features/comments/commentSlice';
-
+import moment from 'moment';
 
 function CommentItem({comment,alterSize}) {
 
@@ -35,7 +35,7 @@ const[page,setPage] = useState({
 
     useEffect(()=>{
       return () => {
-        dispatch(reset())
+         dispatch(resetComment())
       }
 
     },[])
@@ -82,6 +82,13 @@ const[page,setPage] = useState({
             <span style={{fontSize:"10px",display:"block"}} className='name'><b>{comment.username}</b> </span>
             <span style={{fontSize:"8px",display:"block"}} className="rollno" ><b>{comment.name}</b></span>
         </div> 
+        <div className='dummy' style={{marginLeft:"20px",verticalAlign:"super",marginTop:"0"}}>
+              <span style={{fontSize:"8px",color:"gray",fontWeight:"bold"}}>
+              {moment(comment.createdAt).fromNow()} 
+                </span>
+                <span></span>
+          </div>
+
 
         <div style={{marginTop:"0px",marginLeft:"32px"}}>
             <span style={{fontSize:"14px"}}>{comment.text}</span>
@@ -113,6 +120,13 @@ const[page,setPage] = useState({
                  <span style={{fontSize:"10px",display:"block"}} className='name'><b>{reply.username}</b> </span>
                  <span style={{fontSize:"8px",display:"block"}} className="rollno" ><b>{reply.name}</b></span>
                </div> 
+
+               <div className='dummy' style={{marginLeft:"20px",verticalAlign:"super",marginTop:"0"}}>
+                  <span style={{fontSize:"8px",color:"gray",fontWeight:"bold"}}>
+                    {moment(reply.createdAt).fromNow()} 
+                  </span>
+                  <span></span>
+                </div>
     
                 <div style={{marginTop:"0px",marginLeft:"32px"}}>
                    <span style={{fontSize:"14px"}}>{reply.text}</span>
@@ -126,9 +140,15 @@ const[page,setPage] = useState({
                     <i style ={{color: reply.downvoted ? "#3293db" : "gray", marginTop:"-13px",fontSize:"14px",paddingInline:"6px"}}
                             className="fa-solid fa-arrow-down fa-lg dumer" onClick={ ()=>downvoteReplyClicked(reply._id)}>
                     </i>
-                    
+                </div>
 
-              </div>
+              
+
+
+
+
+
+
             </div> 
  
           ) : 

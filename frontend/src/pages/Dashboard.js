@@ -217,20 +217,20 @@ function Dashboard() {
       {/* ipfs adding files  */}
       <div  className='topbar' style={{marginTop:"30px",display:"flex",borderRadius:"10px"}} >
           
-          <button onClick={() => changeEditor("post")} name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+          <button onClick={() => changeEditor("post")} name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto",backgroundColor: editor == "post" ? "#f8f9fa": null}}>
                <i style={{color:"gray"}} className="fa-solid fa-envelope"></i>
                <b style={{paddingLeft:"8px",color:"gray"}}>Post</b>
           </button>
 
-          <button onClick={() => changeEditor("image")} name="image" id= 'poste' type="button" class="btn btn-light" style={{height: "50px" ,flex:"auto",borderBottom: editor == "image" ? "1px solid #DAE0E6": null}}>
+          <button onClick={() => changeEditor("image")} name="image" id= 'poste' type="button" class="btn btn-light" style={{height: "50px" ,flex:"auto",borderRadius:"0",backgroundColor: editor == "image" ? "#f8f9fa": null}}>
             <i style={{color:"gray"}} className="fa-solid fa-file-image"></i>
             <b style={{paddingLeft:"8px", color:"gray"}}>Image</b>
           </button>
-          <button onClick={() => changeEditor("video")} name="video"  id= 'poste' type="button" class="btn btn-light" style={{height: "50px" , flex:"auto",borderBottom: editor == "video" ? "1px solid #DAE0E6": null}}>
+          <button onClick={() => changeEditor("video")} name="video"  id= 'poste' type="button" class="btn btn-light" style={{height: "50px" , flex:"auto",borderRadius:"0", backgroundColor: editor == "video" ? "#f8f9fa": null}}>
             <i style={{color:"gray"}} className="fa-solid fa-file-video"></i>
             <b style={{paddingLeft:"8px",color:"gray"}}>Video</b>
           </button>
-          <button onClick={() => changeEditor("poll")} name="poll" id= 'poste' type="button" class="btn btn-light" style={{borderTopRightRadius:"5px",borderTopRightRadius:"5px",height: "50px" ,flex:"auto", borderBottom: editor == "poll" ? "1px solid #DAE0E6": null}}>
+          <button onClick={() => changeEditor("poll")} name="poll" id= 'poste' type="button" class="btn btn-light" style={{borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",height: "50px" ,flex:"auto", backgroundColor: editor == "poll" ? "#f8f9fa": null}}>
              <i style={{color:"gray"}} className="fa-solid fa-square-poll-horizontal"></i>
              <b style={{paddingLeft:"8px", color:"gray"}}>File</b>
           </button>
@@ -272,11 +272,13 @@ function Dashboard() {
 
 
     {/* search filters */}
+
+
     
      
-     <div  className='topbar' style={{marginTop:"30px",display:"flex",borderRadius:"10px"}} >
+     <div  className='topbar' style={{marginTop:"20px",display:"flex",borderRadius:"10px"}} >
 
-       <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+       <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto"}}>
           <div class="dropdown">
             <b class="dropdown-toggle" type="button" id="dropdownMenuButton" style={{color:"gray"}} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {buttonName}
@@ -291,15 +293,15 @@ function Dashboard() {
           </div>
        </button>
 
-        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto", borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto"}}>
                   <b style={{paddingLeft:"8px",color:"gray"}}>New</b>
         </button>
 
-        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto"}}>
                   <b style={{paddingLeft:"8px",color:"gray"}}>Hot</b>
         </button>
 
-        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto"}}>
           <div class="dropdown">
             <b class="dropdown-toggle" type="button" id="dropdownMenuButton" style={{color:"gray"}} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Top
@@ -313,16 +315,26 @@ function Dashboard() {
         </div>
        </button>
     
-
-       <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderTopLeftRadius:"5px",borderTopLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
-                  <input className='form-control' type="text" placeholder="2022/3" style={{width:"80px",borderWidth:"2px"}}/>
-                  
-        </button>
-       
-  
-    
-    
+         <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null, textAlign:"center"}}>
+                  <input className='form-control' type="text" placeholder="22/3" style={{width:"60px",alignItems:"center"}}/>          
+          </button>
     </div>
+ 
+
+    {/* selecting feed */}
+    
+    <div  className='topbar' style={{marginTop:"5px",display:"flex",borderRadius:"10px"}} >
+
+    <button name="post" id= 'poste' type="button" class="btn btn-light" style={{borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",margin:"auto",height: "50px", flex:"auto", borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+                  <b style={{paddingLeft:"8px",color:"gray"}}>Student's Feed</b>
+        </button>
+
+        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",margin:"auto",borderRadius:"0",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+                  <b style={{paddingLeft:"8px",color:"gray"}}>Faculty Feed</b>
+        </button>
+
+    </div>
+
 
 
 
@@ -347,7 +359,7 @@ function Dashboard() {
     }
     >
           {posts.map((post,index) => (
-            <PostItem key ={index} post={post}/>
+            <PostItem key ={index} post={post} component="dash"/>
           ))}
     </InfiniteScroll>
 

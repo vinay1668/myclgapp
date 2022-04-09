@@ -6,7 +6,11 @@ import { configureStore } from '@reduxjs/toolkit'
 import pdf from "../pages/components/editors/pdfico.png";
 import {logout, reset} from "../features/auth/authSlice.js";
 import { Link } from 'react-router-dom';
-function PostItem({post,alterSizey}) {
+import moment from 'moment';
+function PostItem({post,alterSizey,component}) {
+    
+  const {posts,userPosts} = useSelector((state) => state.posts);
+
 
     const [voteData,setVoteData] = useState({
         vote:""
@@ -16,6 +20,8 @@ function PostItem({post,alterSizey}) {
 
     useEffect(()=>{
       
+      // var date = post.createdAt.split('T')[0]
+      // console.log(date)
         
         if(voteData.vote !== "") {
           // console.log(voteData)
@@ -67,6 +73,11 @@ function PostItem({post,alterSizey}) {
           <div className='dummy'>
               <span style={{fontSize:"13px",display:"block"}} className='name'><b>{post.username}</b> </span>
               <span style={{fontSize:"10px",display:"block"}} className="rollno" ><b>{post.name}</b></span>
+          </div>
+          <div className='dummy' style={{position:"absolute",top:"0",marginTop:"4px",right:"30px"}}>
+              <span style={{fontSize:"10px",color:"gray",fontWeight:"bold"}}>
+              {moment(post.createdAt).fromNow()} 
+                </span>
           </div>
           </Link>
         </div>
@@ -162,9 +173,11 @@ function PostItem({post,alterSizey}) {
                 {/* <span className='dum'>
                 <i style={{display:"inline-block", paddingInline:"5px",color:"gray"}} className="fa-solid fa-share-from-square fa-lg"></i>
                 </span> */}
+               
               <Link  
                   to={"/post"}
-                  state= {post}
+                  state= {{post:post,component:component}}
+              
                   style={{textDecoration:"none",color:"black"}} >
                   <span className='dum'>
                     <i onClick={()=>alterSizey()} style={{display:"inline-block", paddingInline:"5px",color:"gray"}} className="fa-regular fa-message fa-lg"></i>
