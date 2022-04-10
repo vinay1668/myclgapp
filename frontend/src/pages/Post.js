@@ -16,7 +16,7 @@ function Post() {
     const dispatch = useDispatch()
     const stateData = location.state; 
     const post = stateData['post']
-    const component = stateData['component'];
+    
   
 
 
@@ -86,7 +86,7 @@ function Post() {
 
   return (
       <div style={{paddingBottom:"30px"}}>
-       <PostItem post={post} alterSizey={alterSizey} component={component}/>
+       <PostItem post={post} alterSizey={alterSizey} />
 
        {/* filter */}
        <div className="viewcommentbar"style={{backgroundColor:"#DAE0E6"}}>

@@ -11,31 +11,43 @@ function User() {
     const dispatch = useDispatch()
 
     const {user} = useSelector((state) => state.auth);
-    const {userPosts,isLoading,isError,message,isSuccess} = useSelector((state) => state.posts);
+    const {userPosts} = useSelector((state) => state.posts);
     const [page,setPage] = useState({
         limit: 20,
-        skip: 20,
+        skip: 0,
         id:location.state.user
       });
 
     useEffect(() => {   
         // console.log(location.state.user);
         //dispatch(reset()) 
-        dispatch(getUserPosts({limit:20,skip:0,id:location.state.user}))
+        // console.log(page.skip)
+        // djs();
+        // dispatch(getUserPosts(page))
+        // setPage({
+        //   limit:page.limit,
+        //   skip: page.skip + page.limit,
+        //   id:location.state.user
+        // })  
         
+
       return () => {   
         dispatch(resetUserPosts()) 
-         
       }
-    }, [dispatch])
+    }, [])
 
-    function fetchImages() {
+    function djs() {
+      // console.log(page.skip)
+        dispatch(getUserPosts(page))
         setPage({
           limit:page.limit,
           skip: page.skip + page.limit,
           id:location.state.user
         })
-        dispatch(getUserPosts(page))
+
+      
+      
+        
       }
 
 
@@ -95,7 +107,7 @@ function User() {
 
         <InfiniteScroll
     dataLength={userPosts.length} //This is important field to render the next data
-    next={fetchImages}
+    next={djs}
     hasMore={true}
     endMessage={
       <p style={{ textAlign: 'center' }}>
@@ -104,7 +116,7 @@ function User() {
     }
     >
           {userPosts.map((post,index) => (
-            <PostItem key ={index} post={post} component="user" />
+            <PostItem key ={index} post={post}  />
           ))}
     </InfiniteScroll>
 

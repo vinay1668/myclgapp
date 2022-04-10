@@ -7,7 +7,7 @@ import pdf from "../pages/components/editors/pdfico.png";
 import {logout, reset} from "../features/auth/authSlice.js";
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-function PostItem({post,alterSizey,component}) {
+function PostItem({post,alterSizey}) {
     
   const {posts,userPosts} = useSelector((state) => state.posts);
 
@@ -176,7 +176,7 @@ function PostItem({post,alterSizey,component}) {
                
               <Link  
                   to={"/post"}
-                  state= {{post:post,component:component}}
+                  state= {{post:post}}
               
                   style={{textDecoration:"none",color:"black"}} >
                   <span className='dum'>

@@ -52,8 +52,10 @@ function Dashboard() {
           if(isError) {
             console.log(message)
           }
-          dispatch(getPosts({limit,skip}))
-          dispatch(modifyPage({limit,skip}));
+          if(skip == 0) {
+            dispatch(getPosts({limit,skip}))
+            dispatch(modifyPage({limit,skip}));
+          }
         
           if(!user){
             navigate('/login');

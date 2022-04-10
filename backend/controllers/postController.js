@@ -7,7 +7,53 @@ const Comment = require('../models/commentModel.js');
 // @access   Private
 
 const getPosts = asyncHandler(async (req,res) => {
-    await Post.find().sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
+
+
+   //Getting hot posts
+
+    // const hot = await Post.aggregate([
+    //     {
+    //         $project: {
+    //             ratio: { $divide: [ "$votes", {$subtract: [ {"$toLong": "$$NOW" } ,{"$toLong": "$createdAt"}  ] } ]},
+    //             text : "$title"
+    //         }
+    //     },
+   
+    //     {
+    //         $sort: { ratio: -1 },
+    //     }
+    //     ]).limit(5);
+
+    // console.log(hot);
+
+
+    // Top filter for month
+
+    // var d = new Date();
+    // d.setMonth(d.getMonth() - 1); //1 month ago
+    // db.data.find({created:{$gte:d}}); //change "data" for your collection's name
+
+    //Top filter for day 
+    
+    // var d = new Date();
+    // d.setDate(d.getDate() -1);
+    
+    // const topOfDay = await Post.find({createdAt:{$gte:d}}).sort({_id:-1})
+    // console.log(topOfDay)
+
+
+    //Top filter for the year
+
+    // var d = new Date();
+    // d.setDate(d.getDate() -365);
+    
+   //const topOfYear = await Post.find({createdAt:{$gte:d}}).sort({_id:-1})
+    // console.log(d)
+
+    
+    
+
+   
 
     
 
@@ -202,7 +248,10 @@ const getUserPosts = asyncHandler(async (req,res) => {
     }
     else{
         userId = req.body.id;
+
     }
+    console.log(req.body.limit);
+    console.log(req.body.skip)
     const post = await Post.find({"user": userId}).sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
     
     var newPosts = post.map(function(post) {
