@@ -61,9 +61,6 @@ function Dashboard() {
             navigate('/login');
             
           }
-
-          
-          
           return () => { 
             // dispatch(reset())
           }
@@ -176,6 +173,14 @@ function Dashboard() {
         function changeBranch(e){
           setButtonName(e);
         }
+        
+        const[userScrolled,setUserScrolled] = useState(false);
+
+        window.onscroll = function (e)
+        {
+          setUserScrolled(true);
+        }
+
 
 
         // if(isLoading) {
@@ -186,12 +191,12 @@ function Dashboard() {
   return (
     <>
 
-    <div className="">
+    <div className="" >
 
       {/* top profile */}
     
 
-    <div className='topbar'>
+    <div className='topbar' >
         <div className='column' style={{paddingLeft:"20px"}}>
             <input  style ={{height:"30px", paddingRight:"0px"}} className="form-control input-sm search-username" id="inputsm" placeholder = "Search" type="search"/>
         </div>
@@ -361,7 +366,7 @@ function Dashboard() {
     }
     >
           {posts.map((post,index) => (
-            <PostItem key ={index} post={post} component="dash"/>
+            <PostItem key ={index} post={post} userScrolled={userScrolled}/>
           ))}
     </InfiniteScroll>
 

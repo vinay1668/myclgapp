@@ -77,11 +77,16 @@ const[page,setPage] = useState({
 
     <div style={{marginTop:"15px"}}>
       <div>
+      <Link  
+           to={"/user"}
+           state= {comment}
+          style={{textDecoration:"none",color:"black"}} >
         <img className="" style={{borderRadius:"50%", width:"25px",marginLeft:"2px"}} src={comment.pfp} />
         <div className='dummy'>
             <span style={{fontSize:"10px",display:"block"}} className='name'><b>{comment.username}</b> </span>
             <span style={{fontSize:"8px",display:"block"}} className="rollno" ><b>{comment.name}</b></span>
         </div> 
+      </Link>
         <div className='dummy' style={{marginLeft:"20px",verticalAlign:"super",marginTop:"0"}}>
               <span style={{fontSize:"8px",color:"gray",fontWeight:"bold"}}>
               {moment(comment.createdAt).fromNow()} 

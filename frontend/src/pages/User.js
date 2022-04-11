@@ -15,20 +15,20 @@ function User() {
     const [page,setPage] = useState({
         limit: 20,
         skip: 0,
-        id:location.state.user
+        id:location.state.post.user
       });
 
     useEffect(() => {   
-        // console.log(location.state.user);
-        //dispatch(reset()) 
-        // console.log(page.skip)
-        // djs();
-        // dispatch(getUserPosts(page))
-        // setPage({
-        //   limit:page.limit,
-        //   skip: page.skip + page.limit,
-        //   id:location.state.user
-        // })  
+      console.log(location.state.scrolled)
+       if(!location.state.scrolled){
+         dispatch(getUserPosts(page))
+         setPage({
+          limit:page.limit,
+          skip: page.skip + page.limit,
+          id:location.state.post.user
+        })
+      }
+
         
 
       return () => {   
@@ -36,19 +36,32 @@ function User() {
       }
     }, [])
 
-    function djs() {
-      // console.log(page.skip)
-        dispatch(getUserPosts(page))
-        setPage({
-          limit:page.limit,
-          skip: page.skip + page.limit,
-          id:location.state.user
-        })
+// user has not scrolled!
+    // function fetchImages() {
+    //   console.log(page.skip)
+    //   if(page.skip !== 0){
+    //   dispatch(getUserPosts(page))
+    //   }
+    //     setPage({
+    //       limit:page.limit,
+    //       skip: page.skip + page.limit,
+    //       id:location.state.user
+    //     })
+    //   }
+    
+  // user has scrolled
+      function fetchImages() {
 
-      
-      
-        
-      }
+      dispatch(getUserPosts(page))
+          setPage({
+            limit:page.limit,
+            skip: page.skip + page.limit,
+            id:location.state.post.user
+          })
+        }
+
+  
+
 
 
     
@@ -60,11 +73,11 @@ function User() {
         <div style={{minHeight:"280px",zIndex:"-2"}} className='usertopbar'>
         
             <div style={{textAlign:"center", margin:"0 auto"}}>
-            <button type="button" style={{position:"absolute", top:"81px",left:"0",width:"50px",height:"30px",fontSize:"12px"}} class="btn btn-dark">{location.state.branch}</button>
+            <button type="button" style={{position:"absolute", top:"81px",left:"0",width:"50px",height:"30px",fontSize:"12px"}} class="btn btn-dark">{location.state.post.branch}</button>
             <div style={{position:"absolute",left:"0",top:"0" , width:"100%" ,backgroundColor:"#33a8ff",height:"80px",zIndex:"-1",borderTopLeftRadius:"10px",borderTopRightRadius:"10px"}}></div>
-                <img style={{marginTop:"15px",borderRadius:"50%", width:"100px"}} src={location.state.pfp} />
-                <h4 style={{}}>{location.state.name}</h4>
-                <span style={{color:"gray",fontWeight:"bold",display:"inline"}}>{location.state.username}</span>
+                <img style={{marginTop:"15px",borderRadius:"50%", width:"100px"}} src={location.state.post.pfp} />
+                <h4 style={{}}>{location.state.post.name}</h4>
+                <span style={{color:"gray",fontWeight:"bold",display:"inline"}}>{location.state.post.username}</span>
                 {/* <div style={{width:"90%",margin:"auto",marginTop:"10px"}}>
                 <h6 style={{display:"inline"}}>my name is vinay kumar. currently studying final year. I will be graduating in 2022</h6>
                 </div> */}
@@ -107,7 +120,7 @@ function User() {
 
         <InfiniteScroll
     dataLength={userPosts.length} //This is important field to render the next data
-    next={djs}
+    next={fetchImages}
     hasMore={true}
     endMessage={
       <p style={{ textAlign: 'center' }}>

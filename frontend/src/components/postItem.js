@@ -7,7 +7,7 @@ import pdf from "../pages/components/editors/pdfico.png";
 import {logout, reset} from "../features/auth/authSlice.js";
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-function PostItem({post,alterSizey}) {
+function PostItem({post,alterSizey,userScrolled}) {
     
   const {posts,userPosts} = useSelector((state) => state.posts);
 
@@ -36,6 +36,9 @@ function PostItem({post,alterSizey}) {
     const[upvote,setUpvote] = useState(false)
     const[downvote,setDownvote] = useState(false)
 
+
+    
+  
 
 
 
@@ -67,7 +70,8 @@ function PostItem({post,alterSizey}) {
         <div>
         <Link  
            to={"/user"}
-           state= {post}
+           state= {{post:post,scrolled:userScrolled}}
+           
           style={{textDecoration:"none",color:"black"}} >
           <img className="dummy" style={{borderRadius:"50%", width:"40px"}} src={post.pfp} />
           <div className='dummy'>
