@@ -6,7 +6,7 @@ import File from './components/editors/File';
 import { create } from 'ipfs-http-client';
 import {useSelector, useDispatch} from "react-redux"
 import {logout} from "../features/auth/authSlice.js"
-import {createPost, getPosts,reset as resetDash} from "../features/posts/postSlice.js";
+import {createPost, getPosts,reset as resetDash, modifyPaths} from "../features/posts/postSlice.js";
 import {modifyPage} from "../features/page/pageSlice.js";
 import {reset as resetter} from "../features/page/pageSlice.js";
 import { useNavigate } from 'react-router-dom';
@@ -14,9 +14,12 @@ import Spinner from '../components/Spinner';
 import PostItem from '../components/postItem';
 import "../App.css";
 import InfiniteScroll from 'react-infinite-scroll-component';
-
 import { Link } from 'react-router-dom';
 import { filter } from 'domutils';
+import { createBrowserHistory } from "history";
+
+
+
 
 
 /* Create an instance of the client */
@@ -35,7 +38,7 @@ function Dashboard() {
         const dispatch = useDispatch()
         const firstTime = true;
         const {user} = useSelector((state) => state.auth);
-        const {posts,isLoading,isError,message,isSuccess} = useSelector((state) => state.posts);
+        const {posts,isLoading,isError,message,isSuccess,paths} = useSelector((state) => state.posts);
         const {limit,skip} = useSelector((state) => state.page);
 
         const [posty,setPosty] = useState({
@@ -80,20 +83,26 @@ function Dashboard() {
         // }
      
         
+        
+        const history = createBrowserHistory();
         useEffect(() =>{
-          if(skip !== 0) {
-            console.log(`skip after modifying ${skip}`)
-            dispatch(getPosts({limit,skip,branch:page.branch,type:page.type}))
+          if(history.action !== 'POP'){
+            if(skip !== 0) {
+              console.log(`skip after modifying ${skip}`)
+              dispatch(getPosts({limit,skip,branch:page.branch,type:page.type}))
+            }       
           }
-          
-
         },[skip])
         function fetchImages() {
            //dispatch(modifyPage({limit:20,skip:0})) 
            
           
           
-          dispatch(modifyPage({limit,skip}));
+          dispatch(modifyPage({limit,skip})).then(() =>{
+            dispatch(getPosts(page))
+          });
+
+
         }
 
 
@@ -275,17 +284,20 @@ function Dashboard() {
         }
 
         useEffect(() =>{
-          console.log(skip);
-          if(skip == 0) {
-              dispatch(resetDash())
-              dispatch(resetter())
-              dispatch(getPosts(page))
- 
-                .catch((e) => {
-                  console.log(e)
-                });  
-              console.log("doing...")
-            }
+          console.log(skip); 
+            if(skip == 0) {
+              if(paths !== '/user'){
+                dispatch(resetDash())
+                dispatch(resetter())
+                dispatch(getPosts(page))
+                  .catch((e) => {
+                    console.log(e)
+                  });  
+                console.log("doing...")
+              }
+              }
+              dispatch(modifyPaths('/'))
+            
 
         },[page])
 

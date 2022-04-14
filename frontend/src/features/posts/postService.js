@@ -2,6 +2,7 @@ import axios from 'axios'
 
 
 
+
 const API_URL = '/posts/'
 const API_URI='/posts/6243270c1774efda6b629786'
 
@@ -59,6 +60,7 @@ const getUserPosts = async(page,token) =>{
         }
     }
     const response = await axios.post(`${API_URL}/getMe`,page,config);
+    console.log(response.data);
     return response.data   
 }
 

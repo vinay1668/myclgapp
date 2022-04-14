@@ -7,6 +7,7 @@ const initialState = {
     isError: false,
     isSuccess: false,
     isLoading: false,
+    paths:"",
     message:""
 }
 
@@ -89,10 +90,17 @@ export const createPost = createAsyncThunk('posts/create', async(postData, thunk
     }
   })
 
-
-
-
-  
+  // modifying paths
+  export const modifyPaths = createAsyncThunk('posts/modifyPaths', async( path, thunkAPI) =>{
+    try {
+        return path;
+        
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+        
+    }
+  })
 
 
 
@@ -168,6 +176,22 @@ export const postSlice = createSlice ({
                     state.userPosts = action.payload
                 })
                 .addCase(resetUserPosts.rejected, (state,action) => {
+                    state.isError = true
+                    state.message = action.payload
+                    state.isLoading = false
+                })
+
+                // Modifying paths
+
+                .addCase(modifyPaths.pending, (state) => {
+                    state.isLoading = true
+                })
+                .addCase(modifyPaths.fulfilled, (state, action) =>{
+                    state.isSuccess = true
+                    state.isLoading = false
+                    state.paths = action.payload
+                })
+                .addCase(modifyPaths.rejected, (state,action) => {
                     state.isError = true
                     state.message = action.payload
                     state.isLoading = false

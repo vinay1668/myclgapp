@@ -1,7 +1,7 @@
 import { useEffect,useState } from "react"
 import {BrowserRouter as Router,Switch,useLocation} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux"
-import { getUserPosts,resetUserPosts } from "../features/posts/postSlice";
+import { getUserPosts,resetUserPosts,modifyPaths } from "../features/posts/postSlice";
 import { reset, otherPostsReset } from "../features/posts/postSlice"
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostItem from "../components/postItem";
@@ -15,10 +15,12 @@ function User() {
     const [page,setPage] = useState({
         limit: 20,
         skip: 0,
-        id:location.state.post.user
+        id:location.state.post.user,
+        type:'New',
       });
 
-    useEffect(() => {   
+    useEffect(() => {
+      dispatch(modifyPaths('/user'));   
       console.log(location.state.scrolled)
        if(!location.state.scrolled){
          dispatch(getUserPosts(page))
@@ -51,14 +53,43 @@ function User() {
     
   // user has scrolled
       function fetchImages() {
-
-      dispatch(getUserPosts(page))
-          setPage({
-            limit:page.limit,
-            skip: page.skip + page.limit,
-            id:location.state.post.user
-          })
+          dispatch(getUserPosts(page))
+          setPage((prevState) => ({
+            limit:20,
+            skip: prevState.skip + prevState.limit
+          }))
+      }
+      
+      const[filterType,setFilterType] = useState("New");
+      function changeFilter(filter) {
+        setFilterType(filter)
+        dispatch(resetUserPosts())
+        setPage((prevState) => ({
+          ...prevState,
+          limit:20,
+          skip:0,
+          type : filter,
+        }) )
+        dispatch(getUserPosts({limit:20,skip:0,type:filter,id:location.state.post.user}))
+      }
+ 
+      function dateChange(value){
+        if(value.length == 5){
+          value = value.replace(/\//g, "");
+          var newValue = "date"+ value;
+          dispatch(resetUserPosts())
+          setPage((prevState) => ({
+            ...prevState,
+            limit:20,
+            skip:0,
+            type : newValue,
+          }) )
+          dispatch(getUserPosts({limit:20,skip:0,type:newValue,id:location.state.post.user}))
         }
+
+      }
+
+     
 
   
 
@@ -95,20 +126,20 @@ function User() {
 
         <div  className='topbar' style={{marginTop:"30px",display:"flex",borderRadius:"10px"}} >
 
-<button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto",borderBottom: "1px solid #DAE0E6"}}>
+<button name="post" id= 'poste' type="button" class="btn btn-light" onClick={() => changeFilter('New')} style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto",backgroundColor: filterType == 'New' ? '#f8f9fa' : null}}>
           <b style={{paddingLeft:"8px",color:"gray"}}>New</b>
 </button>
 
-<button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto",borderBottom:"1px solid #DAE0E6"}}>
+<button name="post" id= 'poste' type="button" class="btn btn-light" onClick={() => changeFilter('Old')} style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto",backgroundColor: filterType == 'Old' ? '#f8f9fa' : null}}>
           <b style={{paddingLeft:"8px",color:"gray"}}>Old</b>
 </button>
 
-<button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto",borderBottom:"1px solid #DAE0E6"}}>
+<button name="post" id= 'poste' type="button" class="btn btn-light" onClick={() => changeFilter('Top')} style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto",backgroundColor: filterType == 'Top' ? '#f8f9fa' : null}}>
 <b style={{paddingLeft:"8px",color:"gray"}}>Top</b>
           
 </button>
 
-<button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",height: "50px", flex:"auto",borderBottom: "1px solid #DAE0E6"}}>
+<button name="post" id= 'poste' type="button" class="btn btn-light" onChange={(e) => dateChange(e.target.value)} style={{margin:"auto",borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",height: "50px", flex:"auto", backgroundColor: filterType == 'Date' ? '#f8f9fa' : null}}>
         <input className='form-control' type="text" placeholder="2022/3" style={{width:"80px",marginLeft:"15px",borderWidth:"2px"}}/>
 </button>
 

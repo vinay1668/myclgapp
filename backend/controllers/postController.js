@@ -710,10 +710,34 @@ const getUserPosts = asyncHandler(async (req,res) => {
     }
     else{
         userId = req.body.id;
+    }
+    var post;
+    console.log(req.body.type);
+    if(req.body.type == 'New'){
+        post = await Post.find({"user": userId}).sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
+    }
+    if(req.body.type == 'Old'){
+        post = await Post.find({"user": userId}).sort({ _id: 1}).limit(req.body.limit).skip(req.body.skip);
+
+    }
+    if(req.body.type == 'Top'){
+        post = await Post.find({"user": userId}).sort( {votes: -1 } ).limit(req.body.limit).skip(req.body.skip);
+
+    }
+    if(/^[A-Za-z]{4}\d{4}$/.test(req.body.type)){
+
+        var lastFour = req.body.type.substr(req.body.type.length - 4)
+        var year = '20'+ lastFour.substr(0,2)
+        var month = Number(lastFour.substr(2,4));
+        var date = new Date();
+        date.setYear(year);
+        date.setMonth(month-1);
+
+    post = await Post.find(  {createdAt:{$gte:date}} ).sort( { createdAt:1 } ).limit(req.body.limit).skip(req.body.skip);
 
     }
 
-    const post = await Post.find({"user": userId}).sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
+
     
     var newPosts = post.map(function(post) {
         var temPost = post.toObject();
