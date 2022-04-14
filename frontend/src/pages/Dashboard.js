@@ -6,8 +6,9 @@ import File from './components/editors/File';
 import { create } from 'ipfs-http-client';
 import {useSelector, useDispatch} from "react-redux"
 import {logout} from "../features/auth/authSlice.js"
-import {createPost, getPosts} from "../features/posts/postSlice.js";
-import {modifyPage,reset} from "../features/page/pageSlice.js";
+import {createPost, getPosts,reset as resetDash} from "../features/posts/postSlice.js";
+import {modifyPage} from "../features/page/pageSlice.js";
+import {reset as resetter} from "../features/page/pageSlice.js";
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import PostItem from '../components/postItem';
@@ -15,6 +16,9 @@ import "../App.css";
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Link } from 'react-router-dom';
+import { filter } from 'domutils';
+
+
 /* Create an instance of the client */
 const client = create('https://ipfs.infura.io:5001/api/v0')
 // import InfiniteScroll from 'react-infinite-scroll-component';
@@ -44,18 +48,23 @@ function Dashboard() {
         
 
         const [page,setPage] = useState({
-          limit: 20,
-          skip: 20
+          limit: limit,
+          skip: skip,
+          branch: "ALL",
+          type: "hot",
+          feed:"student",
         });
-
+   
         useEffect(() => {
+         
+          
           if(isError) {
             console.log(message)
           }
-          if(skip == 0) {
-            dispatch(getPosts({limit,skip}))
-            dispatch(modifyPage({limit,skip}));
-          }
+          // if(skip == 0) {
+          //   dispatch(getPosts(page))
+          //   dispatch(modifyPage({limit,skip}));
+          // }
         
           if(!user){
             navigate('/login');
@@ -64,15 +73,26 @@ function Dashboard() {
           return () => { 
             // dispatch(reset())
           }
-        },[user, isError,message,dispatch,navigate,user])
+        },[user,navigate,skip])
 
         // if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
         //   dispatch(reset())
         // }
      
+        
+        useEffect(() =>{
+          if(skip !== 0) {
+            console.log(`skip after modifying ${skip}`)
+            dispatch(getPosts({limit,skip,branch:page.branch,type:page.type}))
+          }
+          
 
+        },[skip])
         function fetchImages() {
-          dispatch(getPosts({limit,skip}))
+           //dispatch(modifyPage({limit:20,skip:0})) 
+           
+          
+          
           dispatch(modifyPage({limit,skip}));
         }
 
@@ -169,10 +189,9 @@ function Dashboard() {
         }
 
 
-        const[buttonName,setButtonName] = useState('All');
-        function changeBranch(e){
-          setButtonName(e);
-        }
+        
+
+       
         
         const[userScrolled,setUserScrolled] = useState(false);
 
@@ -181,11 +200,98 @@ function Dashboard() {
           setUserScrolled(true);
         }
 
+        
+        const[filterType, setFilterType] = useState("hot");
+        const[buttonName,setButtonName] = useState('All');
+        const[timeButton,setTimeButton] = useState('Top');
+
+        function changeBranch(branch){
+          setButtonName(branch);
+          dispatch(resetter()) 
+          setPage((prevState) => ({
+            ...prevState,
+            branch: branch,
+            skip:0,
+            limit:20
+          })
+          )
+        }
+       // function changeTimePeriod(time){
+          // setTimeButton(time);
+          //  dispatch(resetter());
+          //  setPage((prevState) => ({
+          //   ...prevState,
+          //   type: time,
+          //   skip:0,
+          //   limit:20
+          // })
+          // )
+           
+       // }
+
+        function changeFilterType(e){
+          if(e !== 'new' && e !== "hot") {
+            setTimeButton(e)
+          }
+          setFilterType(e);
+          dispatch(resetter()) 
+          setPage((prevState) => ({
+            ...prevState,
+            type: e,
+            skip:0,
+            limit:20
+          })
+          )      
+        }
+
+        function changeFeed(feed) {
+          dispatch(resetter())
+          setPage((prevState) => ({
+            ...prevState,
+            feed:feed,
+            skip:0,
+            limit:20
+          })
+          )
+          
+
+        }
+
+        function filterByTime(value) {
+          setFilterType("Date");
+          if(value.length == 5){
+            value = value.replace(/\//g, "");
+            var newValue = "date"+ value;
+            dispatch(resetter()) 
+            setPage((prevState) => ({
+              ...prevState,
+              type: newValue,
+              skip:0,
+              limit:20
+            })
+            ) 
+          }
+          
+        }
+
+        useEffect(() =>{
+          console.log(skip);
+          if(skip == 0) {
+              dispatch(resetDash())
+              dispatch(resetter())
+              dispatch(getPosts(page))
+ 
+                .catch((e) => {
+                  console.log(e)
+                });  
+              console.log("doing...")
+            }
+
+        },[page])
 
 
-        // if(isLoading) {
-        //   return <Spinner />
-        // }
+
+
 
 
   return (
@@ -285,45 +391,45 @@ function Dashboard() {
      
      <div  className='topbar' style={{marginTop:"20px",display:"flex",borderRadius:"10px"}} >
 
-       <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto"}}>
+       <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto", backgroundColor:"#f8f9fa"}}>
           <div class="dropdown">
             <b class="dropdown-toggle" type="button" id="dropdownMenuButton" style={{color:"gray"}} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {buttonName}
             </b>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a onClick={()=>changeBranch('ALL')} class="dropdown-item" href="#">ALL</a>
-              <a onClick={()=>changeBranch('CSE')} class="dropdown-item" href="#">CSE</a>
-              <a onClick={()=>changeBranch('ECE')} class="dropdown-item" href="#">ECE</a>
-              <a onClick={()=>changeBranch('EEE')} class="dropdown-item" href="#">EEE</a>
+              <span onClick={()=>changeBranch('ALL')} class="dropdown-item">ALL</span>
+              <span onClick={()=>changeBranch('CSE')} class="dropdown-item">CSE</span>
+              <span onClick={()=>changeBranch('ECE')} class="dropdown-item">ECE</span>
+              <span onClick={()=>changeBranch('EEE')} class="dropdown-item" >EEE</span>
              
             </div> 
           </div>
        </button>
 
-        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto"}}>
-                  <b style={{paddingLeft:"8px",color:"gray"}}>New</b>
-        </button>
-
-        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto"}}>
+        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto", backgroundColor: filterType == "hot" ? "#f8f9fa" : null }} onClick={() => changeFilterType("hot")}>
                   <b style={{paddingLeft:"8px",color:"gray"}}>Hot</b>
         </button>
 
-        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto"}}>
+        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto", backgroundColor: filterType == "new" ? "#f8f9fa" : null }} onClick={() => changeFilterType("new")} >
+                  <b style={{paddingLeft:"8px",color:"gray"}}>New</b>
+        </button>
+
+        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",height: "50px", flex:"auto", backgroundColor: filterType == "Top" || filterType == "Month" || filterType == "Year" || filterType == "Week" ? "#f8f9fa" : null }}>
           <div class="dropdown">
             <b class="dropdown-toggle" type="button" id="dropdownMenuButton" style={{color:"gray"}} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Top
+              {timeButton}
             </b>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#">Today</a>
-              <a class="dropdown-item" href="#">This month</a>
-              <a class="dropdown-item" href="#">This Year</a>
-              <a class="dropdown-item" href="#">All Time</a>
+              <span onClick={()=>changeFilterType('Week')}  class="dropdown-item">This Week</span>
+              <span onClick={()=>changeFilterType('Month')}  class="dropdown-item">This Month</span>
+              <span onClick={()=>changeFilterType('Year')}  class="dropdown-item">This Year</span>
+              <span onClick={()=>changeFilterType('Top')}  class="dropdown-item">All Time Top</span>
             </div>
         </div>
        </button>
     
-         <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null, textAlign:"center"}}>
-                  <input className='form-control' type="text" placeholder="22/3" style={{width:"60px",alignItems:"center"}}/>          
+         <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",height: "50px", flex:"auto",backgroundColor: filterType == "Date" ? "#f8f9fa": null, textAlign:"center"}}>
+                  <input className='form-control' type="text" placeholder="22/03" onChange={(e)=> filterByTime(e.target.value)} style={{width:"60px",alignItems:"center",paddingLeft:"5px"}}/>          
           </button>
     </div>
  
@@ -332,11 +438,11 @@ function Dashboard() {
     
     <div  className='topbar' style={{marginTop:"5px",display:"flex",borderRadius:"10px"}} >
 
-    <button name="post" id= 'poste' type="button" class="btn btn-light" style={{borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",margin:"auto",height: "50px", flex:"auto", borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+    <button name="post" id= 'poste' type="button" class="btn btn-light" onClick={() => {changeFeed("student")}} style={{borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",margin:"auto",height: "50px", flex:"auto",backgroundColor: page.feed == 'student' ? "#f8f9fa" :null}}>
                   <b style={{paddingLeft:"8px",color:"gray"}}>Student's Feed</b>
         </button>
 
-        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",margin:"auto",borderRadius:"0",height: "50px", flex:"auto",borderBottom: editor == "post" ? "1px solid #DAE0E6": null}}>
+        <button name="post" id= 'poste' type="button" class="btn btn-light" onClick={() => {changeFeed("faculty")}} style={{borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",margin:"auto",borderRadius:"0",height: "50px", flex:"auto",backgroundColor :page.feed =='faculty' ? '#f8f9fa':null}}>
                   <b style={{paddingLeft:"8px",color:"gray"}}>Faculty Feed</b>
         </button>
 

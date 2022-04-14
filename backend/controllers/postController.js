@@ -2,29 +2,518 @@ const asyncHandler = require('express-async-handler')
 const User = require("../models/userModel.js")
 const Post = require('../models/postModel.js')
 const Comment = require('../models/commentModel.js');
+
 // @desc    Get all Posts
 // @route   GET /posts
 // @access   Private
 
 const getPosts = asyncHandler(async (req,res) => {
-
+     
+     var branch = req.body.branch;
+    
+    
+    if(req.body.type == "new")
+    {
+        var post;
+         if(branch !== 'ALL') {
+             if(req.body.feed == 'faculty') {
+                post = await Post.find( {$and:[ {'branch': branch}, { username: {$not: {$regex: /\d/} } } ] } ).sort({ createdAt: -1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+             else {
+                post = await Post.find({'branch': branch}).sort({ createdAt: -1 }).limit(req.body.limit).skip(req.body.skip);
+             } 
+        }
+         else {
+             if(req.body.feed == 'faculty'){
+               
+                post = await Post.find( {username: {$not: {$regex: /\d/} } } ).sort({ createdAt: -1 }).limit(req.body.limit).skip(req.body.skip);
+             }
+             else {
+                post = await Post.find().sort({ createdAt: -1 }).limit(req.body.limit).skip(req.body.skip);
+             }
+            
+         }
+         
+         var getCommentCountOfPost = await Promise.all(post.map(async(post)=>{
+             var count = await Comment.find({'postId': post._id }).count();
+             var modifiedCount = post.toObject();
+             modifiedCount.commentCount = count;
+             return modifiedCount;
+          }))
+ 
+         var newPosts = getCommentCountOfPost.map(function(post) {
+             var temPost = post;
+             if(temPost.upvotedBy.includes(req.user.id)){
+                 temPost.upvoted = 1;
+                 temPost.downvoted = 0
+             }
+             else if(temPost.downvotedBy.includes(req.user.id)){
+                 temPost.downvoted = 1;
+                 temPost.upvoted = 0;
+             }
+             else {
+                 temPost.upvoted = 0;
+                 temPost.downvoted = 0;
+             }
+             delete temPost.upvotedBy;
+             delete temPost.downvotedBy;
+             return temPost;
+         })
+ 
+         res.status(200).json(newPosts);
+    }
+    
+   
 
    //Getting hot posts
+   if(req.body.type == "hot")
+   {    
+       var hotPosts;
+       if(branch !== 'ALL') 
+       {
+           if(req.body.feed == 'faculty')
+           {
+            hotPosts = await Post.aggregate([
+                { $match : {$and: [ { branch : branch }, {username : {$not: {$regex: /\d/} }}  ] } },
+                {
+                    $project: {
+                        ratio: { $divide: [ "$votes", {$subtract: [ {"$toLong": "$$NOW" } ,{"$toLong": "$createdAt"}  ] } ]},
+                        _id: "$_id",
+                        user:"$user",
+                        username:"$username",
+                        name:"$name",
+                        pfp:"$pfp",
+                        title:"$title",
+                        text:"$text",
+                        imgHash:"$imgHash",
+                        videoHash:"$videoHash",
+                        fileHash:"$fileHash",
+                        votes:"$votes",
+                        upvotedBy:"$upvotedBy",
+                        downvotedBy:"$downvotedBy",
+                        createdAt:"$createdAt",
+                    }
+                },
+        
+                {
+                    $sort: { ratio: -1 },
+                    
+                },
+                ]).skip(req.body.skip).limit(req.body.limit);
 
-    // const hot = await Post.aggregate([
-    //     {
-    //         $project: {
-    //             ratio: { $divide: [ "$votes", {$subtract: [ {"$toLong": "$$NOW" } ,{"$toLong": "$createdAt"}  ] } ]},
-    //             text : "$title"
-    //         }
-    //     },
+           }
+           else {
+                hotPosts = await Post.aggregate([
+                    { $match : { branch : branch } },
+                    {
+                        $project: {
+                            ratio: { $divide: [ "$votes", {$subtract: [ {"$toLong": "$$NOW" } ,{"$toLong": "$createdAt"}  ] } ]},
+                            _id: "$_id",
+                            user:"$user",
+                            username:"$username",
+                            name:"$name",
+                            pfp:"$pfp",
+                            title:"$title",
+                            text:"$text",
+                            imgHash:"$imgHash",
+                            videoHash:"$videoHash",
+                            fileHash:"$fileHash",
+                            votes:"$votes",
+                            upvotedBy:"$upvotedBy",
+                            downvotedBy:"$downvotedBy",
+                            createdAt:"$createdAt",
+                        }
+                    },
+            
+                    {
+                        $sort: { ratio: -1 },
+                        
+                    },
+                    ]).skip(req.body.skip).limit(req.body.limit);     
+           }
+
+
+
+       }
+       else {
+           if(req.body.feed == 'faculty') { 
+             hotPosts = await Post.aggregate([
+                {$match: { username :{ $not:{ $regex : /\d/ }}}},
+                {
+                    $project: {
+                        ratio: { $divide: [ "$votes", {$subtract: [ {"$toLong": "$$NOW" } ,{"$toLong": "$createdAt"}  ] } ]},
+                        _id: "$_id",
+                        user:"$user",
+                        username:"$username",
+                        name:"$name",
+                        pfp:"$pfp",
+                        title:"$title",
+                        text:"$text",
+                        imgHash:"$imgHash",
+                        videoHash:"$videoHash",
+                        fileHash:"$fileHash",
+                        votes:"$votes",
+                        upvotedBy:"$upvotedBy",
+                        downvotedBy:"$downvotedBy",
+                        createdAt:"$createdAt",
+                    }
+                },
+        
+                {
+                    $sort: { ratio: -1 },
+                    
+                },
+                ]).skip(req.body.skip).limit(req.body.limit);
+
+           }
+           else { 
+            hotPosts = await Post.aggregate([
+                {
+                    
+                    $project: {
+                        ratio: { $divide: [ "$votes", {$subtract: [ {"$toLong": "$$NOW" } ,{"$toLong": "$createdAt"}  ] } ]},
+                        _id: "$_id",
+                        user:"$user",
+                        username:"$username",
+                        name:"$name",
+                        pfp:"$pfp",
+                        title:"$title",
+                        text:"$text",
+                        imgHash:"$imgHash",
+                        videoHash:"$videoHash",
+                        fileHash:"$fileHash",
+                        votes:"$votes",
+                        upvotedBy:"$upvotedBy",
+                        downvotedBy:"$downvotedBy",
+                        createdAt:"$createdAt",
+                    }
+                },
+        
+                {
+                    $sort: { ratio: -1 },
+                    
+                },
+                ]).skip(req.body.skip).limit(req.body.limit);
+
+           }
+            
+        }
+
+
+            var getCommentCountOfPost = await Promise.all(hotPosts.map(async(post)=>{
+                var count = await Comment.find({'postId': post._id }).count();
+         
+                var modifiedCount = post
+                modifiedCount.commentCount = count;
+                
+                return modifiedCount;
+          }))
+        
+          
+        
+            var newPosts = getCommentCountOfPost.map(function(post) {
+                var temPost = post;
+                if(temPost.upvotedBy.includes(req.user.id)){
+                    temPost.upvoted = 1;
+                    temPost.downvoted = 0
+                }
+                else if(temPost.downvotedBy.includes(req.user.id)){
+                    temPost.downvoted = 1;
+                    temPost.upvoted = 0;
+                }
+                else {
+                    temPost.upvoted = 0;
+                    temPost.downvoted = 0;
+                }
+                delete temPost.upvotedBy;
+                delete temPost.downvotedBy;
+                return temPost;
+            })
+            res.status(200).json(newPosts);
+    }
+
+
+    if(req.body.type == 'Top') {
+
+        
+        var post;
+        if(branch !== 'ALL'){
+            if(req.body.feed == 'faculty'){
+                post = await Post.find( {$and:[ {'branch':branch},  {username : {$not: {$regex : /\d/}} } ]} ).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+            else {
+                post = await Post.find({'branch':branch}).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+            
+        }
+        else{
+            if(req.body.feed == 'faculty'){
+                post = await Post.find({username : {$not: {$regex : /\d/}} } ).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+            else {
+                post = await Post.find().sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+            
+
+        }
+        
+        var getCommentCountOfPost = await Promise.all(post.map(async(post)=>{
+            var count = await Comment.find({'postId': post._id }).count();
+            var modifiedCount = post.toObject();
+            modifiedCount.commentCount = count;
+            return modifiedCount;
+         }))
+
+        var newPosts = getCommentCountOfPost.map(function(post) {
+            var temPost = post;
+            if(temPost.upvotedBy.includes(req.user.id)){
+                temPost.upvoted = 1;
+                temPost.downvoted = 0
+            }
+            else if(temPost.downvotedBy.includes(req.user.id)){
+                temPost.downvoted = 1;
+                temPost.upvoted = 0;
+            }
+            else {
+                temPost.upvoted = 0;
+                temPost.downvoted = 0;
+            }
+            delete temPost.upvotedBy;
+            delete temPost.downvotedBy;
+            return temPost;
+        })
+
+        res.status(200).json(newPosts);
+    }
+
+    if(req.body.type == "Week"){
+        var d = new Date();
+        d.setDate(d.getDate() -7);
+        var post;
+        if(branch !== "ALL"){
+            if(req.body.feed = 'faculty'){
+                post = await Post.find(  { $and :[ {'branch' :branch} , {createdAt:{$gte:d}}, { username: {$not: {$regex: /\d/} } } ] } ).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+            else {
+               post = await Post.find(  { $and :[ {'branch' :branch} , {createdAt:{$gte:d}} ] } ).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }      
+        }
+        else {
+            if(req.body.feed == 'faculty'){
+                post = await Post.find( {$and:[ { username: {$not: {$regex: /\d/} } } ,{createdAt:{$gte:d}} ] } ).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+            else {
+                post = await Post.find({createdAt:{$gte:d}}).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+
+            }
+        }
+
+        var getCommentCountOfPost = await Promise.all(post.map(async(post)=>{
+            var count = await Comment.find({'postId': post._id }).count();
+            var modifiedCount = post.toObject();
+            modifiedCount.commentCount = count;
+            return modifiedCount;
+        }))
+
+
+        var newPosts = getCommentCountOfPost.map(function(post) {
+            var temPost = post;
+            if(temPost.upvotedBy.includes(req.user.id)){
+                temPost.upvoted = 1;
+                temPost.downvoted = 0
+            }
+            else if(temPost.downvotedBy.includes(req.user.id)){
+                temPost.downvoted = 1;
+                temPost.upvoted = 0;
+            }
+            else {
+                temPost.upvoted = 0;
+                temPost.downvoted = 0;
+            }
+            delete temPost.upvotedBy;
+            delete temPost.downvotedBy;
+            return temPost;
+        })
+
+        res.status(200).json(newPosts);
+    }
+
+    if(req.body.type == "Month"){
+        var d = new Date();
+        d.setMonth(d.getMonth() - 1);
+        var post;
+
+        if(branch !== "ALL"){
+            if(req.body.feed == 'faculty'){
+                post = await Post.find(  { $and :[ {'branch' :branch} , {createdAt:{$gte:d}}, { username: {$not: {$regex: /\d/} } }  ] } ).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+            else {
+                post = await Post.find(  { $and :[ {'branch' :branch} , {createdAt:{$gte:d}} ] } ).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+        }
+        else{
+            if(req.body.feed == 'faculty'){
+                post = await Post.find( {$and :[ { username: {$not: {$regex: /\d/} } } ,{createdAt:{$gte:d}}  ] } ).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+            else {
+               post = await Post.find({createdAt:{$gte:d}}).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+        }
+    
+        var getCommentCountOfPost = await Promise.all(post.map(async(post)=>{
+            var count = await Comment.find({'postId': post._id }).count();
+            var modifiedCount = post.toObject();
+            modifiedCount.commentCount = count;
+            return modifiedCount;
+        }))
+
+        var newPosts = getCommentCountOfPost.map(function(post) {
+            var temPost = post;
+            if(temPost.upvotedBy.includes(req.user.id)){
+                temPost.upvoted = 1;
+                temPost.downvoted = 0
+            }
+            else if(temPost.downvotedBy.includes(req.user.id)){
+                temPost.downvoted = 1;
+                temPost.upvoted = 0;
+            }
+            else {
+                temPost.upvoted = 0;
+                temPost.downvoted = 0;
+            }
+            delete temPost.upvotedBy;
+            delete temPost.downvotedBy;
+            return temPost;
+        })
+
+        res.status(200).json(newPosts);
+        
+
+
+
+
+
+    }
+
+    if(req.body.type == "Year"){
+        var d = new Date();
+        d.setDate(d.getDate() - 365);
+        var post;
+        if(branch !== "ALL"){
+            if(req.body.feed == 'faculty') {
+                post = await Post.find(  { $and :[ {'branch' :branch} , {createdAt:{$gte:d}}, { username: {$not: {$regex: /\d/} } }  ] } ).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+            else {
+               post = await Post.find(  { $and :[ {'branch' :branch} , {createdAt:{$gte:d}} ] } ).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }       
+        }
+
+        else {
+            if(req.body.feed  == 'faculty'){
+                post = await Post.find(  {$and: [ { username: {$not: {$regex: /\d/} } }  ,{createdAt:{$gte:d}} ] }).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+            else {
+               post = await Post.find({createdAt:{$gte:d}}).sort({ votes: -1, createdAt:-1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+        }
+
+        var getCommentCountOfPost = await Promise.all(post.map(async(post)=>{
+            var count = await Comment.find({'postId': post._id }).count();
+            var modifiedCount = post.toObject();
+            modifiedCount.commentCount = count;
+            return modifiedCount;
+        }))
+
+
+        var newPosts = getCommentCountOfPost.map(function(post) {
+            var temPost = post;
+            if(temPost.upvotedBy.includes(req.user.id)){
+                temPost.upvoted = 1;
+                temPost.downvoted = 0
+            }
+            else if(temPost.downvotedBy.includes(req.user.id)){
+                temPost.downvoted = 1;
+                temPost.upvoted = 0;
+            }
+            else {
+                temPost.upvoted = 0;
+                temPost.downvoted = 0;
+            }
+            delete temPost.upvotedBy;
+            delete temPost.downvotedBy;
+            return temPost;
+        })
+
+        res.status(200).json(newPosts);
+    }
+    // filter by date 
+    if(/^[A-Za-z]{4}\d{4}$/.test(req.body.type)){
+
+        var lastFour = req.body.type.substr(req.body.type.length - 4)
+        var year = '20'+ lastFour.substr(0,2)
+        var month = Number(lastFour.substr(2,4));
+        var date = new Date();
+        date.setYear(year);
+        date.setMonth(month-1);
+
+
+        var post;
+        if(branch !== "ALL"){
+            if(req.body.feed == 'faculty') {
+                post = await Post.find(  { $and :[ {'branch' :branch} , {createdAt:{$gte:date}}, { username: {$not: {$regex: /\d/} } }  ] } ).sort( { createdAt:1,votes: -1  } ).limit(req.body.limit).skip(req.body.skip);
+            }
+            else {
+                post = await Post.find(  { $and :[ {'branch' :branch} , {createdAt:{$gte:date}} ] } ).sort( { createdAt:1,votes: -1  } ).limit(req.body.limit).skip(req.body.skip);
+
+            }
+        }
+        else {
+            if(req.body.feed == 'faculty') {
+                post = await Post.find( {$and:[ {createdAt:{$gte:date}}, { username: {$not: {$regex: /\d/} } }  ]} ).sort({  createdAt:1,votes: -1 }).limit(req.body.limit).skip(req.body.skip);
+            }
+            else {
+                post = await Post.find({createdAt:{$gte:date}}).sort({  createdAt:1,votes: -1 }).limit(req.body.limit).skip(req.body.skip);
+            }     
+        }
+
+        var getCommentCountOfPost = await Promise.all(post.map(async(post)=>{
+            var count = await Comment.find({'postId': post._id }).count();
+            var modifiedCount = post.toObject();
+            modifiedCount.commentCount = count;
+            return modifiedCount;
+        }))
+
+
+        var newPosts = getCommentCountOfPost.map(function(post) {
+            var temPost = post;
+            if(temPost.upvotedBy.includes(req.user.id)){
+                temPost.upvoted = 1;
+                temPost.downvoted = 0
+            }
+            else if(temPost.downvotedBy.includes(req.user.id)){
+                temPost.downvoted = 1;
+                temPost.upvoted = 0;
+            }
+            else {
+                temPost.upvoted = 0;
+                temPost.downvoted = 0;
+            }
+            delete temPost.upvotedBy;
+            delete temPost.downvotedBy;
+            return temPost;
+        })
+
+        res.status(200).json(newPosts);
+        
+        
+    }
+
+  
+
+
+
+
    
-    //     {
-    //         $sort: { ratio: -1 },
-    //     }
-    //     ]).limit(5);
-
-    // console.log(hot);
 
 
     // Top filter for month
@@ -57,38 +546,8 @@ const getPosts = asyncHandler(async (req,res) => {
 
     
 
-    const post = await Post.find().sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
 
 
-    var getCommentCountOfPost = await Promise.all(post.map(async(post)=>{
-        var count = await Comment.find({'postId': post._id }).count();
-        var modifiedCount = post.toObject();
-        modifiedCount.commentCount = count;
-        return modifiedCount;
-  }))
-  
-
-    var newPosts = getCommentCountOfPost.map(function(post) {
-        var temPost = post;
-        if(temPost.upvotedBy.includes(req.user.id)){
-            temPost.upvoted = 1;
-            temPost.downvoted = 0
-        }
-        else if(temPost.downvotedBy.includes(req.user.id)){
-            temPost.downvoted = 1;
-            temPost.upvoted = 0;
-        }
-        else {
-            temPost.upvoted = 0;
-            temPost.downvoted = 0;
-        }
-        delete temPost.upvotedBy;
-        delete temPost.downvotedBy;
-        return temPost;
-    })
-
-   //return new post
-    res.status(200).json(newPosts);
 });
 // @desc    Create a Post
 // @route   CREATE /posts
@@ -110,9 +569,12 @@ const createPost = asyncHandler(async (req,res) => {
         votes:0,
         user: req.user.id,
         name: req.user.name,
+        branch:req.user.branch,
         username:req.user.username,
         pfp: req.user.pfp,
+        
     })
+    console.log(req.user.branch);
 
     res.status(200).json(post);
 });
@@ -250,8 +712,7 @@ const getUserPosts = asyncHandler(async (req,res) => {
         userId = req.body.id;
 
     }
-    console.log(req.body.limit);
-    console.log(req.body.skip)
+
     const post = await Post.find({"user": userId}).sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
     
     var newPosts = post.map(function(post) {

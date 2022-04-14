@@ -79,7 +79,7 @@ const[page,setPage] = useState({
       <div>
       <Link  
            to={"/user"}
-           state= {comment}
+           state= {{post:comment}}
           style={{textDecoration:"none",color:"black"}} >
         <img className="" style={{borderRadius:"50%", width:"25px",marginLeft:"2px"}} src={comment.pfp} />
         <div className='dummy'>

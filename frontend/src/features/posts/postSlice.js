@@ -157,7 +157,7 @@ export const postSlice = createSlice ({
                     state.isLoading = false
                 })
 
-        // getting current user posts
+        // resetting user posts
 
                 .addCase(resetUserPosts.pending, (state) => {
                     state.isLoading = true

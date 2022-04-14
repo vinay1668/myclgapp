@@ -11,6 +11,7 @@ const initialState = {
 
 export const modifyPage = createAsyncThunk('page/modifyPage', async({limit,skip}, thunkAPI) =>{
     try {
+        
         return {
         limit:limit,
         skip: skip + limit,
@@ -46,6 +47,7 @@ export const pageSlice = createSlice ({
                   state.isLoading = false
                   state.limit = action.payload.limit
                   state.skip = action.payload.skip
+                  
               })
               .addCase(modifyPage.rejected, (state,action) => {
                   state.isError = true

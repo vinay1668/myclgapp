@@ -20,6 +20,10 @@ const postSchema = mongoose.Schema({
         required:true,
         ref: 'User',
     },
+    branch:{
+        type:String,
+        required:true,
+    },
     title: {
         type: String,
         required:[true, 'please add the title of the post']

@@ -3,8 +3,10 @@ import {useSelector, useDispatch} from "react-redux"
 import {createComment, createCommentReply, getComment} from "../features/comments/commentSlice.js";
 import PostItem from "../components/postItem";
 import { reset } from "../features/posts/postSlice"
-import {BrowserRouter as Router,Switch,useLocation} from "react-router-dom";
+import {BrowserRouter as Router,Switch,useLocation, useNavigate} from "react-router-dom";
 import CommentItem from "../components/commentItem.js";
+
+
 
 
 function Post() {
@@ -13,7 +15,7 @@ function Post() {
   const {posts,userPosts} = useSelector((state) => state.posts);
  
     const location = useLocation();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const stateData = location.state; 
     const post = stateData['post']
     
@@ -30,8 +32,10 @@ function Post() {
       postId: post._id,
       parentId:''
     })
-
+ 
+    
     useEffect(() =>{
+      console.log("in post")
      
         dispatch(getComment(page));
         return () => { 

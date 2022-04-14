@@ -7,11 +7,12 @@ import Me from "./pages/Me.js"
 import User from "./pages/User.js"
 import Post from './pages/Post.js';
 
+
 import './App.css';
 function App() {
   return (
     <>
-      <Router>
+      <Router >
           <div>
             
             <Routes>

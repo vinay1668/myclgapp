@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 
+
 const API_URL = '/posts/'
 const API_URI='/posts/6243270c1774efda6b629786'
 
@@ -42,8 +43,9 @@ const getPosts = async(page,token) =>{
             Authorization: `Bearer ${token}`
         }
     }
-
+ 
     const response = await axios.post(`${API_URL}/get`,page,config);
+    console.log(response.data);
     return response.data   
 }
 
