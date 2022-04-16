@@ -8,6 +8,7 @@ const Comment = require('../models/commentModel.js');
 // @access   Private
 
 const getPosts = asyncHandler(async (req,res) => {
+    
      
      var branch = req.body.branch;
     
@@ -24,8 +25,7 @@ const getPosts = asyncHandler(async (req,res) => {
              } 
         }
          else {
-             if(req.body.feed == 'faculty'){
-               
+             if(req.body.feed == 'faculty') {    
                 post = await Post.find( {username: {$not: {$regex: /\d/} } } ).sort({ createdAt: -1 }).limit(req.body.limit).skip(req.body.skip);
              }
              else {
@@ -71,6 +71,7 @@ const getPosts = asyncHandler(async (req,res) => {
        var hotPosts;
        if(branch !== 'ALL') 
        {
+           
            if(req.body.feed == 'faculty')
            {
             hotPosts = await Post.aggregate([
@@ -85,6 +86,7 @@ const getPosts = asyncHandler(async (req,res) => {
                         pfp:"$pfp",
                         title:"$title",
                         text:"$text",
+                        branch:"$branch",
                         imgHash:"$imgHash",
                         videoHash:"$videoHash",
                         fileHash:"$fileHash",
@@ -103,6 +105,7 @@ const getPosts = asyncHandler(async (req,res) => {
 
            }
            else {
+               
                 hotPosts = await Post.aggregate([
                     { $match : { branch : branch } },
                     {
@@ -115,6 +118,7 @@ const getPosts = asyncHandler(async (req,res) => {
                             pfp:"$pfp",
                             title:"$title",
                             text:"$text",
+                            branch:"$branch",
                             imgHash:"$imgHash",
                             videoHash:"$videoHash",
                             fileHash:"$fileHash",
@@ -126,7 +130,10 @@ const getPosts = asyncHandler(async (req,res) => {
                     },
             
                     {
-                        $sort: { ratio: -1 },
+                        $sort: { ratio: -1 ,
+                           
+                        },
+                        
                         
                     },
                     ]).skip(req.body.skip).limit(req.body.limit);     
@@ -149,6 +156,7 @@ const getPosts = asyncHandler(async (req,res) => {
                         pfp:"$pfp",
                         title:"$title",
                         text:"$text",
+                        branch:"$branch",
                         imgHash:"$imgHash",
                         videoHash:"$videoHash",
                         fileHash:"$fileHash",
@@ -167,6 +175,7 @@ const getPosts = asyncHandler(async (req,res) => {
 
            }
            else { 
+             
             hotPosts = await Post.aggregate([
                 {
                     
@@ -179,6 +188,7 @@ const getPosts = asyncHandler(async (req,res) => {
                         pfp:"$pfp",
                         title:"$title",
                         text:"$text",
+                        branch:"$branch",
                         imgHash:"$imgHash",
                         videoHash:"$videoHash",
                         fileHash:"$fileHash",
@@ -712,7 +722,7 @@ const getUserPosts = asyncHandler(async (req,res) => {
         userId = req.body.id;
     }
     var post;
-    console.log(req.body.type);
+    
     if(req.body.type == 'New'){
         post = await Post.find({"user": userId}).sort({ _id: -1 }).limit(req.body.limit).skip(req.body.skip);
     }

@@ -2,7 +2,8 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require('../models/userModel.js')
 const asyncHandler = require('express-async-handler');
-const { use } = require('../routes/postRoutes.js');
+// const { use } = require('../routes/postRoutes.js');
+
 
 // @desc    Registering User
 // @route   POST /users
@@ -105,6 +106,26 @@ const getUser = asyncHandler(async(req,res) => {
 })
 
 
+// @desc    Getting all users that matches the lettes using regex
+// @route   GET /users/allUsers
+    //       /users/allUsers?search=19X55A0501
+// @access  Private/Public
+
+const getAllUsers = asyncHandler(async(req,res) =>{
+    const keyword = req.query.search ?
+    {
+        $or:[ 
+            {name: {$regex :req.query.search , $options : "i"}},
+            {username : {$regex: req.query.search, $options : "i"}},
+        ],
+    } :
+    {};
+
+    const user =  await User.find(keyword).find({_id:{$ne: req.user._id}})
+    res.status(200).send(user)
+});
+
+
 const generateToken = (id) =>{
     return jwt.sign({id}, process.env.JWT_SECRET,{
         expiresIn:'30d'
@@ -115,6 +136,7 @@ module.exports = {
     register,
     login,
     getMe,
-    getUser
+    getUser,
+    getAllUsers,
 
 }

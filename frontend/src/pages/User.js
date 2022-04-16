@@ -5,6 +5,7 @@ import { getUserPosts,resetUserPosts,modifyPaths } from "../features/posts/postS
 import { reset, otherPostsReset } from "../features/posts/postSlice"
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostItem from "../components/postItem";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 function User() {
     const location = useLocation();
@@ -21,7 +22,6 @@ function User() {
 
     useEffect(() => {
       dispatch(modifyPaths('/user'));   
-      console.log(location.state.scrolled)
        if(!location.state.scrolled){
          dispatch(getUserPosts(page))
          setPage({
@@ -94,32 +94,64 @@ function User() {
   
 
 
-
-    
+    const[edit,setEdit] = useState(false)
+    function editDiscription() {
+      setEdit(true)
+      console.log(edit)
+    }
 
 
 
   return (
       <>
-        <div style={{minHeight:"280px",zIndex:"-2"}} className='usertopbar'>
+        <div style={{minHeight:"280px",zIndex:"99",height:'auto',paddingBottom:"30px"}} className='usertopbar'>
         
             <div style={{textAlign:"center", margin:"0 auto"}}>
-            <button type="button" style={{position:"absolute", top:"81px",left:"0",width:"50px",height:"30px",fontSize:"12px"}} class="btn btn-dark">{location.state.post.branch}</button>
-            <div style={{position:"absolute",left:"0",top:"0" , width:"100%" ,backgroundColor:"#33a8ff",height:"80px",zIndex:"-1",borderTopLeftRadius:"10px",borderTopRightRadius:"10px"}}></div>
-                <img style={{marginTop:"15px",borderRadius:"50%", width:"100px"}} src={location.state.post.pfp} />
-                <h4 style={{}}>{location.state.post.name}</h4>
-                <span style={{color:"gray",fontWeight:"bold",display:"inline"}}>{location.state.post.username}</span>
-                {/* <div style={{width:"90%",margin:"auto",marginTop:"10px"}}>
-                <h6 style={{display:"inline"}}>my name is vinay kumar. currently studying final year. I will be graduating in 2022</h6>
-                </div> */}
-            </div>
-            <div style={{marginTop:"20px"}}>
-                <span style={{display:"inline", marginLeft:"20px",fontSize:"20px",fontWeight:"600"}}>Karma: </span>
+               <div style={{position:"absolute",left:"0",top:"0" , width:"100%" ,backgroundColor:"#33a8ff",height:"80px",zIndex:"-1",borderTopLeftRadius:"10px",borderTopRightRadius:"10px"}}></div>
+                
+                <div style={{display:"flex",flexDirection:"row"}}>
+                     <button type="button" style={{width:"50px",height:"30px",fontSize:"12px",marginTop:"85px"}} class="btn btn-dark">{location.state.post.branch}</button>
+
+                  <div style={{margin:"auto"}}>
+                    <img style={{marginTop:"15px",borderRadius:"50%", width:"100px"}} src={location.state.post.pfp} />
+                    <h4>{location.state.post.name}</h4>
+                    <span style={{color:"gray",fontWeight:"bold",display:"inline"}}>{location.state.post.username}</span>
+                  </div>
+
+                  <div style={{display:"flex",flexDirection:'column',marginTop:"85px"}}>
+                    <span style={{ fontSize:"13px",fontWeight:"600"}}>
+                       <i style={{ marginRight:"10px"}} class="bi bi-megaphone-fill"></i>
+                       <span style={{marginRight:"10px"}}>580</span>
+                    </span>
+                    <span style={{ fontSize:"13px",fontWeight:"600",marginTop:"10px"}}>
+                        <i style={{ marginRight:"10px"}} class="bi bi-gift-fill"></i>
+                        <span style={{marginRight:"10px"}} >456</span>
+                      </span>
+                  </div>
+
+                </div>
+                
+                  <div style={{paddingTop:"20px",fontWeight:"500",width:"80%",margin:"0 auto",display:"flex"}}>
+                     {!edit ? 
+                     <span>My name is Kim Wexler. I am currently pursuing bachelors of Engineering!</span> : 
+                     <input  style = {{margin:"0 auto",borderTop:"0",borderLeft:"0",borderRight:"0",width:"80%" }} type="email" class="form-control discript" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description" />
+                     }
+                  
+                     <i style ={{paddingLeft:"5px",marginTop:"5px",zIndex:"55",cursor:"pointer"}} onClick={editDiscription} class="fa fa-solid fa-pen"></i>
+                  </div>
+                 
+               </div>
+      
+            <div style={{marginTop:"20px",display:'flex',flexDirection:'column'}}>
+ 
+
             </div>
             {/* <div style={{marginTop:"10px"}}>
             <span style={{display:"inline", marginLeft:"20px",fontSize:"20px",fontWeight:"600"}}>Comment Karma: </span>
             </div> */}
         </div>
+
+
 
 
 

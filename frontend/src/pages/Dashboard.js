@@ -4,7 +4,7 @@ import VideoEditor from './components/editors/VideoEditor';
 import ImageEditor from './components/editors/ImageEditor';
 import File from './components/editors/File';
 import { create } from 'ipfs-http-client';
-import {useSelector, useDispatch} from "react-redux"
+import {useSelector, useDispatch, batch} from "react-redux"
 import {logout} from "../features/auth/authSlice.js"
 import {createPost, getPosts,reset as resetDash, modifyPaths} from "../features/posts/postSlice.js";
 import {modifyPage} from "../features/page/pageSlice.js";
@@ -93,14 +93,25 @@ function Dashboard() {
             }       
           }
         },[skip])
+
+
+        useEffect(()=>{
+           if(skip!==0 ){
+            dispatch(getPosts({limit:page.limit, skip:skip, branch:page.branch, type:page.type, feed: page.feed}))
+            console.log(skip)
+            
+           }
+        },[skip])
         function fetchImages() {
            //dispatch(modifyPage({limit:20,skip:0})) 
            
           
-          
           dispatch(modifyPage({limit,skip})).then(() =>{
-            dispatch(getPosts(page))
+  
+        
+               
           });
+          
 
 
         }

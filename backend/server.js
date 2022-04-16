@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended : false}))
 app.use('/posts', require('./routes/postRoutes.js'))
 app.use('/users', require('./routes/userRoutes.js'))
 app.use('/comments',require('./routes/commentRoute.js'))
+app.use('/chat', require('./routes/chatRoutes.js'))
 
 
 // server frontend
