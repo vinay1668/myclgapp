@@ -6,12 +6,13 @@ import Main from './pages/Main.js';
 import Me from "./pages/Me.js"
 import User from "./pages/User.js"
 import Post from './pages/Post.js';
-
+import { ChakraProvider } from '@chakra-ui/react'
 
 import './App.css';
 function App() {
   return (
     <>
+
       <Router >
           <div>
             
@@ -24,6 +25,7 @@ function App() {
             </Routes>
           </div>
       </Router>
+
       <ToastContainer />
     </>
   );

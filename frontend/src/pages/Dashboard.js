@@ -17,6 +17,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import { filter } from 'domutils';
 import { createBrowserHistory } from "history";
+import MessageDash from './Message/MessageDash';
 
 
 
@@ -98,8 +99,7 @@ function Dashboard() {
         useEffect(()=>{
            if(skip!==0 ){
             dispatch(getPosts({limit:page.limit, skip:skip, branch:page.branch, type:page.type, feed: page.feed}))
-            console.log(skip)
-            
+            console.log(skip)      
            }
         },[skip])
         function fetchImages() {
@@ -319,6 +319,10 @@ function Dashboard() {
 
   return (
     <>
+    <div style={{position:"fixed", top:"0"}}>
+      profile goes herer
+    </div>
+
 
     <div className="" >
 
@@ -512,15 +516,13 @@ function Dashboard() {
 
 
 
-
-
-
-
-
-
-
-
     </div>
+   
+   <MessageDash />
+    
+
+    
+
     </>
 
   );

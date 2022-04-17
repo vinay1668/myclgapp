@@ -8,11 +8,15 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from 'redux-thunk';
 
 import * as serviceWorker from './serviceWorker';
-
+import { ChakraProvider } from '@chakra-ui/react'
 ReactDOM.render(
+  
   <React.StrictMode>
     <Provider store={store}>
+   
       <App />
+      
+    
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

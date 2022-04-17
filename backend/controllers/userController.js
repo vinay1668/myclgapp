@@ -121,7 +121,7 @@ const getAllUsers = asyncHandler(async(req,res) =>{
     } :
     {};
 
-    const user =  await User.find(keyword).find({_id:{$ne: req.user._id}})
+    const user =  await User.find(keyword).find({_id:{$ne: req.user._id}}).select("-password").select("-createdAt").select("-updatedAt")
     res.status(200).send(user)
 });
 
