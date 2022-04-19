@@ -84,7 +84,7 @@ const fetchChats = asyncHandler(async (req, res) => {
 //@route           POST /chat/group
 //@access          Protected
 const createGroupChat = asyncHandler(async (req, res) => {
-    if (!req.body.users || !req.body.name) {
+    if (!req.body.users || !req.body.name || !req.body.pfp) {
       return res.status(400).send({ message: "Please Fill all the feilds" });
     }
   
@@ -104,6 +104,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
         users: users,
         isGroupChat: true,
         groupAdmin: req.user,
+        pfp:req.body.pfp,
       });
   
       const fullGroupChat = await Chat.findOne({ _id: groupChat._id })

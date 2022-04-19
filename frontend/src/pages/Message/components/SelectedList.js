@@ -6,7 +6,11 @@ function SelectedList({list,handleClick}) {
 
         {list.map(item => (
             <button style={{position:"relative",width:"73px",height:"15px",fontSize:'10px',marginLeft:"3px",textAlign:"center",alignContent:"center"}} type="button" class="btn btn-outline-secondary" onClick={() => handleClick(item.userId)}>
-              <span style={{position:"absolute",top:"0",left:"0",textSizeAdjust:"auto"}}>{item.username}</span>
+              <span style={{position:"absolute",top:"0",left:"0",textSizeAdjust:"auto"}}>
+                {item.username} 
+              <i style={{marginLeft:"5px"}} class="fa-solid fa-xmark"></i>
+
+                </span>
             </button>
         ))}
 

@@ -18,6 +18,9 @@ const chatModel = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
     },
+    pfp: {
+        type:String,
+    },
 }
 ,{ timestamps: true})
 

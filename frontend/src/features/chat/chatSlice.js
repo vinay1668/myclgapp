@@ -64,6 +64,61 @@ export const fetchChats = createAsyncThunk('chat/fetchChats', async(_, thunkAPI)
   });
 
 
+  //Creating a new Group
+
+  export const createGroup = createAsyncThunk('chat/createGroup', async(data, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await chatService.createGroup(data,token)
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+       
+    }
+  });
+
+//Renaming the group
+
+    export const renameGroup = createAsyncThunk('chat/renameGroup', async(data, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.user.token;
+            return await chatService.renameGroup(data,token)
+        } catch (error) {
+          const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+          return thunkAPI.rejectWithValue(message)
+           
+        }
+      });
+
+
+//Removing the User
+
+export const removeFromGroup = createAsyncThunk('chat/removeFromGroup', async(data, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await chatService.removeFromGroup(data,token)
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+       
+    }
+  });
+
+
+// Add to Group
+
+
+export const addToGroup = createAsyncThunk('chat/addToGroup', async(data, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await chatService.addToGroup(data,token)
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+       
+    }
+  });
+
 
   export const chatSlice = createSlice ({
     name: 'chat',
@@ -149,6 +204,113 @@ export const fetchChats = createAsyncThunk('chat/fetchChats', async(_, thunkAPI)
                 state.message = action.payload
                 state.isLoading = false
             })
+
+          //Creating a new Group
+
+            .addCase(createGroup.pending, (state) => {
+                state.isLoading = true
+
+            })
+            .addCase(createGroup.fulfilled, (state, action) =>{
+                state.isSuccess = true
+                state.isLoading = false
+                state.chats = [action.payload, ...state.chats]
+                console.log(action.payload);
+            })
+            .addCase(createGroup.rejected, (state,action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+
+
+
+            //Renaming the new Group
+
+            .addCase(renameGroup.pending, (state) => {
+                state.isLoading = true
+
+            })
+            .addCase(renameGroup.fulfilled, (state, action) =>{
+                state.isSuccess = true
+                state.isLoading = false
+                state.chats.filter(obj => {
+                    if(obj._id === action.payload._id) {
+
+                       return (
+                           obj.chatName= action.payload.chatName
+                       )
+                    }
+                    return obj
+                  });
+              
+                
+            })
+            .addCase(renameGroup.rejected, (state,action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+
+
+
+            //Removing from Group
+
+
+            .addCase(removeFromGroup.pending, (state) => {
+                state.isLoading = true
+
+            })
+            .addCase(removeFromGroup.fulfilled, (state, action) =>{
+                state.isSuccess = true
+                state.isLoading = false
+                state.chats.filter(obj => {
+                    if(obj._id === action.payload._id) {
+
+                       return (
+                           obj.users= action.payload.users
+                       )
+                    }
+                    return obj
+                  });
+            })
+            .addCase(removeFromGroup.rejected, (state,action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+
+
+
+            //Adding To  Group
+
+
+            .addCase(addToGroup.pending, (state) => {
+                state.isLoading = true
+
+            })
+            .addCase(addToGroup.fulfilled, (state, action) =>{
+                state.isSuccess = true
+                state.isLoading = false
+                state.chats.filter(obj => {
+                    if(obj._id === action.payload._id) {
+                        return (
+                            obj.users= action.payload.users
+                        )
+                    }
+                    return obj
+                    });
+            })
+            .addCase(addToGroup.rejected, (state,action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+            
+
+
+
+
 
 
      

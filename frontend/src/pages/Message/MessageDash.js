@@ -14,14 +14,16 @@ function MessageDash() {
 
   const [user,setUser] = useState('')
   const[showModal,setShowModal] = useState(false);
+  const[viewing,setViewing] = useState(false);
   
   useEffect(() =>{
     if(!showModal){
       dispatch(emptyUserList())
     }
   
-
+ 
   },[showModal])
+
 
 
   function userChanged(e){
@@ -40,6 +42,17 @@ function MessageDash() {
     dispatch(accessChat(userId));
     dispatch(emptyUserList());   
   }
+  function insideGroup(){
+    setViewing(true);
+
+  }
+  function outsideGroup(){
+    setViewing(false);
+  }
+  useState(()=>{
+    console.log(viewing)
+
+  },[viewing ])
 
 
   return (
@@ -50,16 +63,16 @@ function MessageDash() {
             <div style={{display:"flex"}}>
               <input onChange= {userChanged} style ={{height:"40px", margin:"2px", marginTop:"5px",width:"120px"}} className="form-control input-sm search-username" id="inputsm" placeholder = "Search" type="search"/>
               <button onClick={searchUser} type="button" class="btn btn-light" style ={{height:"40px", marigin:"2px", marginTop:"5px",width:"40px"}} >
-               {searchResults.length > 0 && !showModal ? (<i class="fa-solid fa-xmark"></i>) :(<i class="fa fa-solid fa-magnifying-glass"></i>) } 
+               {searchResults.length > 0 && !showModal  && !viewing ? (<i class="fa-solid fa-xmark"></i>) :(<i class="fa fa-solid fa-magnifying-glass"></i>) } 
               </button>
             </div>
             <button style ={{height:"40px", marigin:"2px", marginTop:"5px",width:"120px"}} type="button" class="btn btn-light" onClick={()=>setShowModal(true)}>New Group +</button>   
         
         </div>
         
-           {searchResults.length > 0 && !showModal ?  (
+           {searchResults.length > 0 && !showModal && !viewing ?  (
         
-             <div style={{position:"absolute",marginLeft:"30px",marginTop:"10px",width:"220px", height:"auto",minHeight:"50px",borderRadius:"8px",backgroundColor:"#DAE0E6"}}>         
+             <div className='chats' style={{position:"absolute",marginLeft:"30px",marginTop:"10px",width:"220px", height:"auto",minHeight:"50px",maxHeight:"500px",overflowY:"scroll",borderRadius:"8px",backgroundColor:"#DAE0E6"}}>         
              {/* <button type="button" class="btn btn-light" style={{width:"10px",height:"10px"}}>
                 <i class="fa-solid fa-arrow-left"></i>
              </button> */}
@@ -73,8 +86,8 @@ function MessageDash() {
   
 
           {/* modal   */}     
-        <div className = "chats" style={{marginTop:"6px",backgroundColor:"#DAE0E6",borderRadius:"8px", minHeight:"60px",maxHeight:"91%",paddingTop:"2px",overflowY:"auto", borderColor:"white",borderStyle:"solid",borderWidth:"2px"}}>     
-             <Chats />
+        <div >     
+             <Chats inGroup={insideGroup} outGroup={outsideGroup}/>
         </div>
 
        {showModal ? (
