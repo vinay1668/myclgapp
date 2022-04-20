@@ -5,6 +5,8 @@ import PostItem from "../components/postItem";
 import { reset } from "../features/posts/postSlice"
 import {BrowserRouter as Router,Switch,useLocation, useNavigate} from "react-router-dom";
 import CommentItem from "../components/commentItem.js";
+import MessageDash from './Message/MessageDash';
+import Profile from './Profile';
 
 
 
@@ -90,6 +92,7 @@ function Post() {
 
   return (
       <div style={{paddingBottom:"30px"}}>
+        <Profile />
        <PostItem post={post} alterSizey={alterSizey} />
 
        {/* filter */}
@@ -126,7 +129,9 @@ function Post() {
         <i style={{fontSize:"20px"}} class="fa-solid fa-arrow-up-from-bracket"></i>
         </button>
       </div> 
+    
 
+    <MessageDash />
     </div> 
     
   )

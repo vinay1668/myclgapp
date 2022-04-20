@@ -62,7 +62,14 @@ function Register({details}) {
       ...prevState,
       [e.target.name]: e.target.value,
     }))
-    
+      
+  }
+  function changeBranch(stream) {
+
+    setFormData((prevState) => ({
+      ...prevState,
+      branch: stream,
+    }))
     
   }
 
@@ -109,7 +116,7 @@ function Register({details}) {
       </section>
 
       <section className='form'>
-        <form onSubmit={onSubmit} style={{marginTop:"0"}}>
+        <form  style={{marginTop:"0"}}>
 
           <div>
             <img src={pfp}
@@ -170,15 +177,15 @@ function Register({details}) {
             
             
             <div className='form-group text-box' style={{display:"flex",justifyContent:'space-between',paddingTop:"20px"}}>
-              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary"><span>CSE</span></button>
-              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary"><span>ECE</span></button>
-              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary"><span>EEE</span></button>
-              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary"><span>MEC</span></button>
+              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary" onClick={()=>changeBranch('CSE')}><span>CSE</span></button>
+              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary" onClick={()=>changeBranch('ECE')} ><span>ECE</span></button>
+              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary" onClick={()=>changeBranch('EEE')} ><span>EEE</span></button>
+              <button style={{display:"flex",width:"50px",height:"40px",borderRadius:"5px",borderColor:"white",textAlign:"center",lineHeight:"25px"}} type="button" className="btn btn-secondary" onClick={()=>changeBranch('MEC')} ><span>MEC</span></button>
             </div>
 
               <div className='form-group text-box' style={{paddingTop:"50px", display:"flex",justifyContent:"flex-end"}}>
-              <button style={{width:"80px", height:"40px",borderColor:"white"}} className="btn btn-primary">
-                   <span>Submit</span>
+              <button onClick={onSubmit} style={{width:"80px", height:"40px",borderColor:"white"}} className="btn btn-primary">
+                   <span >Submit</span>
                   </button>
               </div>
           </>

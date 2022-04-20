@@ -4,6 +4,7 @@ import chatService from "./chatService.js";
 const initialState = {
     searchResults:[],
     chats:[],
+    groupMembers:[],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -56,6 +57,33 @@ export const fetchChats = createAsyncThunk('chat/fetchChats', async(_, thunkAPI)
     try {
         const token = thunkAPI.getState().auth.user.token;
         return await chatService.fetchChats(token)
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+       
+    }
+  });
+
+
+//Getting all the Group Chat members data 
+
+export const getGroupMembers = createAsyncThunk('chat/getGroupMembers', async(chatId, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await chatService.getGroupMembers(chatId, token)
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+       
+    }
+  });
+ 
+  //Emptying the group chat members data
+
+  export const emptyGroupChatMembers = createAsyncThunk('chat/emptyGroupChatMembers', async(_, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        return [];
     } catch (error) {
       const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
@@ -205,6 +233,44 @@ export const addToGroup = createAsyncThunk('chat/addToGroup', async(data, thunkA
                 state.isLoading = false
             })
 
+            //Gettting group members data from ChatId
+
+            .addCase(getGroupMembers.pending, (state) => {
+                state.isLoading = true
+
+            })
+            .addCase(getGroupMembers.fulfilled, (state, action) =>{
+                state.isSuccess = true
+                state.isLoading = false
+                state.groupMembers = action.payload
+            })
+            .addCase(getGroupMembers.rejected, (state,action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+
+            //Emptying Group Chat Members 
+
+            .addCase(emptyGroupChatMembers.pending, (state) => {
+                state.isLoading = true
+
+            })
+            .addCase(emptyGroupChatMembers.fulfilled, (state, action) =>{
+                state.isSuccess = true
+                state.isLoading = false
+                state.groupMembers = [];
+            })
+            .addCase(emptyGroupChatMembers.rejected, (state,action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+
+
+
+
+
           //Creating a new Group
 
             .addCase(createGroup.pending, (state) => {
@@ -243,9 +309,12 @@ export const addToGroup = createAsyncThunk('chat/addToGroup', async(data, thunkA
                     }
                     return obj
                   });
+
+                state.groupMembers.chatName = action.payload.chatName;
               
                 
             })
+
             .addCase(renameGroup.rejected, (state,action) => {
                 state.isError = true
                 state.message = action.payload
@@ -264,16 +333,9 @@ export const addToGroup = createAsyncThunk('chat/addToGroup', async(data, thunkA
             .addCase(removeFromGroup.fulfilled, (state, action) =>{
                 state.isSuccess = true
                 state.isLoading = false
-                state.chats.filter(obj => {
-                    if(obj._id === action.payload._id) {
-
-                       return (
-                           obj.users= action.payload.users
-                       )
-                    }
-                    return obj
-                  });
+                state.groupMembers = action.payload        
             })
+
             .addCase(removeFromGroup.rejected, (state,action) => {
                 state.isError = true
                 state.message = action.payload
@@ -292,14 +354,7 @@ export const addToGroup = createAsyncThunk('chat/addToGroup', async(data, thunkA
             .addCase(addToGroup.fulfilled, (state, action) =>{
                 state.isSuccess = true
                 state.isLoading = false
-                state.chats.filter(obj => {
-                    if(obj._id === action.payload._id) {
-                        return (
-                            obj.users= action.payload.users
-                        )
-                    }
-                    return obj
-                    });
+                state.groupMembers.users.unshift(action.payload)
             })
             .addCase(addToGroup.rejected, (state,action) => {
                 state.isError = true

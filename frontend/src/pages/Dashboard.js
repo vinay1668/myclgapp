@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 import { filter } from 'domutils';
 import { createBrowserHistory } from "history";
 import MessageDash from './Message/MessageDash';
+import Profile from './Profile';
 
 
 
@@ -319,16 +320,16 @@ function Dashboard() {
 
   return (
     <>
-    <div style={{position:"fixed", top:"0"}}>
-      profile goes herer
-    </div>
+
 
 
     <div className="" >
+     
+    {user && <Profile /> }
 
       {/* top profile */}
     
-
+  
     <div className='topbar' >
         <div className='column' style={{paddingLeft:"20px"}}>
             <input  style ={{height:"30px", paddingRight:"0px"}} className="form-control input-sm search-username" id="inputsm" placeholder = "Search" type="search"/>
@@ -345,7 +346,7 @@ function Dashboard() {
         </Link>
            <div style={{pointer:'cursor', display:"inline-block", paddingRight:"10px"}}>
              <Link to="/login">
-                 <i onClick = {onLogout} style={{color:"red",marginRight:"6px"}} class="fa-solid fa-arrow-right-from-bracket fa-lg"></i>
+                 <i onClick = {onLogout} style={{color:"red",marginRight:"6px"}} className="fa-solid fa-arrow-right-from-bracket fa-lg"></i>
             </Link>
               
               {/* <span onClick = {onLogout}  style={{pointer:'cursor'}} className='logout'></span> */}
@@ -357,20 +358,20 @@ function Dashboard() {
       {/* ipfs adding files  */}
       <div  className='topbar' style={{marginTop:"30px",display:"flex",borderRadius:"10px"}} >
           
-          <button onClick={() => changeEditor("post")} name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto",backgroundColor: editor == "post" ? "#f8f9fa": null}}>
+          <button onClick={() => changeEditor("post")} name="post" id= 'poste' type="button" className="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto",backgroundColor: editor == "post" ? "#f8f9fa": null}}>
                <i style={{color:"gray"}} className="fa-solid fa-envelope"></i>
                <b style={{paddingLeft:"8px",color:"gray"}}>Post</b>
           </button>
 
-          <button onClick={() => changeEditor("image")} name="image" id= 'poste' type="button" class="btn btn-light" style={{height: "50px" ,flex:"auto",borderRadius:"0",backgroundColor: editor == "image" ? "#f8f9fa": null}}>
+          <button onClick={() => changeEditor("image")} name="image" id= 'poste' type="button" className="btn btn-light" style={{height: "50px" ,flex:"auto",borderRadius:"0",backgroundColor: editor == "image" ? "#f8f9fa": null}}>
             <i style={{color:"gray"}} className="fa-solid fa-file-image"></i>
             <b style={{paddingLeft:"8px", color:"gray"}}>Image</b>
           </button>
-          <button onClick={() => changeEditor("video")} name="video"  id= 'poste' type="button" class="btn btn-light" style={{height: "50px" , flex:"auto",borderRadius:"0", backgroundColor: editor == "video" ? "#f8f9fa": null}}>
+          <button onClick={() => changeEditor("video")} name="video"  id= 'poste' type="button" className="btn btn-light" style={{height: "50px" , flex:"auto",borderRadius:"0", backgroundColor: editor == "video" ? "#f8f9fa": null}}>
             <i style={{color:"gray"}} className="fa-solid fa-file-video"></i>
             <b style={{paddingLeft:"8px",color:"gray"}}>Video</b>
           </button>
-          <button onClick={() => changeEditor("poll")} name="poll" id= 'poste' type="button" class="btn btn-light" style={{borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",height: "50px" ,flex:"auto", backgroundColor: editor == "poll" ? "#f8f9fa": null}}>
+          <button onClick={() => changeEditor("poll")} name="poll" id= 'poste' type="button" className="btn btn-light" style={{borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",height: "50px" ,flex:"auto", backgroundColor: editor == "poll" ? "#f8f9fa": null}}>
              <i style={{color:"gray"}} className="fa-solid fa-square-poll-horizontal"></i>
              <b style={{paddingLeft:"8px", color:"gray"}}>File</b>
           </button>
@@ -387,8 +388,8 @@ function Dashboard() {
       {/* Editor */}
 
     <div className="editcontainer" style={{minHeight:"330px",position:"relative",borderRadius:"10px", marginTop:'5px'}}>
-              <div class="input-group mb-3">
-              <textarea  value={posty.title} style={{height:"40px"}} type="text" class="form-control title-box" placeholder="An interesting title" aria-label="Username" aria-describedby="basic-addon1" onChange={changeHeading} > </textarea>
+              <div className="input-group mb-3">
+              <textarea  value={posty.title} style={{height:"40px"}} type="text" className="form-control title-box" placeholder="An interesting title" aria-label="Username" aria-describedby="basic-addon1" onChange={changeHeading} > </textarea>
               </div>
               <div>
               
@@ -419,8 +420,8 @@ function Dashboard() {
      <div  className='topbar' style={{marginTop:"20px",display:"flex",borderRadius:"10px"}} >
 
        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto", backgroundColor:"#f8f9fa"}}>
-          <div class="dropdown">
-            <b class="dropdown-toggle" type="button" id="dropdownMenuButton" style={{color:"gray"}} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <div className="dropdown">
+            <b className="dropdown-toggle" type="button" id="dropdownMenuButton" style={{color:"gray"}} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {buttonName}
             </b>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -518,6 +519,7 @@ function Dashboard() {
 
     </div>
    
+  
    <MessageDash />
     
 

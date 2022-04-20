@@ -1,6 +1,6 @@
 import React,{useEffect,useState} from 'react'
 import {useSelector, useDispatch} from "react-redux"
-import { fetchChats } from '../../../features/chat/chatSlice.js'
+import { fetchChats,getGroupMembers } from '../../../features/chat/chatSlice.js'
 import ChatList from './ChatList.js'
 import SendMessage from './SendMessage.js'
 import ViewGroup from './ViewGroup.js'
@@ -33,7 +33,7 @@ function Chats({inGroup,outGroup}) {
     function showGroup(chat){
         setDoChat(false);
         setDoGroup(true);
-        setGroupData(chat);
+        setGroupData(chat); 
         inGroup();
     }
     function endGroup(){
@@ -46,7 +46,7 @@ function Chats({inGroup,outGroup}) {
   return (
    <>
         { chats.length > 0 && !doChat && !doGroup ? (
-            <div className ="chats" style={{marginTop:"6px",backgroundColor:"#DAE0E6",borderRadius:"8px", height:"540px",paddingTop:"2px",overflowY:"auto", borderColor:"white",borderStyle:"solid",borderWidth:"2px"}}>
+            <div className ="chats" style={{marginTop:"6px",backgroundColor:"#DAE0E6",borderRadius:"8px",minHeight:"60px",height:"auto", maxHeight:"540px",paddingTop:"2px",overflowY:"auto", borderColor:"white",borderStyle:"solid",borderWidth:"2px"}}>
             {chats.map(data => (   
                 <ChatList chat={data} key={data._id} startChat={startChat}/>
             ))}

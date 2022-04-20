@@ -49,10 +49,7 @@ function MessageDash() {
   function outsideGroup(){
     setViewing(false);
   }
-  useState(()=>{
-    console.log(viewing)
 
-  },[viewing ])
 
 
   return (

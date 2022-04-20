@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import {useSelector, useDispatch,} from "react-redux"
-import {queryUser,emptyUserList,renameGroup,fetchChats,removeFromGroup,addToGroup} from "../../../features/chat/chatSlice.js"
+import {queryUser,emptyUserList,renameGroup,fetchChats,removeFromGroup,addToGroup,getGroupMembers,emptyGroupChatMembers} from "../../../features/chat/chatSlice.js"
 import SearchResultsList from './SearchResultsList';
 
 function ViewGroup({details,endGroup}) {
@@ -11,6 +11,8 @@ function ViewGroup({details,endGroup}) {
 
     const {user} = useSelector((state) => state.auth);
     const {chats} = useSelector((state) => state.chat);
+    const {groupMembers} = useSelector((state) =>state.chat);
+    
     const[loggedUser,setLoggedUser] = useState(user);
     const {searchResults} = useSelector((state) => state.chat);
     const[addingUser,setAddingUser] = useState(false);
@@ -19,22 +21,25 @@ function ViewGroup({details,endGroup}) {
     const dispatch = useDispatch()
 
  
-    const[detailsy,setDetailsy] = useState(details);
+    const[detailsy,setDetailsy] = useState(groupMembers);
+
 
     useEffect(()=>{
-        
-        setDetailsy(chats.find(item => item._id === details._id) )
+
+        dispatch(getGroupMembers({chatId: details._id})) 
 
         return(() =>{
             dispatch(emptyUserList())
+            dispatch(emptyGroupChatMembers())
         })
       
-    },[chats])
+    },[])
+
+
 
     useEffect(() =>{
-        console.log(detailsy)
-
-    },[detailsy])
+        console.log(groupMembers)
+    },[groupMembers])
 
     function saveToDb(){
         const data = {
@@ -80,6 +85,10 @@ function ViewGroup({details,endGroup}) {
          }
      }
 
+
+
+
+
     function MemberList({user}){
 
         const[hovered,setHovered] = useState(false);
@@ -93,7 +102,7 @@ function ViewGroup({details,endGroup}) {
           function deleteUser(){
               const data = {
                   userId : user._id,
-                  chatId : detailsy._id
+                  chatId : groupMembers._id
               }
               dispatch(removeFromGroup(data));
           }
@@ -130,11 +139,10 @@ function ViewGroup({details,endGroup}) {
     <div className = "chats" style={{position:"absolute",marginTop:"6px",backgroundColor:"white",borderRadius:"8px",height:"89%",width:"100%",paddingTop:"2px",overflowY:"auto", borderColor:"white",borderStyle:"solid",borderWidth:"2px"}}>
     <div style={{borderRadius:"8px",height:"90%",display:"flex",flexDirection:"column"}}>
         
-        <img style={{height:"150px",width:"150px",marginLeft:"25%",borderRadius:"50%",marginTop:"10px"}} src={details.pfp} />
-        
+        <img style={{height:"150px",width:"150px",marginLeft:"25%",borderRadius:"50%",marginTop:"10px"}} src={groupMembers.pfp ? groupMembers.pfp : null} />
         <div style={{display:"flex"}}>
             {!showRename ? (
-                <b style={{margin:"auto",paddingLeft:"20px",marginTop:"20px",fontSize:"24px",fontWeight:"600"}}>{detailsy.chatName}</b>
+                <b style={{margin:"auto",paddingLeft:"20px",marginTop:"20px",fontSize:"24px",fontWeight:"600"}}>{groupMembers.chatName ? groupMembers.chatName: null}</b>
             ) : (
                 <input style ={{marginLeft:"25%",marginTop:"20px",borderTop:"0",borderLeft:"0",borderRight:"0",}} className="form-control input-sm search-username" placeholder = "Add Group Name" onChange={changingName} type="text"/>
 
@@ -186,10 +194,16 @@ function ViewGroup({details,endGroup}) {
         
         (
             <div className ="chats" style={{marginTop:"10px",backgroundColor:"#DAE0E6",borderRadius:"8px",paddingTop:"2px",overflowY:"scroll", borderColor:"white",borderStyle:"solid",borderWidth:"2px",width:"90%",height:"200px",margin:"auto"}}>     
-            {detailsy.users.map(user => (   
-                            <MemberList user={user} />
+            
+            {groupMembers.users ? 
+                     ( groupMembers.users.map(user => (   
+                            <MemberList key={user._id} user={user} />
+                           
+                            
                 
-            ))}
+            ))
+            
+            ) : (null)}
        </div>
             
             
@@ -197,6 +211,10 @@ function ViewGroup({details,endGroup}) {
         
     
     }
+
+
+
+    
 
     
     </div>  

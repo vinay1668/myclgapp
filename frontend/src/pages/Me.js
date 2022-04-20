@@ -5,6 +5,8 @@ import { reset } from "../features/posts/postSlice"
 import {reset as resetPage} from '../features/page/pageSlice';
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostItem from "../components/postItem";
+import MessageDash from './Message/MessageDash';
+import Profile from './Profile';
 
 function Me() {
     
@@ -48,6 +50,7 @@ function Me() {
 
   return (
       <>
+      <Profile />
         <div style={{minHeight:"280px",zIndex:"-2"}} className='usertopbar'>
         
             <div style={{textAlign:"center", margin:"0 auto"}}>
@@ -111,7 +114,7 @@ function Me() {
 
 
 
-
+  <MessageDash />
     </>
   )
 }

@@ -123,14 +123,15 @@ export const postSlice = createSlice ({
               .addCase(createPost.fulfilled, (state, action) =>{
                   state.isSuccess = true
                   state.isLoading = false
-                  state.posts.push(action.payload)
+                  state.posts.unshift(action.payload)
               })
               .addCase(createPost.rejected, (state,action) => {
                   state.isError = true
                   state.message = action.payload
                   state.isLoading = false
               })
-        // getting all posts
+       
+              // getting all posts
 
                 .addCase(getPosts.pending, (state) => {
                     state.isLoading = true

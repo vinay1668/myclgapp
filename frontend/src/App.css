@@ -400,6 +400,9 @@ body::-webkit-scrollbar-thumb {
     .messagepane{
       display: none;
     }
+    .sideprofile{
+      display: none;
+    }
 
 
     .loader {
@@ -465,6 +468,9 @@ body::-webkit-scrollbar-thumb {
       margin:auto   
     }
     .messagepane{
+      display: none;
+    }
+    .sideprofile{
       display: none;
     }
 

@@ -6,6 +6,9 @@ import { reset, otherPostsReset } from "../features/posts/postSlice"
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostItem from "../components/postItem";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import MessageDash from './Message/MessageDash';
+import Profile from './Profile';
+
 
 function User() {
     const location = useLocation();
@@ -104,6 +107,7 @@ function User() {
 
   return (
       <>
+      <Profile />
         <div style={{minHeight:"280px",zIndex:"99",height:'auto',paddingBottom:"30px"}} className='usertopbar'>
         
             <div style={{textAlign:"center", margin:"0 auto"}}>
@@ -199,7 +203,9 @@ function User() {
 
 
 
+   <MessageDash />
 
+   
     </>
   )
 }

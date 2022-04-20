@@ -1,24 +1,50 @@
 import ViewGroup from './ViewGroup';
 import React,{useEffect,useState} from 'react'
 import {useSelector, useDispatch,} from "react-redux"
+import {sendMessage,fetchMessages} from "../../../features/messages/messageSlice.js"
+
+import {getGroupMembers} from "../../../features/chat/chatSlice.js"
+ 
 
 
 
 
 function SendMessage({chatDetails,endChat,showGroup}) {
 
-
+  const dispatch = useDispatch();
   const {chats} = useSelector((state) => state.chat);
+  const {messagesList} = useSelector((state) => state.messages);
   const[detailsy,setDetailsy] = useState(chatDetails)
   useEffect(() => {
     setDetailsy(chats.find(item => item._id === chatDetails._id) )
+    
+    dispatch(fetchMessages(chatDetails._id))
  
     },[])
 
+
+
+
 function viewGroup(chat){
-  if(chatDetails.chatName !== "sender"){
+  if(chatDetails.chatName !== "sender") { 
      showGroup(chat)
   }
+}
+
+const[doMessage,setDoMessage] = useState('');
+
+function messageChange(e){
+  setDoMessage(e.target.value);
+}
+
+
+function sendText() {
+  const data ={
+    content: doMessage,
+    chatId: chatDetails._id
+  }
+
+  dispatch(sendMessage(data));
 }
 
     
@@ -39,13 +65,15 @@ function viewGroup(chat){
 
           {/* Real Chatting */}
           <div style={{height:"88%",width:"98%",border:"2px solid #DAE0E6",borderRadius:"8px",margin:'0 auto',marginTop:"4px"}}>
-
+             {messagesList.length>0 ? (
+               <h6>{messagesList[0].content}</h6>
+             ) : (null)}
           </div>
         
         {/* Send Messages */}
           <div style={{display:"flex",width:"98%",marginLeft:"5px",marginTop:"0", marginTop:"5px"}}>
-           <input style ={{height:"35px",width:"100%",marginTop:"5px"}} className="form-control input-sm search-username" placeholder = "Message.." type="text"/>    
-           <button style={{height:"35px",marginTop:"5px",marginLeft:"5px"}} className='btn btn-primary'>
+           <input style ={{height:"35px",width:"100%",marginTop:"5px"}} className="form-control input-sm search-username" placeholder = "Message.." onChange={(e)=>messageChange(e)} type="text"/>    
+           <button onClick={sendText} style={{height:"35px",marginTop:"5px",marginLeft:"5px"}} className='btn btn-primary'>
               <i class="bi bi-send"></i>
            </button>
           </div>
