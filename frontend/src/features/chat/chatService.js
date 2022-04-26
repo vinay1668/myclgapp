@@ -69,6 +69,7 @@ const createGroup = async(data,token) =>{
     }
 
     const response = await axios.post(`${API_URL}group`,data,config);
+  
     return response.data   
 }
 

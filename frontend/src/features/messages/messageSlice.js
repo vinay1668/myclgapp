@@ -16,6 +16,7 @@ export const sendMessage = createAsyncThunk('messages/sendMessage', async(data, 
     
     try {
         const token = thunkAPI.getState().auth.user.token;
+
         return await messageService.sendMessage(data,token)
     } catch (error) {
       const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -23,6 +24,23 @@ export const sendMessage = createAsyncThunk('messages/sendMessage', async(data, 
         
     }
   });
+
+export const appendMessage = createAsyncThunk('messages/appendMessage', async(data, thunkAPI) => {
+    
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+
+        return data
+    } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    return thunkAPI.rejectWithValue(message)
+        
+    }
+});
+
+
+
+
 
 
 // Fetching Messages by Chat Id
@@ -87,6 +105,29 @@ export const messageSlice = createSlice ({
                 
             })
             .addCase(fetchMessages.rejected, (state,action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+
+
+
+            //appending new message from socket.io
+
+            .addCase(appendMessage.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(appendMessage.fulfilled, (state, action) =>{
+                state.isSuccess = true
+                state.isLoading = false
+                var index = state.messagesList.findIndex(x => x._id == action.payload._id);
+                if(index === -1){
+                    state.messagesList.push(action.payload) 
+                } 
+                
+                
+            })
+            .addCase(appendMessage.rejected, (state,action) => {
                 state.isError = true
                 state.message = action.payload
                 state.isLoading = false

@@ -15,7 +15,7 @@ function Profile() {
                <div style={{position:"absolute",left:"0",top:"0" , width:"100%" ,backgroundColor:"#33a8ff",height:"80px",zIndex:"-1",borderTopLeftRadius:"10px",borderTopRightRadius:"10px"}}></div>
                 
                 <div style={{display:"flex",flexDirection:"row"}}>
-                     <button type="button" style={{width:"50px",height:"30px",fontSize:"12px",marginTop:"85px"}} class="btn btn-dark"></button>
+                     <button type="button" style={{width:"50px",height:"30px",fontSize:"12px",marginTop:"85px"}} class="btn btn-dark">{user.branch}</button>
 
                   <div style={{margin:"auto"}}>
                     <img style={{marginTop:"15px",borderRadius:"50%", width:"100px"}} src={user.pfp} />

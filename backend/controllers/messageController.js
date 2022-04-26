@@ -11,7 +11,7 @@ const allMessages = asyncHandler(async (req, res) => {
 
   try {
     const messages = await Message.find({ chat: req.params.chatId })
-      .populate("sender", "name username pfp")
+      .populate("sender", "name username pfp branch")
       
     res.json(messages);
   } catch (error) {
@@ -40,7 +40,8 @@ const sendMessage = asyncHandler(async (req, res) => {
   try {
     var message = await Message.create(newMessage);
 
-    message = await message.populate("sender", "name username pfp")
+    message = await message.populate("sender", "name username pfp branch")
+    message = await message.populate("chat")
     message = await User.populate(message, {
       path: "chat.users",
       select: "name username pfp",
