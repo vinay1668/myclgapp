@@ -220,7 +220,7 @@ function trySending(e){
 
           {/* Real Chatting */}
 
-        <ScrollableFeed style={{height:"100%",marginBottom:"30px"}} className='chats'>
+        <ScrollableFeed style={{height:"100%",marginBottom:"0"}} className='chats'>
           <div style={{minHeight:"88%",height:"auto", width:"98%",border:"2px solid #DAE0E6",borderRadius:"8px",margin:'0 auto',marginTop:"4px"}}>
           
              {messagesList.length > 0 ? (
@@ -306,7 +306,7 @@ function trySending(e){
         {/* Send Messages */}
         <>
  
-          <div style={{display:"flex",width:"98%",marginLeft:"5px",marginTop:"0", marginTop:"5px"}}>
+          <div style={{display:"flex",width:"98%",marginLeft:"5px",marginTop:"0", marginTop:"0px"}}>
 
             <input style ={{height:"35px",width:"100%",marginTop:"5px"}} className="form-control input-sm search-username" placeholder = "Message.." value={doMessage} onChange={(e)=>messageChange(e)} onKeyPress={(e) => trySending(e)}  type="text"/>    
             <button onClick={sendText} style={{height:"35px",marginTop:"5px",marginLeft:"5px"}} className='btn btn-primary'>
