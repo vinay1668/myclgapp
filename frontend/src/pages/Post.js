@@ -2,7 +2,7 @@ import { useEffect,useState } from "react"
 import {useSelector, useDispatch} from "react-redux"
 import {createComment, createCommentReply, getComment} from "../features/comments/commentSlice.js";
 import PostItem from "../components/postItem";
-import { reset } from "../features/posts/postSlice"
+import { reset,modifyPaths } from "../features/posts/postSlice"
 import {BrowserRouter as Router,Switch,useLocation, useNavigate} from "react-router-dom";
 import CommentItem from "../components/commentItem.js";
 import MessageDash from './Message/MessageDash';
@@ -38,6 +38,7 @@ function Post() {
     
     useEffect(() =>{
       console.log("in post")
+      dispatch(modifyPaths('/post'));
      
         dispatch(getComment(page));
         return () => { 

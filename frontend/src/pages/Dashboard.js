@@ -96,20 +96,28 @@ function Dashboard() {
           }
         },[skip])
 
+          
 
+        //The below useEffect might be the bug!
         useEffect(()=>{
-           if(skip!==0 ){
+           if(skip !== 0 ){
+            if(paths !== '/user' ){
+              if(paths !== '/post') {
             dispatch(getPosts({limit:page.limit, skip:skip, branch:page.branch, type:page.type, feed: page.feed}))
-            console.log(skip)      
+            console.log(skip) 
+              }
+            }     
            }
         },[skip])
+
         function fetchImages() {
            //dispatch(modifyPage({limit:20,skip:0})) 
+           // Runs the above useEffect function!!
            
           
           dispatch(modifyPage({limit,skip})).then(() =>{
   
-        
+
                
           });
           
@@ -297,20 +305,22 @@ function Dashboard() {
 
         useEffect(() =>{
           console.log(skip); 
+          console.log(paths)
             if(skip == 0) {
-              if(paths !== '/user'){
-                dispatch(resetDash())
-                dispatch(resetter())
-                dispatch(getPosts(page))
-                  .catch((e) => {
-                    console.log(e)
-                  });  
-                console.log("doing...")
+              if(paths !== '/user' ){
+                if(paths !== '/post') {
+                    dispatch(resetDash())
+                    dispatch(resetter())
+                    dispatch(getPosts(page))
+                      .catch((e) => {
+                        console.log(e)
+                      });  
+                    console.log("doing...")
               }
+            }
+
               }
               dispatch(modifyPaths('/'))
-            
-
         },[page])
 
 
