@@ -341,11 +341,11 @@ body::-webkit-scrollbar-thumb {
 
   .messagepane{
     position:fixed; 
-    top:80px;
+    top:20px;
     right:1%;
     width:26%;
     background-color:#DAE0E6;
-    height:80%;
+    height:90%;
     border-radius:8px;
     
     
