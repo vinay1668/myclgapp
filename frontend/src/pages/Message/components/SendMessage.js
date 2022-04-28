@@ -4,7 +4,9 @@ import {useSelector, useDispatch,} from "react-redux"
 import {sendMessage,fetchMessages,appendMessage} from "../../../features/messages/messageSlice.js"
 import ScrollableFeed from "react-scrollable-feed"
 import {getGroupMembers} from "../../../features/chat/chatSlice.js"
+import Lottie from "lottie-react";
 import moment from 'moment';
+import typingico from "./typing.json"
 import io from "socket.io-client";
 const ENDPOINT = "http://localhost:5000";
 
@@ -22,12 +24,25 @@ function SendMessage({chatDetails,endChat,showGroup}) {
   const[detailsy,setDetailsy] = useState(chatDetails)
   const[socketConnected,setSocketConnected] = useState(false);
   const[messageRecieved,setMessageRecieved] = useState('');
+  const[typing,setTyping] = useState(false);
+  const[isTyping,setIsTyping]=useState(false);
+
+
+  // const defaultOptions = {
+  //   loop: true,
+  //   autoplay: true,
+  //   animationData: animationData,
+  //   rendererSettings: {
+  //     preserveAspectRatio: "xMidYMid slice",
+  //   },
+  // };
 
 
 
 
   
   useEffect(() => {
+  
   
     
     setDetailsy(chats.find(item => item._id === chatDetails._id) )
@@ -84,20 +99,20 @@ function SendMessage({chatDetails,endChat,showGroup}) {
       socket = io(ENDPOINT)
       socket.emit('setup',user);
    
-      socket.on("connection",()=>{
+      socket.on("connected",()=>{
         setSocketConnected(true);
        
-      }
-        )
+      });
+
+      // socket.on('typing',()=>setIsTyping(true));
+      // socket.on('stop typing',()=>setIsTyping(false));
+      
       
 
     },[])
 
    
-    useEffect(()=>{
-      console.log(messagesList)
-    },[messagesList])
-
+    
 
     useEffect(()=>{
       if(chatDetails){
@@ -115,14 +130,11 @@ function SendMessage({chatDetails,endChat,showGroup}) {
         
         if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id){
           //give notification
+          console.log("new Message recieved!!!")
           
         }
         else{
-          
-          // setMessageListy((prevState)=>({
-          //   ...prevState,
-          //   newMessageRecieved
-          // }));
+      
           dispatch(appendMessage(newMessageRecieved))
         }
         })
@@ -145,10 +157,35 @@ const[doMessage,setDoMessage] = useState('');
 
 function messageChange(e){
   setDoMessage(e.target.value);
+
+
+  // if(!socketConnected) return
+
+  // if(!typing){
+  //   setTyping(true);
+  //   socket.emit('typing',chatDetails._id)
+  // }
+  // let lastTypingTime = new Date().getTime();
+  // var timerLength = 5000;
+  // setTimeout(() => {
+  //   var timeNow = new Date().getTime();
+  //   var timeDiff = timeNow - lastTypingTime;
+  //   if (timeDiff >= timerLength && typing) {
+  //     socket.emit("stop typing", chatDetails._id);
+  //     setTyping(false);
+  //   }
+  // }, timerLength);
+  
+
+
+
+
+
 }
 
 
  async function sendText() {
+  // socket.emit('stop typing',chatDetails._id)
   const data ={
     content: doMessage,
     chatId: chatDetails._id
@@ -183,7 +220,7 @@ function trySending(e){
 
           {/* Real Chatting */}
 
-          <ScrollableFeed style={{height:"100%"}}className='chats'>
+        <ScrollableFeed style={{height:"100%",marginBottom:"30px"}} className='chats'>
           <div style={{minHeight:"88%",height:"auto", width:"98%",border:"2px solid #DAE0E6",borderRadius:"8px",margin:'0 auto',marginTop:"4px"}}>
           
              {messagesList.length > 0 ? (
@@ -200,7 +237,9 @@ function trySending(e){
                   
                   <div style={{marginLeft:"8px",display:'flex',flexDirection:"column",marginTop:"0"}}>
                      {array[index-1] && array[index-1].sender.username === message.sender.username ? 
-                      <div></div>:
+                      <div style={{}}>
+
+                      </div>:
                       (chatDetails.isGroupChat ?
 
                       <div style={{display:"flex",flexDirection:"column"}}>
@@ -209,7 +248,8 @@ function trySending(e){
                           <span style={{fontSize:"8px",fontWeight:"600",color:"grey",marginBottom:"0",marginTop:"6px",marginLeft:"8px"}}>{moment(message.createdAt).fromNow()}</span>
                         </di>
                         <span style={{fontSize:"8px",fontWeight:"700",color:"#294A66",marginBottom:"0",wordSpacing:"5px"}}>{message.sender.username}  {message.sender.branch}</span>
-                      </div> :
+                      </div> 
+                      :
                       <di style={{marginBottom:'0' ,display:"flex"}}>
                         <span style={{fontSize:"14px",fontWeight:"600",color:"#069A8E",marginBottom:"0"}}>{message.sender.name}</span>
                         <span style={{fontSize:"8px",fontWeight:"600",color:"grey",marginBottom:"0",marginTop:"6px",marginLeft:"8px"}}>{moment(message.createdAt).fromNow()}</span>
@@ -219,11 +259,15 @@ function trySending(e){
                       
 
                      }
-                    <span style={{fontSize:"13px",fontWeight:"500",color:"#2C3333",lineHeight:"15px"}}>{message.content}</span>
+                     
+                    <div style={{fontSize:"13px",fontWeight:"500",color:"#2C3333",lineHeight:"15px",marginBottom: array[index+1] ? "0"  :"30px",display:"flex"}}>
+                        <span style={{width:"310px"}}>{message.content}</span>
+                      </div>
                   </div>
 
-                
+                  
                </div>
+              
                       
                   
 
@@ -234,18 +278,42 @@ function trySending(e){
                
              
              ) : (null)}
-            
+
+            {/* dynamic typing indicator */}
+
+       {/* <div style={{marginLeft:"0px",paddingLeft:"0px"}}>
+            {isTyping? 
+            <div style={{display:"flex"}}>
+              <span>
+                <Lottie 
+                    animationData={typingico}
+                    style={{margin:'0',width:"100px",height:"40px",paddingRight:"2px"}}
+                />
+                
+              </span>
+              <span style={{marginLeft:"0",fontSize:"9px",paddingLeft:"0",marginTop:"12px",color:"grey",fontWeight:"600"}}>{`${otherUser.name} is typing`}</span>
+              </div>
+
+              :null}
+            </div> */}
           </div>
+
+
+          
           </ScrollableFeed>
        
         
         {/* Send Messages */}
+        <>
+ 
           <div style={{display:"flex",width:"98%",marginLeft:"5px",marginTop:"0", marginTop:"5px"}}>
-           <input style ={{height:"35px",width:"100%",marginTop:"5px"}} className="form-control input-sm search-username" placeholder = "Message.." value={doMessage} onChange={(e)=>messageChange(e)} onKeyPress={(e) => trySending(e)}  type="text"/>    
-           <button onClick={sendText} style={{height:"35px",marginTop:"5px",marginLeft:"5px"}} className='btn btn-primary'>
+
+            <input style ={{height:"35px",width:"100%",marginTop:"5px"}} className="form-control input-sm search-username" placeholder = "Message.." value={doMessage} onChange={(e)=>messageChange(e)} onKeyPress={(e) => trySending(e)}  type="text"/>    
+            <button onClick={sendText} style={{height:"35px",marginTop:"5px",marginLeft:"5px"}} className='btn btn-primary'>
               <i class="bi bi-send"></i>
-           </button>
+            </button>
           </div>
+          </>
          
       </div>  
 

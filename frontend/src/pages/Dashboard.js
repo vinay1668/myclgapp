@@ -356,7 +356,7 @@ function Dashboard() {
 
 
       {/* ipfs adding files  */}
-      <div  className='topbar' style={{marginTop:"30px",display:"flex",borderRadius:"10px"}} >
+      <div  className='topbar' style={{marginTop:"10px",display:"flex",borderRadius:"10px"}} >
           
           <button onClick={() => changeEditor("post")} name="post" id= 'poste' type="button" className="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto",backgroundColor: editor == "post" ? "#f8f9fa": null}}>
                <i style={{color:"gray"}} className="fa-solid fa-envelope"></i>
