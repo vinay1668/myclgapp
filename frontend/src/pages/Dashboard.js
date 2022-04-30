@@ -64,13 +64,7 @@ function Dashboard() {
           dispatch(getMe())
 
         },[])
-        useEffect(()=>{
-          console.log(user.likecount)
-        },[user])
-   
         useEffect(() => {
-          
-         
           console.log(user)
           if(isError) {
             console.log(message)
