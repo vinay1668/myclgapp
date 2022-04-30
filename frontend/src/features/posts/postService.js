@@ -17,6 +17,12 @@ const createPost = async(postData,token) =>{
     }
 
     const response = await axios.post(API_URL, postData, config);
+    
+    // const newUser = JSON.parse(localStorage.getItem('user'));
+    
+    // newUser.postcount = response.data.newUser.postcount ;
+
+    // localStorage.setItem('user', JSON.stringify(newUser))
     return response.data
     
 }
@@ -31,7 +37,7 @@ const updatePostVotes = async(postId,voteData,token) =>{
     }
     
     const response = await axios.put(API_URL+ postId, voteData, config);
-    console.log(response.data)
+    
     return response.data
 
 }

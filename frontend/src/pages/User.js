@@ -102,12 +102,23 @@ function User() {
       setEdit(true)
       console.log(edit)
     }
+    const [width, setWidth]   = useState(window.innerWidth);    
+    const updateDimensions = () => {
+      setWidth(window.innerWidth);
+    }
+  
+    useEffect(() => {
+        window.addEventListener("resize", updateDimensions);
+        
+        return () => window.removeEventListener("resize", updateDimensions);
+        
+    }, []);
 
 
 
   return (
       <>
-      <Profile />
+      {width > 1050 ? <Profile /> : null}
         <div style={{minHeight:"280px",zIndex:"99",height:'auto',paddingBottom:"30px"}} className='usertopbar'>
         
             <div style={{textAlign:"center", margin:"0 auto"}}>
@@ -125,7 +136,7 @@ function User() {
                   <div style={{display:"flex",flexDirection:'column',marginTop:"85px"}}>
                     <span style={{ fontSize:"13px",fontWeight:"600"}}>
                        <i style={{ marginRight:"10px"}} class="bi bi-megaphone-fill"></i>
-                       <span style={{marginRight:"10px"}}>580</span>
+                       <span style={{marginRight:"10px"}}>62</span>
                     </span>
                     <span style={{ fontSize:"13px",fontWeight:"600",marginTop:"10px"}}>
                         <i style={{ marginRight:"10px"}} class="bi bi-gift-fill"></i>
@@ -137,11 +148,11 @@ function User() {
                 
                   <div style={{paddingTop:"20px",fontWeight:"500",width:"80%",margin:"0 auto",display:"flex"}}>
                      {!edit ? 
-                     <span>My name is Kim Wexler. I am currently pursuing bachelors of Engineering!</span> : 
+                     <span style={{margin:"0 auto",paddingLeft:"20px"}}>My name is Kim Wexler. </span> : 
                      <input  style = {{margin:"0 auto",borderTop:"0",borderLeft:"0",borderRight:"0",width:"80%" }} type="email" class="form-control discript" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description" />
                      }
                   
-                     <i style ={{paddingLeft:"5px",marginTop:"5px",zIndex:"55",cursor:"pointer"}} onClick={editDiscription} class="fa fa-solid fa-pen"></i>
+                     {/* <i style ={{paddingLeft:"5px",marginTop:"5px",zIndex:"55",cursor:"pointer"}} onClick={editDiscription} class="fa fa-solid fa-pen"></i> */}
                   </div>
                  
                </div>
@@ -176,7 +187,7 @@ function User() {
 </button>
 
 <button name="post" id= 'poste' type="button" class="btn btn-light" onChange={(e) => dateChange(e.target.value)} style={{margin:"auto",borderRadius:"0",borderTopRightRadius:"5px",borderBottomRightRadius:"5px",height: "50px", flex:"auto", backgroundColor: filterType == 'Date' ? '#f8f9fa' : null}}>
-        <input className='form-control' type="text" placeholder="2022/3" style={{width:"80px",marginLeft:"15px",borderWidth:"2px"}}/>
+        <input className='form-control' type="text" placeholder="YY/MM" style={{width:"80px",marginLeft:"15px",borderWidth:"2px"}}/>
 </button>
 
 </div>
@@ -203,7 +214,7 @@ function User() {
 
 
 
-   <MessageDash />
+   {width > 1050 ? <MessageDash />: null}
 
    
     </>

@@ -5,7 +5,7 @@ import ImageEditor from './components/editors/ImageEditor';
 import File from './components/editors/File';
 import { create } from 'ipfs-http-client';
 import {useSelector, useDispatch, batch} from "react-redux"
-import {logout} from "../features/auth/authSlice.js"
+import {logout,getMe} from "../features/auth/authSlice.js"
 import {createPost, getPosts,reset as resetDash, modifyPaths} from "../features/posts/postSlice.js";
 import {modifyPage} from "../features/page/pageSlice.js";
 import {reset as resetter} from "../features/page/pageSlice.js";
@@ -59,10 +59,19 @@ function Dashboard() {
           type: "hot",
           feed:"student",
         });
+
+        useEffect(()=>{
+          dispatch(getMe())
+
+        },[])
+        useEffect(()=>{
+          console.log(user.likecount)
+        },[user])
    
         useEffect(() => {
-         
           
+         
+          console.log(user)
           if(isError) {
             console.log(message)
           }
@@ -200,6 +209,7 @@ function Dashboard() {
           }
           else{
             dispatch(createPost(posty));
+            
             setEditor("postSuccess")
             setPosty({
               title:'',
@@ -208,6 +218,7 @@ function Dashboard() {
               videoHash:[],
               fileHash:[],
             });
+            dispatch(getMe())
             
             setTimeout(function () {
               setEditor("post")
@@ -324,6 +335,24 @@ function Dashboard() {
         },[page])
 
 
+        const[showMessageBox,setShowMessageBox] = useState(false);
+
+
+        //Knowing the width of the screen
+
+        const [width, setWidth]   = useState(window.innerWidth);    
+        const updateDimensions = () => {
+          setWidth(window.innerWidth);
+        }
+      
+        useEffect(() => {
+            window.addEventListener("resize", updateDimensions);
+            
+            return () => window.removeEventListener("resize", updateDimensions);
+            
+        }, []);
+
+
 
 
 
@@ -339,13 +368,27 @@ function Dashboard() {
 
       {/* top profile */}
     
-  
+
+
     <div className='topbar' >
-        <div className='column' style={{paddingLeft:"20px"}}>
-            <input  style ={{height:"30px", paddingRight:"0px"}} className="form-control input-sm search-username" id="inputsm" placeholder = "Search" type="search"/>
+        <div className='column' style={{paddingLeft:"10px"}}>
+            <input  style ={{height:"30px", paddingRight:"0px",width:"110px"}} className="form-control input-sm search-username" id="inputsm" placeholder = "Search" type="search"/>
         </div>
+        
+        { width < 1050 ?
+        <div className='column'> 
+        { !showMessageBox ?
+             <i style={{fontSize:"25px",color:"gray",fontWeight:"800",marginTop:"5px",cursor:"pointer"}} onClick={()=>setShowMessageBox(true)} className="bi bi-chat-square-text-fill"></i>:
+             <i style={{fontSize:"25px",color:"gray",fontWeight:"600",marginTop:"5px",cursor:"pointer"}} onClick={()=>setShowMessageBox(false)} class="fa-solid fa-house"></i>
+        }
+        </div> :null}
+
+
         <div className='column' style={{}}>
-        <Link style={{ textDecoration: 'none', color: 'black' }} to = "/me" >
+        <Link 
+          to={"/me"}
+          state= {{useri:user,scrolled:false}}
+          style={{ textDecoration: 'none', color: 'black' }}>
            <div style={{paddingRight:"10px",paddingLeft:"0px",display:"inline-block"}}>
                <img style={{borderRadius:"50%", width:"30px",paddingRight:"0px"}} src={user && user.pfp } />
                <div className='dummy'>
@@ -365,7 +408,10 @@ function Dashboard() {
     </div>
 
 
-      {/* ipfs adding files  */}
+    { !showMessageBox ?
+    <>
+    
+    
       <div  className='topbar' style={{marginTop:"10px",display:"flex",borderRadius:"10px"}} >
           
           <button onClick={() => changeEditor("post")} name="post" id= 'poste' type="button" className="btn btn-light" style={{margin:"auto",borderRadius:"0",borderTopLeftRadius:"5px",borderBottomLeftRadius:"5px",height: "50px", flex:"auto",backgroundColor: editor == "post" ? "#f8f9fa": null}}>
@@ -395,7 +441,7 @@ function Dashboard() {
 
 
 
-      {/* Editor */}
+       
 
     <div className="editcontainer" style={{minHeight:"330px",position:"relative",borderRadius:"10px", marginTop:'5px'}}>
               <div className="input-group mb-3">
@@ -422,7 +468,7 @@ function Dashboard() {
      </div>
 
 
-    {/* search filters */}
+   
 
 
     
@@ -472,7 +518,7 @@ function Dashboard() {
     </div>
  
 
-    {/* selecting feed */}
+   
     
     <div  className='topbar' style={{marginTop:"5px",display:"flex",borderRadius:"10px"}} >
 
@@ -492,11 +538,7 @@ function Dashboard() {
 
 
 
-{/*  
-    posts */}
 
-{/* 
-    {/* {posts && } */}
 
     <InfiniteScroll
     dataLength={posts.length} //This is important field to render the next data
@@ -514,23 +556,16 @@ function Dashboard() {
           ))}
     </InfiniteScroll>
 
-    {/* {posts && <div>
-          {posts.map((post,index) => (
-            <PostItem key ={index} post={post}/>
-          ))}
-        </div>
-    } */}
-
-     {/* <div className='editcontainer'>
-            
-       </div> */}
 
 
 
+    </>
+    : <MessageDash />
+    }
     </div>
    
   
-   <MessageDash />
+   {width > 1050 ? <MessageDash /> : null}
     
 
     

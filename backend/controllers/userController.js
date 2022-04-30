@@ -32,6 +32,7 @@ const register = asyncHandler(async(req,res) => {
         name: name,
         pfp: pfp,
         branch: branch,
+
     })
     if(user){
         res.status(201).json({
@@ -40,6 +41,9 @@ const register = asyncHandler(async(req,res) => {
             name: user.name,
             pfp: user.pfp,
             branch: user.branch,
+            description:user.description,
+            likecount:user.likecount,
+            postcount:user.postcount,
             token: generateToken(user._id)
         })
     }
@@ -63,6 +67,9 @@ const login = asyncHandler(async(req,res) => {
             name: user.name,
             pfp: user.pfp,
             branch: user.branch,
+            description:user.description,
+            likecount:user.likecount,
+            postcount:user.postcount,
             token: generateToken(user._id)
         })
     }
@@ -75,12 +82,19 @@ const login = asyncHandler(async(req,res) => {
 // @route   GET /users/me
 // @access  Private/Public
 const getMe = asyncHandler(async(req,res) => {
+
+    const user = await User.findById(req.user.id)
     res.status(200).json({
         id: req.user.id,
         username: req.user.username,
         name: req.user.name,
         pfp: req.user.pfp,
         branch: req.user.branch,
+        description:user.description,
+        likecount:user.likecount,
+        postcount:user.postcount,
+        token: generateToken(user._id)
+
     })
 })
 
@@ -101,8 +115,25 @@ const getUser = asyncHandler(async(req,res) => {
             name: req.user.name,
             pfp: req.user.pfp,
             branch: req.user.branch,
+            description:user.description,
+            likecount:user.likecount,
+            postcount:user.postcount
         })
     }
+})
+
+
+const updateDes = asyncHandler(async(req,res)=>{
+
+    const UpdatedData = await User.findByIdAndUpdate(
+        req.user._id, 
+        {"description":req.body.des},  
+        { new: true,}
+    )
+  
+    
+
+    res.status(200).json(UpdatedData)
 })
 
 
@@ -138,5 +169,6 @@ module.exports = {
     getMe,
     getUser,
     getAllUsers,
+    updateDes
 
 }

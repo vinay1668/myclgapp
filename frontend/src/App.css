@@ -186,9 +186,27 @@ body::-webkit-scrollbar-thumb {
     margin:10px;
   
   }
- .loader{
-   
- }
+  .loader {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid black;
+    width: 40px;
+    height: 40px;  
+    -webkit-animation: spin 1s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+    overflow-x: hidden;
+  }
+
+  /* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg);  }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg);  }
+  100% { transform: rotate(360deg);  }
+}
 
   .titlesection {
     padding-top: 50px;
@@ -350,6 +368,10 @@ body::-webkit-scrollbar-thumb {
     
     
   }
+
+  .messagebuton{
+    display: none;
+  }
   
   
   /* mobile devices */
@@ -365,7 +387,21 @@ body::-webkit-scrollbar-thumb {
       width: 95%;
     }
     .messagepane{
-      display: none;
+      
+    }
+    .messagebuton {
+      display :inline;
+      /* font-size:25px;
+      color:gray;
+      font-weight:800;
+      margin-top:5px */
+    }
+    .chats::-webkit-scrollbar {
+      width: 6px;
+      background-color: #F5F5F5;
+    }
+    .chats::-webkit-scrollbar-thumb {
+      background-color: #DAE0E6;
     }
 
   }
@@ -399,7 +435,11 @@ body::-webkit-scrollbar-thumb {
       margin:auto;
     }
     .messagepane{
-      display: none;
+     
+    }
+    .messagebuton {
+      display: inline;
+
     }
     .sideprofile{
       display: none;
@@ -417,6 +457,13 @@ body::-webkit-scrollbar-thumb {
       overflow-x: hidden;
   
       
+    }
+    .chats::-webkit-scrollbar {
+      width: 6px;
+      background-color: #F5F5F5;
+    }
+    .chats::-webkit-scrollbar-thumb {
+      background-color: #DAE0E6;
     }
 
 
@@ -469,8 +516,11 @@ body::-webkit-scrollbar-thumb {
       margin:auto   
     }
     .messagepane{
-      display: none;
+     
+      
     }
+
+
     .sideprofile{
       display: none;
     }
@@ -485,6 +535,13 @@ body::-webkit-scrollbar-thumb {
       -webkit-animation: spin 1s linear infinite; /* Safari */
       animation: spin 1s linear infinite;
       overflow-x: hidden;
+    }
+    .chats::-webkit-scrollbar {
+      width: 6px;
+      background-color: #F5F5F5;
+    }
+    .chats::-webkit-scrollbar-thumb {
+      background-color: #DAE0E6;
     }
 
     /* Safari */

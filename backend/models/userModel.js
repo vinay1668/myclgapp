@@ -22,7 +22,18 @@ const userSchema = mongoose.Schema({
      },
      branch: {
         type:String,
-
+     },
+     description :{
+        type:String,
+        default: 'guitarist'
+     },
+     postcount:{
+        type:Number,
+        default:0
+     },
+     likecount:{
+        type:Number,
+        default:0
      },
 
 },{timestamps:true})

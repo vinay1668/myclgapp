@@ -49,11 +49,23 @@ function MessageDash() {
   function outsideGroup(){
     setViewing(false);
   }
+  
+  const [width, setWidth]   = useState(window.innerWidth);    
+  const updateDimensions = () => {
+    setWidth(window.innerWidth);
+  }
+
+  useEffect(() => {
+      window.addEventListener("resize", updateDimensions);
+      
+      return () => window.removeEventListener("resize", updateDimensions);
+      
+  }, []);
 
 
 
   return (
-    <div className="messagepane" style={{}}>
+    <div className="" style={{position: width > 1050 ? "fixed":"relative",top:width > 1050 ? "20px":null, right:width > 1050 ? "1%":null, margin:width < 1050 ? "0 auto":null, width: width < 1050 ? "95%":"26%",height:width > 1050 ?"90%":"20%", marginTop: width < 1050 ? "8px":"0",backgroundColor:"#DAE0E6",borderRadius:"8px"}}>
 
         <div style={{height:"50px",borderRadius:"5px",display:"flex",justifyContent:"space-around",backgroundColor:"white"}}>
             

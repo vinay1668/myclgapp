@@ -1,7 +1,7 @@
 import ViewGroup from './ViewGroup';
 import React,{useEffect,useState} from 'react'
 import {useSelector, useDispatch,} from "react-redux"
-import {sendMessage,fetchMessages,appendMessage} from "../../../features/messages/messageSlice.js"
+import {sendMessage,fetchMessages,appendMessage,removeMessages} from "../../../features/messages/messageSlice.js"
 import ScrollableFeed from "react-scrollable-feed"
 import {getGroupMembers} from "../../../features/chat/chatSlice.js"
 import Lottie from "lottie-react";
@@ -48,6 +48,10 @@ function SendMessage({chatDetails,endChat,showGroup}) {
     setDetailsy(chats.find(item => item._id === chatDetails._id) )
     dispatch(fetchMessages(chatDetails._id))
     selectedChatCompare=chatDetails;
+
+    return()=>{
+      dispatch(removeMessages())
+    }
 
 
     },[])
@@ -185,6 +189,7 @@ function messageChange(e){
 
 
  async function sendText() {
+  setDoMessage("")
   // socket.emit('stop typing',chatDetails._id)
   const data ={
     content: doMessage,
@@ -193,7 +198,7 @@ function messageChange(e){
 
   const res =  await dispatch(sendMessage(data));
   socket.emit('new message',res.payload)
-  setDoMessage("")
+  
 }
 
 function trySending(e){
@@ -202,10 +207,25 @@ function trySending(e){
   }
 }
 
+  const [width, setWidth]   = useState(window.innerWidth);
+  const [height, setHeight]   = useState(window.innerHeight);     
+  const updateDimensions = () => {
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight)
+  }
+
+  useEffect(() => {
+      window.addEventListener("resize", updateDimensions);
+      
+      return () => window.removeEventListener("resize", updateDimensions);
+      
+  }, []);
+
+
     
   return (
     
-    <div className = "chats" style={{position:"absolute",marginTop:"6px",backgroundColor:"white",borderRadius:"8px",height:"89%",width:"100%",paddingTop:"2px",overflowY:"auto", borderColor:"white",borderStyle:"solid",borderWidth:"2px"}}>
+    <div className = "chats" style={{position:width > 1050 ?"absolute":"relative",marginTop:"6px",backgroundColor:"white",borderRadius:"8px",height: width > 1050 ?"89%":height*0.8,width:"100%",paddingTop:"2px",overflowY:"auto", borderColor:"white",borderStyle:"solid",borderWidth:"2px"}}>
       <div style={{borderRadius:"8px",height:"90%"}}>
           
           {/* Chat Header */}
@@ -219,9 +239,8 @@ function trySending(e){
           </div>
 
           {/* Real Chatting */}
-
-        <ScrollableFeed style={{height:"100%",marginBottom:"0"}} className='chats'>
-          <div style={{minHeight:"88%",height:"auto", width:"98%",border:"2px solid #DAE0E6",borderRadius:"8px",margin:'0 auto',marginTop:"4px"}}>
+        <ScrollableFeed  style={{height:"100%",marginBottom:"0"}} className="chats">
+          <div style={{minHeight:"88%", height:"auto",width:"98%",border:"2px solid #DAE0E6",borderRadius:"8px",margin:'0 auto',marginTop:"4px"}}>
           
              {messagesList.length > 0 ? (
 
@@ -261,7 +280,7 @@ function trySending(e){
                      }
                      
                     <div style={{fontSize:"13px",fontWeight:"500",color:"#2C3333",lineHeight:"15px",marginBottom: array[index+1] ? "0"  :"30px",display:"flex"}}>
-                        <span style={{width:"310px"}}>{message.content}</span>
+                        <span style={{width: width > 1050 ? width*0.2:width*0.76}}>{message.content}</span>
                       </div>
                   </div>
 
@@ -277,7 +296,7 @@ function trySending(e){
 
                
              
-             ) : (null)}
+             ) : (<div style={{margin:"0 auto",marginTop:"30px"}} className='loader'></div>)}
 
             {/* dynamic typing indicator */}
 

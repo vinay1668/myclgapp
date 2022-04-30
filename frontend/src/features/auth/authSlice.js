@@ -7,7 +7,8 @@ const initialState = {
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: ''
+    message: '',
+    des:{}
 }
 
 //Register User
@@ -37,6 +38,39 @@ export const login = createAsyncThunk('auth/login', async(user,thunkAPI) => {
         return thunkAPI.rejectWithValue(message)
     }
 })
+
+//Updating User Description
+
+
+export const updateDes = createAsyncThunk('auth/updateDes', async(data,thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await authService.updateDes(data,token)
+        
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+
+//Getting current User details
+
+
+export const getMe = createAsyncThunk('auth/getMe', async(_,thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await authService.getMe(token)
+        
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+
+
+
 
 
 export const authSlice = createSlice({
@@ -90,6 +124,39 @@ export const authSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
                 state.user = null
+            })
+
+
+            //Updating User Description
+
+            .addCase(updateDes.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(updateDes.fulfilled,  (state, action) =>{
+                state.isLoading = false
+                state.isSuccess = true
+                state.user = action.payload
+            })
+            .addCase(updateDes.rejected,(state,action) =>{
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+
+            //Getting current User details
+            .addCase(getMe.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getMe.fulfilled,  (state, action) =>{
+                state.isLoading = false
+                state.isSuccess = true
+                state.user = action.payload
+            })
+            .addCase(getMe.rejected,(state,action) =>{
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+                 state.user = null
             })
     },
 })

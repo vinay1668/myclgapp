@@ -41,17 +41,31 @@ function Chats({inGroup,outGroup}) {
         setDoChat(true);
         outGroup();
     }
+    const [width, setWidth]   = useState(window.innerWidth);  
+    const [height, setHeight]   = useState(window.innerHeight);  
+    const updateDimensions = () => {
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight)
+    }
+  
+    useEffect(() => {
+        window.addEventListener("resize", updateDimensions);
+        
+        return () => window.removeEventListener("resize", updateDimensions);
+        
+    }, []);
+  
   
 
   return (
    <>
         { chats.length > 0 && !doChat && !doGroup ? (
-            <div className ="chats" style={{marginTop:"10px",backgroundColor:"#DAE0E6",borderRadius:"8px",minHeight:"60px",height:"auto", maxHeight:"540px",paddingTop:"2px",overflowY:"auto", borderColor:"white",borderStyle:"solid",borderWidth:"2px"}}>
+            <div className ="chats" style={{marginTop:"10px",backgroundColor:"#DAE0E6",borderRadius:"8px",minHeight:"60px",height:"auto", maxHeight: width > 1050 ? "540px":height*0.76,paddingTop:"2px",overflowY:"auto", borderColor:"white",borderStyle:"solid",borderWidth:"2px"}}>
             {chats.map(data => (   
                 <ChatList chat={data} key={data._id} startChat={startChat}/>
             ))}
             </div>
-        ): (null)}
+        ): !doChat && !doGroup ?<div style={{margin:"0 auto",marginTop:"50px"}} className='loader'></div>:(null)}
 
         {doChat ? (
             <SendMessage chatDetails={chatpassed} endChat={endChatting} showGroup={showGroup}/>

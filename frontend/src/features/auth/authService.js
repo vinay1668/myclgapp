@@ -26,6 +26,40 @@ const login = async(userData) => {
     return response.data
 }
 
+// Updating User Description
+
+const updateDes = async(data,token) => {
+      
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.put(API_URL+'updatedes',data,config)
+
+    // const newUser = JSON.parse(localStorage.getItem('user'));
+    // newUser.description = response.data.description;
+
+    // localStorage.setItem('user', JSON.stringify(newUser))
+ 
+    return response.data
+}
+
+
+//Getting current user details
+const getMe = async(token) =>{
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.get(`${API_URL}/me`,config);
+    console.log(response.data);
+    return response.data   
+}
+
+
 // Logout User
 
 const logout = () =>{
@@ -36,6 +70,8 @@ const authService = {
     register,
     logout,
     login,
+    updateDes,
+    getMe
 }
 
 export default authService

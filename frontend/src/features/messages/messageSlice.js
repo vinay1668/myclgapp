@@ -58,6 +58,18 @@ export const fetchMessages = createAsyncThunk('messages/fetchMessages', async(ch
     }
   });
 
+//Removing all the Messages
+  export const removeMessages = createAsyncThunk('messages/removeMessages', async(_, thunkAPI) => {
+    
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        return [];
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+        
+    }
+  });
 
 
 
@@ -128,6 +140,24 @@ export const messageSlice = createSlice ({
                 
             })
             .addCase(appendMessage.rejected, (state,action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+
+            
+            //Removing all the Messages
+            .addCase(removeMessages.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(removeMessages.fulfilled, (state, action) =>{
+                state.isSuccess = true
+                state.isLoading = false
+                state.messagesList =  action.payload
+       
+                
+            })
+            .addCase(removeMessages.rejected, (state,action) => {
                 state.isError = true
                 state.message = action.payload
                 state.isLoading = false

@@ -41,9 +41,10 @@ function ShowModal({changeModel}) {
          dispatch(queryUser(e.target.value))
          }
      }
+     const[err,setErr] = useState(false)
 
      function createGroup(){
-        if(chatName && selectedList.length>0){
+        if(chatName && selectedList.length > 0){
             const data = {
                 name:chatName,
                 users:JSON.stringify(selectedList.map((u) => u.userId) ),
@@ -51,14 +52,44 @@ function ShowModal({changeModel}) {
             }
             dispatch(makeGroup(data));
         }
-        changeModel();
+        if(chatName.length == 0 || selectedList.length == 0){
+            
+            setErr(true)       
+            function greet() {
+                setErr(false)
+            }
+            setInterval(greet, 1000);
+        
+        }
+        
      }
+
+     const [width, setWidth]   = useState(window.innerWidth);  
+     const [height, setHeight]   = useState(window.innerHeight);  
+     const updateDimensions = () => {
+       setWidth(window.innerWidth);
+       setHeight(window.innerHeight)
+     }
+   
+     useEffect(() => {
+         window.addEventListener("resize", updateDimensions);
+         
+         return () => window.removeEventListener("resize", updateDimensions);
+         
+     }, []);
+   
    
   return (
       <>
-      <div style={{position:"absolute",top:"55px",width:"97%",backgroundColor:"#f8f9fa",borderRadius:"8px",margin:"6px",height:"90%"}}>
+      <div style={{position: "absolute",top:"55px",width:"97%",backgroundColor:"#f8f9fa",borderRadius:"8px",margin:"6px",height:"90%"}}>
         <div style={{}}>
              <img src="https://www.redditinc.com/assets/images/site/value_default-open.png"  style={{width:"70px", height:"70px",borderRadius:"50%",marginTop:"15px",marginLeft:"35%",borderColor:"white",border:"solid"}}/>
+             
+             {err ? 
+             <div style={{paddingTop:"20px"}}>
+             <span  style={{zIndex:"65",height:"30px",color:'red',marginLeft:"28%"}}>Please Input Data </span> 
+             </div>
+             :null}
              <div style={{marginTop:"5px"}}>
                  {selectedList.length > 0 ? (
                 <SelectedList list={selectedList} handleClick={deleteMember}/>
@@ -68,9 +99,9 @@ function ShowModal({changeModel}) {
                  )}
                
              </div>
-             <input  style ={{height:"40px", width:"80%",margin:"0 auto", marginTop:"20px"}} className="form-control input-sm search-username" placeholder = "Chat Name" type="text" onChange={(e)=>setChatName(e.target.value)}/> 
+             <input  style ={{height:"40px", width: width > 1050 ? "80%": width*0.8, marginLeft:"20px", marginTop:"20px"}} className="form-control input-sm search-username" placeholder = "Chat Name" type="text" onChange={(e)=>setChatName(e.target.value)}/> 
              <div style={{display:"flex"}}>
-               <input  style ={{height:"40px", width:"80%",margin:"0 auto", marginTop:"20px"}} className="form-control input-sm search-username" placeholder = "Add  Members" type="search" onChange={userChanged}/>
+               <input  style ={{height:"40px", width: width > 1050 ? "80%": width*0.8,marginLeft:"20px" , marginTop:"30px"}} className="form-control input-sm search-username" placeholder = "Add  Members" type="search" onChange={userChanged}/>
                   
              </div>
 
@@ -86,8 +117,8 @@ function ShowModal({changeModel}) {
             ): (null) }
         </div>
 
-        <div style={{marginTop:"20px"}}>
-            <button style={{marginLeft:"55%"}} type="button" class="btn btn-primary" onClick={createGroup}>Create</button>
+        <div style={{marginTop: width > 1050 ? "20px": height*0.02}}>
+            <button style={{marginLeft: width > 1050 ?"55%":width*0.45}} type="button" class="btn btn-primary" onClick={createGroup}>Create</button>
             <button style ={{marginLeft:"10px"}} type="button" class="btn btn-dark" onClick={changeModel}>Cancel</button>
         </div>
 

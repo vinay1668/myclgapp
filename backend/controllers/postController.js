@@ -94,6 +94,7 @@ const getPosts = asyncHandler(async (req,res) => {
                         upvotedBy:"$upvotedBy",
                         downvotedBy:"$downvotedBy",
                         createdAt:"$createdAt",
+                        
                     }
                 },
         
@@ -584,8 +585,15 @@ const createPost = asyncHandler(async (req,res) => {
         pfp: req.user.pfp,
         
     })
-    console.log(req.user.branch);
-
+    const newUser = await User.findOneAndUpdate( 
+        {_id: req.user.id},
+        {
+            $inc: { postcount: 1 } 
+       },
+       {new: true}
+        
+    )
+    
     res.status(200).json(post);
 });
 
@@ -597,6 +605,7 @@ const updatePostVotes = asyncHandler(async (req,res) => {
     
     const postId = req.params.id;
     const post = await Post.findById(req.params.id)
+    
     if(!post) {
         res.status(400)
         throw new Error('Post not found')
@@ -614,9 +623,11 @@ const updatePostVotes = asyncHandler(async (req,res) => {
     //     throw new Error('User not authorized')
     // }
     var updatedPost;
+    var newUser;
     if(req.body.vote == "upvote"){
         const post = await Post.findById(postId);
-        if(post.downvotedBy.includes(req.user.id)){
+        if(post.downvotedBy.includes(req.user.id))
+        {
             updatedPost = await Post.findOneAndUpdate( 
                 {_id: postId},
                 {
@@ -624,9 +635,18 @@ const updatePostVotes = asyncHandler(async (req,res) => {
                     $pull: { downvotedBy: req.user.id },
                     $inc: { votes: 2 } 
                },
+               {new: true}     
+            )
+            newUser = await User.findOneAndUpdate( 
+                {_id: post.user},
+                {
+                    $inc: { likecount: 2 } 
+               },
                {new: true}
                 
             )
+
+
         }
         else {
             if(post.upvotedBy.includes(req.user.id))
@@ -641,8 +661,15 @@ const updatePostVotes = asyncHandler(async (req,res) => {
                         $inc: { votes: 1 } 
                     },
                     {new: true}
-    
-                ) 
+                )
+                newUser = await User.findOneAndUpdate( 
+                    {_id: post.user},
+                    {
+                        $inc: { likecount: 1 } 
+                   },
+                   {new: true}
+                    
+                )
             } 
         }
     }
@@ -656,8 +683,15 @@ const updatePostVotes = asyncHandler(async (req,res) => {
                     $pull: { upvotedBy: req.user.id },
                     $inc: { votes: -2 } 
                 },
-                {new: true}
-             
+                {new: true}   
+            )
+            newUser = await User.findOneAndUpdate( 
+                {_id: post.user},
+                {
+                    $inc: { likecount: -2 } 
+               },
+               {new: true}
+                
             )
         }
         else {
@@ -674,6 +708,14 @@ const updatePostVotes = asyncHandler(async (req,res) => {
                         $inc: { votes: -1 } 
                     },
                     {new: true}
+                )
+                newUser = await User.findOneAndUpdate( 
+                    {_id: post.user},
+                    {
+                        $inc: { likecount: -1 } 
+                   },
+                   {new: true}
+                    
                 )
             }
         }

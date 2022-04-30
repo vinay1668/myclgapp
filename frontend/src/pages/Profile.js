@@ -26,11 +26,12 @@ function Profile() {
                   <div style={{display:"flex",flexDirection:'column',marginTop:"85px"}}>
                     <span style={{ fontSize:"13px",fontWeight:"600"}}>
                        <i style={{ marginRight:"10px"}} class="bi bi-megaphone-fill"></i>
-                       <span style={{marginRight:"10px"}}>580</span>
+                       <span style={{marginRight:"10px"}}>{user.postcount}</span>
                     </span>
+
                     <span style={{ fontSize:"13px",fontWeight:"600",marginTop:"10px"}}>
                         <i style={{ marginRight:"10px"}} class="bi bi-gift-fill"></i>
-                        <span style={{marginRight:"10px"}} >456</span>
+                        <span style={{marginRight:"10px"}} >{user.likecount}</span>
                       </span>
                   </div>
 
@@ -38,11 +39,11 @@ function Profile() {
                 
                   <div style={{paddingTop:"20px",fontWeight:"500",width:"80%",margin:"0 auto",display:"flex"}}>
                      {true ? 
-                     <span>My name is Kim Wexler. I am currently pursuing bachelors of Engineering!</span> : 
+                     <span style={{margin:"0 auto"}}>{user.description}</span> : 
                      <input  style = {{margin:"0 auto",borderTop:"0",borderLeft:"0",borderRight:"0",width:"80%" }} type="email" class="form-control discript" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description" />
                      }
                   
-                     <i style ={{paddingLeft:"5px",marginTop:"5px",zIndex:"55",cursor:"pointer"}}  class="fa fa-solid fa-pen"></i>
+                     
                   </div>
                  
                </div>

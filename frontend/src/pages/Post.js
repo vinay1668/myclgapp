@@ -90,14 +90,25 @@ function Post() {
         parentId:'',
       }))
     }
+    const [width, setWidth]   = useState(window.innerWidth);    
+    const updateDimensions = () => {
+      setWidth(window.innerWidth);
+    }
+  
+    useEffect(() => {
+        window.addEventListener("resize", updateDimensions);
+        
+        return () => window.removeEventListener("resize", updateDimensions);
+        
+    }, []);
 
   return (
       <div style={{paddingBottom:"30px"}}>
-        <Profile />
+        {width > 1050 ? <Profile /> : null}
        <PostItem post={post} alterSizey={alterSizey} />
 
        {/* filter */}
-       <div className="viewcommentbar"style={{backgroundColor:"#DAE0E6"}}>
+       {/* <div className="viewcommentbar"style={{backgroundColor:"#DAE0E6"}}>
        <button name="post" id= 'poste' type="button" class="btn btn-light" style={{margin:"auto",borderRadius:"5px",height: "40px", marginLeft:"0"}}>
           <div class="dropdown">
             <b class="dropdown-toggle" type="button" id="dropdownMenuButton" style={{color:"gray"}} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -111,7 +122,7 @@ function Post() {
             </div> 
           </div>
        </button>
-       </div>
+       </div> */}
 
 
       {comments.length > 0 &&
@@ -132,7 +143,7 @@ function Post() {
       </div> 
     
 
-    <MessageDash />
+    {width > 1050? <MessageDash />:null}
     </div> 
     
   )
