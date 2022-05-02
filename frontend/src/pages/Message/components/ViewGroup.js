@@ -84,6 +84,19 @@ function ViewGroup({details,endGroup}) {
          
          }
      }
+     const [width, setWidth]   = useState(window.innerWidth);  
+     const [height, setHeight]   = useState(window.innerHeight);  
+     const updateDimensions = () => {
+       setWidth(window.innerWidth);
+       setHeight(window.innerHeight)
+     }
+   
+     useEffect(() => {
+         window.addEventListener("resize", updateDimensions);
+         
+         return () => window.removeEventListener("resize", updateDimensions);
+         
+     }, []);
 
 
 
@@ -106,6 +119,8 @@ function ViewGroup({details,endGroup}) {
               }
               dispatch(removeFromGroup(data));
           }
+
+
 
           return(
 
@@ -136,7 +151,7 @@ function ViewGroup({details,endGroup}) {
 
   return (
 
-    <div className = "chats" style={{position:"absolute",marginTop:"6px",backgroundColor:"white",borderRadius:"8px",height:"89%",width:"100%",paddingTop:"2px",overflowY:"auto", borderColor:"white",borderStyle:"solid",borderWidth:"2px"}}>
+    <div className = "chats" style={{position:"absolute",marginTop:"6px",backgroundColor:"white",borderRadius:"8px",height: width > 1050?"89%":height*0.78,width:"100%",paddingTop:"2px",overflowY:"auto", borderColor:"white",borderStyle:"solid",borderWidth:"2px"}}>
     <div style={{borderRadius:"8px",height:"90%",display:"flex",flexDirection:"column"}}>
         
         <img style={{height:"150px",width:"150px",marginLeft:"25%",borderRadius:"50%",marginTop:"10px"}} src={groupMembers.pfp ? groupMembers.pfp : null} />
@@ -163,7 +178,7 @@ function ViewGroup({details,endGroup}) {
         
         {user.id ===  details.groupAdmin._id ? (
             <div>
-            <input style ={{height:"40px", margin:"0 auto", marginTop:"20px",width:"90%",marginBottom:"10px"}} className="form-control input-sm search-username" placeholder = "Add Member" type="search" onChange={userChanged}/> 
+            <input style ={{height:"40px", margin:"auto" ,marginLeft: width > 1050 ? "auto":"20px", marginTop:"20px",width:"90%",marginBottom:"10px"}} className="form-control input-sm search-username" placeholder = "Add Member" type="search" onChange={userChanged}/> 
             
             </div>
         ): (null) }

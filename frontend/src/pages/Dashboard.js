@@ -19,8 +19,11 @@ import { filter } from 'domutils';
 import { createBrowserHistory } from "history";
 import MessageDash from './Message/MessageDash';
 import Profile from './Profile';
-
-
+import { queryHomeUser,emptyUserList } from '../features/chat/chatSlice';
+import HomeSearchResults from './HomeSearchResults';
+import anon from "./images/anon.png"
+import AppProfile from './AppProfile';
+import logo from "./images/newlogo.png";
 
 
 
@@ -40,6 +43,7 @@ function Dashboard() {
         const dispatch = useDispatch()
         const firstTime = true;
         const {user} = useSelector((state) => state.auth);
+        const {homeSearchResults} = useSelector((state) => state.chat);
         const {posts,isLoading,isError,message,isSuccess,paths} = useSelector((state) => state.posts);
         const {limit,skip} = useSelector((state) => state.page);
 
@@ -49,6 +53,7 @@ function Dashboard() {
           imgHash:[],
           videoHash:[],
           fileHash:[],
+          postType:"",
         }) 
         
 
@@ -65,7 +70,7 @@ function Dashboard() {
 
         },[])
         useEffect(() => {
-          console.log(user)
+          //console.log(user)
           if(isError) {
             console.log(message)
           }
@@ -186,6 +191,7 @@ function Dashboard() {
             imgHash:[],
             videoHash:[],
             fileHash:[],
+            postType:"",
 
           });
           setTimeout(function () {
@@ -211,6 +217,7 @@ function Dashboard() {
               imgHash:[],
               videoHash:[],
               fileHash:[],
+              postType:""
             });
             dispatch(getMe())
             
@@ -309,8 +316,8 @@ function Dashboard() {
         }
 
         useEffect(() =>{
-          console.log(skip); 
-          console.log(paths)
+          //console.log(skip); 
+          //console.log(paths)
             if(skip == 0) {
               if(paths !== '/user' ){
                 if(paths !== '/post') {
@@ -320,7 +327,7 @@ function Dashboard() {
                       .catch((e) => {
                         console.log(e)
                       });  
-                    console.log("doing...")
+                    //console.log("doing...")
               }
             }
 
@@ -330,6 +337,62 @@ function Dashboard() {
 
 
         const[showMessageBox,setShowMessageBox] = useState(false);
+        
+
+        // Searching User from Home Screen
+        function searchUserFromHome(user){
+          
+          if(user.length > 0){
+          dispatch(queryHomeUser(user))
+          }
+          else{
+            dispatch(emptyUserList());
+          }
+          
+        
+        }
+        useEffect(()=>{
+           return(()=>{
+             dispatch(emptyUserList())
+           })
+        },[])
+        
+        const[anoni,setAnoni] = useState(false);
+        function toAnon(){
+          setAnoni(!anoni)
+        }
+
+        useEffect(()=>{
+          if(anoni == true){
+            setPosty(prevState => ({
+              ...prevState,
+              postType:"anon",     
+            }))
+          }
+          else{
+            setPosty(prevState => ({
+              ...prevState,
+              postType:"",     
+            }))
+
+          }
+        },[anoni])
+
+        const[showAppProfile,setShowAppProfile]= useState( paths == "/user" || "/post" ? false: true);
+    
+        useEffect(()=>{
+
+         setTimeout(()=>{
+           
+           setShowAppProfile(false)
+         },1500)
+
+        },[])
+
+        
+        //Displaying the searched results in home screen
+        
+
 
 
         //Knowing the width of the screen
@@ -351,14 +414,25 @@ function Dashboard() {
 
 
 
+
+
   return (
-    <>
+
+    <> 
+
+    {showAppProfile ?
+    <div style={{textAlign:"center",verticalAlign:"middle"}}>
+       <img  src={logo} style={{width: width >1050 ?"500px":"400px",height: width > 1050 ? "500px":"400px"}}/>
+    </div> :
+  
+    <div>
 
 
 
     <div className="" >
-     
-    {user && <Profile /> }
+  
+    {user && width>1050 ? <AppProfile /> :null }
+    {user && width > 1050 ? <Profile /> :null }
 
       {/* top profile */}
     
@@ -366,8 +440,19 @@ function Dashboard() {
 
     <div className='topbar' >
         <div className='column' style={{paddingLeft:"10px"}}>
-            <input  style ={{height:"30px", paddingRight:"0px",width:"110px"}} className="form-control input-sm search-username" id="inputsm" placeholder = "Search" type="search"/>
+            <input  style ={{height:"30px", paddingRight:"0px",width:"110px"}} autoComplete="off" className="form-control input-sm search-username" id="inputsm" onChange={(e)=>searchUserFromHome(e.target.value)} placeholder = "Search" type="search"/>
         </div>
+
+        {homeSearchResults.length > 0 ?
+        <div className='chats' style={{position:"absolute",zIndex:"212",top:"50px",marginLeft:"30px",marginTop:"10px",width:"220px", height:"auto",minHeight:"50px",maxHeight:"500px",overflowY:"scroll",borderRadius:"8px",backgroundColor:"#DAE0E6"}}>         
+          {homeSearchResults.map((searchedUser)=>(
+            
+              <HomeSearchResults searchedUser={searchedUser} />  
+          ))}
+         </div>
+         :
+         null
+      }
         
         { width < 1050 ?
         <div className='column'> 
@@ -438,8 +523,11 @@ function Dashboard() {
        
 
     <div className="editcontainer" style={{minHeight:"330px",position:"relative",borderRadius:"10px", marginTop:'5px'}}>
-              <div className="input-group mb-3">
-              <textarea  value={posty.title} style={{height:"40px"}} type="text" className="form-control title-box" placeholder="An interesting title" aria-label="Username" aria-describedby="basic-addon1" onChange={changeHeading} > </textarea>
+              <div className="input-group mb-3" style={{display:"flex"}}>
+              <button type="button"  style={{height:"40px",width:"40px",marginTop:"10px",paddingBottom:"10px",paddingLeft:"5px",paddingTop:"3px",marginLeft:"10px",backgroundColor: anoni ? "grey": null}} class="btn" onClick={toAnon}>
+                <img style={{height:"30px",width:"30px",}} src={anon}/>
+              </button>
+                <textarea  value={posty.title} style={{height:"40px",borderRadius:"3px"}} type="text" className="form-control title-box" placeholder="An interesting title" aria-label="Username" aria-describedby="basic-addon1" onChange={changeHeading} > </textarea>
               </div>
               <div>
               
@@ -556,6 +644,9 @@ function Dashboard() {
     </>
     : <MessageDash />
     }
+
+
+
     </div>
    
   
@@ -564,6 +655,8 @@ function Dashboard() {
 
     
 
+    </div>
+}
     </>
 
   );

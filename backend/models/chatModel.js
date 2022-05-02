@@ -14,6 +14,7 @@ const chatModel = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Message"
     },
+ 
     groupAdmin :{
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
@@ -21,6 +22,12 @@ const chatModel = mongoose.Schema({
     pfp: {
         type:String,
     },
+    // notification:[
+    //     {
+    //     Id:{type:mongoose.Schema.Types.ObjectId},
+    //     count:{type:Number,default:0},
+    //     }
+    // ]
 }
 ,{ timestamps: true})
 

@@ -72,6 +72,7 @@ const fetchChats = asyncHandler(async (req, res) => {
             path: "latestMessage.sender",
             select: "name username pfp",
           });
+          // console.log(results)
           res.status(200).send(results);
         });
     } catch (error) {

@@ -7,6 +7,7 @@ import {BrowserRouter as Router,Switch,useLocation, useNavigate} from "react-rou
 import CommentItem from "../components/commentItem.js";
 import MessageDash from './Message/MessageDash';
 import Profile from './Profile';
+import AppProfile from "./AppProfile.js";
 
 
 
@@ -37,7 +38,7 @@ function Post() {
  
     
     useEffect(() =>{
-      console.log("in post")
+      //console.log("in post")
       dispatch(modifyPaths('/post'));
      
         dispatch(getComment(page));
@@ -105,6 +106,7 @@ function Post() {
   return (
       <div style={{paddingBottom:"30px"}}>
         {width > 1050 ? <Profile /> : null}
+        {width > 1050 ? <AppProfile /> : null}
        <PostItem post={post} alterSizey={alterSizey} />
 
        {/* filter */}

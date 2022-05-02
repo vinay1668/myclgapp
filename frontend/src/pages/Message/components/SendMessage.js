@@ -6,9 +6,10 @@ import ScrollableFeed from "react-scrollable-feed"
 import {getGroupMembers} from "../../../features/chat/chatSlice.js"
 import Lottie from "lottie-react";
 import moment from 'moment';
-import typingico from "./typing.json"
+
 import io from "socket.io-client";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://postyclgapp.herokuapp.com/";
+//"http://localhost:5000"; to run locally
 
 var socket,selectedChatCompare;
 
@@ -197,6 +198,7 @@ function messageChange(e){
   }
 
   const res =  await dispatch(sendMessage(data));
+  // console.log(res.payload)
   socket.emit('new message',res.payload)
   
 }
@@ -206,6 +208,13 @@ function trySending(e){
     sendText();
   }
 }
+const[namei,setNamei] = useState("loader")
+useEffect(()=>{
+   setTimeout(()=>{
+      setNamei('')
+   },5000)
+
+},[])
 
   const [width, setWidth]   = useState(window.innerWidth);
   const [height, setHeight]   = useState(window.innerHeight);     
@@ -296,7 +305,7 @@ function trySending(e){
 
                
              
-             ) : (<div style={{margin:"0 auto",marginTop:"30px"}} className='loader'></div>)}
+             ) : (<div style={{margin:"0 auto",marginTop:"30px"}} className={namei}></div>)}
 
             {/* dynamic typing indicator */}
 

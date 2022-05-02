@@ -49,6 +49,15 @@ const postSchema = mongoose.Schema({
     },
     downvotedBy: {
         type: Array,
+    },
+    postType:{
+        type:String
+    },
+    likecount:{
+        type:Number,
+    },
+    postcount:{
+        type:Number,
     }
 
 },{timestamps:true,})

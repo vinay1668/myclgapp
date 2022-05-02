@@ -92,9 +92,11 @@ const getPosts = asyncHandler(async (req,res) => {
                         fileHash:"$fileHash",
                         votes:"$votes",
                         upvotedBy:"$upvotedBy",
+                        postcount:"$postcount",
+                        likecount:"$likecount",
                         downvotedBy:"$downvotedBy",
-                        createdAt:"$createdAt",
-                        
+
+                        createdAt:"$createdAt",                       
                     }
                 },
         
@@ -126,6 +128,8 @@ const getPosts = asyncHandler(async (req,res) => {
                             votes:"$votes",
                             upvotedBy:"$upvotedBy",
                             downvotedBy:"$downvotedBy",
+                            postcount:"$postcount",
+                            likecount:"$likecount",
                             createdAt:"$createdAt",
                         }
                     },
@@ -164,6 +168,8 @@ const getPosts = asyncHandler(async (req,res) => {
                         votes:"$votes",
                         upvotedBy:"$upvotedBy",
                         downvotedBy:"$downvotedBy",
+                        postcount:"$postcount",
+                        likecount:"$likecount",
                         createdAt:"$createdAt",
                     }
                 },
@@ -196,6 +202,8 @@ const getPosts = asyncHandler(async (req,res) => {
                         votes:"$votes",
                         upvotedBy:"$upvotedBy",
                         downvotedBy:"$downvotedBy",
+                        postcount:"$postcount",
+                        likecount:"$likecount",
                         createdAt:"$createdAt",
                     }
                 },
@@ -577,12 +585,15 @@ const createPost = asyncHandler(async (req,res) => {
         imgHash: req.body.imgHash,
         videoHash: req.body.videoHash,
         fileHash:req.body.fileHash,
+        postType:req.body.postType,
         votes:0,
         user: req.user.id,
         name: req.user.name,
         branch:req.user.branch,
         username:req.user.username,
         pfp: req.user.pfp,
+        postcount:req.user.postcount,
+        likecount:req.user.likecount,
         
     })
     const newUser = await User.findOneAndUpdate( 

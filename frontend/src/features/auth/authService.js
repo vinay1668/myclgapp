@@ -55,7 +55,7 @@ const getMe = async(token) =>{
         }
     }
     const response = await axios.get(`${API_URL}/me`,config);
-    console.log(response.data);
+    //console.log(response.data);
     return response.data   
 }
 

@@ -8,6 +8,7 @@ import PostItem from "../components/postItem";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import MessageDash from './Message/MessageDash';
 import Profile from './Profile';
+import AppProfile from "./AppProfile";
 
 
 function User() {
@@ -119,6 +120,7 @@ function User() {
   return (
       <>
       {width > 1050 ? <Profile /> : null}
+      {width > 1050 ? <AppProfile /> : null}
         <div style={{minHeight:"280px",zIndex:"99",height:'auto',paddingBottom:"30px"}} className='usertopbar'>
         
             <div style={{textAlign:"center", margin:"0 auto"}}>
@@ -136,11 +138,11 @@ function User() {
                   <div style={{display:"flex",flexDirection:'column',marginTop:"85px"}}>
                     <span style={{ fontSize:"13px",fontWeight:"600"}}>
                        <i style={{ marginRight:"10px"}} class="bi bi-megaphone-fill"></i>
-                       <span style={{marginRight:"10px"}}>62</span>
+                       <span style={{marginRight:"10px"}}>{location.state.post.postcount}</span>
                     </span>
                     <span style={{ fontSize:"13px",fontWeight:"600",marginTop:"10px"}}>
                         <i style={{ marginRight:"10px"}} class="bi bi-gift-fill"></i>
-                        <span style={{marginRight:"10px"}} >456</span>
+                        <span style={{marginRight:"10px"}} >{location.state.post.likecount}</span>
                       </span>
                   </div>
 

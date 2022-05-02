@@ -10,9 +10,9 @@ function SearchResultsList({user,handleClick}) {
  function leaved() {
    setHovered(false);
  }
-  useEffect(() => {
+  // useEffect(() => {
 
-  } )
+  // } )
 
   return (
       <>           

@@ -60,9 +60,10 @@ function ChatList({chat,startChat}) {
                     <b style={{marginLeft:"10px",fontSize:"9px",fontWeight:"700",color:"gray"}}>{chat.chatName == "sender" ? otherUser.username : chat.groupAdmin.username}</b>  
                     <h6 style={{marginLeft:"10px",fontSize:"13px"}} >{chat.latestMessage  ? chat.latestMessage.content.length > 40 ? chat.latestMessage.content.slice(0,30):chat.latestMessage.content : null}</h6>
                 </div>  
-                <div className="rounded-circle" style={{minWidth:"25px",height:"25px",marginLeft:"auto",marginRight:"15px",marginTop:'20px',backgroundColor:"#6BCB77",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                {/* Message Notification. need to implement in the backend */}
+                {/* <div className="rounded-circle" style={{minWidth:"25px",height:"25px",marginLeft:"auto",marginRight:"15px",marginTop:'20px',backgroundColor:"#6BCB77",display:"flex",justifyContent:"center",alignItems:"center"}}>
                   <span style={{fontSize:"10px",fontWeight:"700"}}>15</span>
-                </div>
+                </div> */}
             </div>      
         </div>                      
 </>

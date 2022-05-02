@@ -52,7 +52,7 @@ const getPosts = async(page,token) =>{
     }
  
     const response = await axios.post(`${API_URL}/get`,page,config);
-    console.log(response.data);
+    //console.log(response.data);
     return response.data   
 }
 
@@ -66,7 +66,7 @@ const getUserPosts = async(page,token) =>{
         }
     }
     const response = await axios.post(`${API_URL}/getMe`,page,config);
-    console.log(response.data);
+    //console.log(response.data);
     return response.data   
 }
 

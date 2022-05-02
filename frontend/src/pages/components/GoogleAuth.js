@@ -33,7 +33,11 @@ function GoogleAuth({details,setUser}) {
                 <GoogleLogin
                     clientId={clientId}
                     render={renderProps => (
-                        <p style={{fontSize:"16px",color:"blue",cursor:"pointer"}} onClick={renderProps.onClick} disabled={renderProps.disabled}>Register with google</p>
+                        // <p style={{fontSize:"16px",color:"blue",cursor:"pointer"}} onClick={renderProps.onClick} disabled={renderProps.disabled}>Register with google</p>
+                        <button  type='submit' className= "btn btn-primary text-box" onClick={renderProps.onClick} >
+                            <i class="fa-brands fa-google"></i>
+                            <span style={{marginLeft:"15px"}}>Register With Google</span>
+                        </button>
                       )}
                     onSuccess={onLoginSuccess}
                     onFailure={onLoginFailure}

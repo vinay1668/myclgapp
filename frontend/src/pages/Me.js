@@ -10,6 +10,7 @@ import PostItem from "../components/postItem";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import MessageDash from './Message/MessageDash';
 import Profile from './Profile';
+import AppProfile from "./AppProfile";
 
 
 function User() {
@@ -26,7 +27,7 @@ function User() {
       });
 
     useEffect(() => {
-      console.log(user)
+      //console.log(user)
       dispatch(modifyPaths('/user'));   
        if(!location.state.scrolled){
          dispatch(getUserPosts(page))
@@ -70,7 +71,7 @@ function User() {
       const[edit,setEdit] = useState(false)
       function editDiscription() {
         setEdit(true)
-        console.log(edit)
+        //console.log(edit)
       }
       function saveToDb(){
         if(description !==""){
@@ -139,6 +140,7 @@ function User() {
   return (
       <>
       {width > 1050 ? <Profile /> : null}
+      {width > 1050 ? <AppProfile/>:null}
         <div style={{minHeight:"280px",zIndex:"99",height:'auto',paddingBottom:"30px"}} className='usertopbar'>
         
             <div style={{textAlign:"center", margin:"0 auto"}}>

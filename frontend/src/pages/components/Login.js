@@ -5,6 +5,8 @@ import {toast} from 'react-toastify'
 import {login,reset} from "../../features/auth/authSlice.js"
 import Spinner from '../../components/Spinner.js'
 import GoogleAuth from './GoogleAuth'
+import logo from "../images/newlogo.png"
+
 
 function Login({addDetails}) {
 
@@ -55,8 +57,8 @@ function Login({addDetails}) {
     }
 
     const userData = {
-      username,
-      password,
+      username: username.toUpperCase(),
+      password: password,
     }
     dispatch(login(userData));
 
@@ -66,11 +68,50 @@ function Login({addDetails}) {
 
   }
 
+
+  const[showAppProfile,setShowAppProfile]= useState(true);
+  useEffect(()=>{
+   setTimeout(()=>{
+     setShowAppProfile(false)
+   },1500)
+
+  },[])
+
+  //Knowing the width of the screen
+
+  const [width, setWidth]   = useState(window.innerWidth);    
+  const updateDimensions = () => {
+    setWidth(window.innerWidth);
+  }
+
+  useEffect(() => {
+      window.addEventListener("resize", updateDimensions);
+      
+      return () => window.removeEventListener("resize", updateDimensions);
+      
+  }, []);
+
+
+
+
+
   if(isLoading) {
     return <Spinner />
   }
+
+
   return    (
+    <div>
+
+    {showAppProfile ? 
+      <div style={{textAlign:"center",verticalAlign:"middle"}}>
+       <img  src={logo} style={{width: width >1050 ?"500px":"400px",height: width > 1050 ? "500px":"400px"}}/>
+      </div>
+       
+       :
+    
        <>
+       
   <section className='heading'>
     <h1 style={{marginTop:"100px",display:"inline-block",paddingRight:"20px"}}>
     <i className="fa fa-sign-in" aria-hidden="true"></i>
@@ -90,6 +131,7 @@ function Login({addDetails}) {
           value={username}
           placeholder='Enter your username'
           onChange={onChange}
+          autoComplete="off"
           required
         />
       </div>
@@ -123,6 +165,8 @@ function Login({addDetails}) {
     </form>
   </section>
 </>
+}
+</div>
 )
 }
 

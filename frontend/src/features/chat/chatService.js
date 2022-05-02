@@ -15,6 +15,18 @@ const searchUser = async(user,token) =>{
     return response.data   
 }
 
+// searching User from HomeScreen
+const searchHomeUser = async(user,token) =>{
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.get(`/users/searchuser?search=${user}`, config);
+    return response.data   
+}
+
 // Accessing the chat from SearchBox
 
 const accessChat = async(userId,token) =>{
@@ -130,6 +142,7 @@ const chatService = {
   removeFromGroup,
   addToGroup,
   getGroupMembers,
+  searchHomeUser,
 }
 
 export default chatService;

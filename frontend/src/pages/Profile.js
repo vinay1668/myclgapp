@@ -7,7 +7,7 @@ function Profile() {
     const {user} = useSelector((state) => state.auth);
   
     return (
-      <div className='sideprofile' style={{position:"fixed", top:"35%",left:"0",paddingRight:"200px",marginLeft:"0",width:"50%"}}>
+      <div className='sideprofile' style={{position:"fixed", top:"28%",left:"10px",paddingRight:"200px",marginLeft:"0",width:"50%"}}>
     
     <div className='usertopbar' style={{marginLeft:"10px",width:"60%",zIndex:"99",height:'335px',paddingBottom:"30px"}} >
         

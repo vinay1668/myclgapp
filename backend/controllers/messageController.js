@@ -47,7 +47,55 @@ const sendMessage = asyncHandler(async (req, res) => {
       select: "name username pfp",
     });
 
-    await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
+    const resp = await Chat.findByIdAndUpdate(
+      {_id:req.body.chatId}, 
+      { latestMessage: message },  
+                                            
+      );
+      
+
+      //updating notifications....
+
+      //await Chat.find({_id:req.body.chatId});
+      // var chatUsers=chatDetails.users;
+      // var otherUser;
+      // chatUsers.map((user)=>{
+      //   console.log(user)
+      // })
+      
+      // const details = await Chat.findById({_id:req.body.chatId});
+      // const notiCount = details.notification[0] ? details.notification[0].count + 1 : 0
+      // console.log(notiCount)
+      // const notiId = details.notification[0] ? details.notification[0]._id:null
+  
+      // if(notiId !==null){
+      //   await Chat.findByIdAndUpdate(
+      //     {_id:req.body.chatId},
+      //     {$pull:{notification:notiId}},
+      //     {$push :{
+      //       "notification":{
+      //         Id:req.body.chatId,
+      //         count: notiCount ,
+      //       }
+      //     }
+    
+      //     }
+      //     )
+      // }
+      // else{
+      //   await Chat.findByIdAndUpdate(
+      //     {_id:req.body.chatId},
+      //     {$push :{
+      //       "notification":{
+      //         Id:req.body.chatId,
+      //         count: 1,
+      //       }
+      //     }
+    
+      //     },
+      //     )
+
+      // }
 
     res.json(message);
   } catch (error) {

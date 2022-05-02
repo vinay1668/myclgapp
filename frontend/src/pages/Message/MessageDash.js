@@ -11,11 +11,13 @@ function MessageDash() {
   
   const dispatch = useDispatch()
   const {searchResults} = useSelector((state) => state.chat);
+  const {user}  = useSelector((state) => state.auth);
 
-  const [user,setUser] = useState('')
+  const [useri,setUseri] = useState('')
   const[showModal,setShowModal] = useState(false);
   const[viewing,setViewing] = useState(false);
   
+
   useEffect(() =>{
     if(!showModal){
       dispatch(emptyUserList())
@@ -27,15 +29,20 @@ function MessageDash() {
 
 
   function userChanged(e){
-     setUser(e.target.value);
+    if(e == ""){
+      setUseri("")
+    }else {
+     setUseri(e.target.value);
+    }
   }
   
   function searchUser(){
+    userChanged("");
     if(searchResults.length>0){
       dispatch(emptyUserList())     
     }
     else{
-      dispatch(queryUser(user))
+      dispatch(queryUser(useri))
     }
   }
   function createChat(userId,username){
@@ -70,12 +77,16 @@ function MessageDash() {
         <div style={{height:"50px",borderRadius:"5px",display:"flex",justifyContent:"space-around",backgroundColor:"white"}}>
             
             <div style={{display:"flex"}}>
-              <input onChange= {userChanged} style ={{height:"40px", margin:"2px", marginTop:"5px",width:"120px"}} className="form-control input-sm search-username" id="inputsm" placeholder = "Search" type="search"/>
+              <input value={useri} onChange= {userChanged}autoComplete="off" style ={{height:"40px", margin:"2px", marginTop:"5px",width:"120px"}} className="form-control input-sm search-username" id="inputsm" placeholder = "Search" type="search"/>
               <button onClick={searchUser} type="button" class="btn btn-light" style ={{height:"40px", marigin:"2px", marginTop:"5px",width:"40px"}} >
                {searchResults.length > 0 && !showModal  && !viewing ? (<i class="fa-solid fa-xmark"></i>) :(<i class="fa fa-solid fa-magnifying-glass"></i>) } 
               </button>
             </div>
-            <button style ={{height:"40px", marigin:"2px", marginTop:"5px",width:"120px"}} type="button" class="btn btn-light" onClick={()=>setShowModal(true)}>New Group +</button>   
+
+            { /\d/.test(user && user.username) && (user && user.username !== "19X55A0501") ? 
+               null:
+              <button style ={{height:"40px", marigin:"2px", marginTop:"5px",width:"120px"}} type="button" class="btn btn-light" onClick={()=>setShowModal(true)}>New Group +</button>   
+            }
         
         </div>
         

@@ -41,6 +41,14 @@ function Chats({inGroup,outGroup}) {
         setDoChat(true);
         outGroup();
     }
+    
+    const[namei,setNamei] = useState("loader")
+    useEffect(()=>{
+       setTimeout(()=>{
+          setNamei('')
+       },5000)
+
+    },[])
     const [width, setWidth]   = useState(window.innerWidth);  
     const [height, setHeight]   = useState(window.innerHeight);  
     const updateDimensions = () => {
@@ -65,7 +73,7 @@ function Chats({inGroup,outGroup}) {
                 <ChatList chat={data} key={data._id} startChat={startChat}/>
             ))}
             </div>
-        ): !doChat && !doGroup ?<div style={{margin:"0 auto",marginTop:"50px"}} className='loader'></div>:(null)}
+        ): !doChat && !doGroup ?<div style={{margin:"0 auto",marginTop:"50px"}} className={namei}></div>:(null)}
 
         {doChat ? (
             <SendMessage chatDetails={chatpassed} endChat={endChatting} showGroup={showGroup}/>

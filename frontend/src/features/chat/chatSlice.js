@@ -3,6 +3,7 @@ import chatService from "./chatService.js";
 
 const initialState = {
     searchResults:[],
+    homeSearchResults:[],
     chats:[],
     groupMembers:[],
     isError: false,
@@ -16,6 +17,20 @@ export const queryUser = createAsyncThunk('chat/searchUser', async(user, thunkAP
     try {
         const token = thunkAPI.getState().auth.user.token;
         return await chatService.searchUser(user,token)
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+        
+    }
+  });
+
+  //Searching User from HomeScreen
+
+  export const queryHomeUser = createAsyncThunk('chat/searchHomeUser', async(user, thunkAPI) => {
+    
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await chatService.searchHomeUser(user,token)
     } catch (error) {
       const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
@@ -174,6 +189,24 @@ export const addToGroup = createAsyncThunk('chat/addToGroup', async(data, thunkA
                   state.message = action.payload
                   state.isLoading = false
               })
+              
+
+            //searching Users!!!
+            .addCase(queryHomeUser.pending, (state) => {
+                state.isLoading = true
+
+            })
+            .addCase(queryHomeUser.fulfilled, (state, action) =>{
+                state.isSuccess = true
+                state.isLoading = false
+                state.homeSearchResults= action.payload;
+                
+            })
+            .addCase(queryHomeUser.rejected, (state,action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
 
             //Emptying user List
 
@@ -185,6 +218,7 @@ export const addToGroup = createAsyncThunk('chat/addToGroup', async(data, thunkA
                 state.isSuccess = true
                 state.isLoading = false
                 state.searchResults = action.payload;
+                state.homeSearchResults = action.payload;
             })
             .addCase(emptyUserList.rejected, (state,action) => {
                 state.isError = true

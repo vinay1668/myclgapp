@@ -72,12 +72,13 @@ function PostItem({post,alterSizey,userScrolled}) {
            to={"/user"}
            state= {{post:post,scrolled:userScrolled}}
            
-          style={{textDecoration:"none",color:"black"}} >
-          <img className="dummy" style={{borderRadius:"50%", width:"40px"}} src={post.pfp} />
+          style={{textDecoration:"none",color:"black",pointerEvents:post.postType == "anon"? "none": null}} >
+          <img className="dummy" style={{borderRadius:"50%", width:"40px"}} src={post.postType !== "anon" ? post.pfp: "https://i.redd.it/snoovatar/avatars/492ef9a1-4c32-4df8-af26-13199a86314c.png"} />
           <div className='dummy'>
-              <span style={{fontSize:"13px",display:"block"}} className='name'><b>{post.username}</b> </span>
-              <span style={{fontSize:"10px",display:"block"}} className="rollno" ><b>{post.name}</b></span>
+              <span style={{fontSize:"13px",display:"block"}} className='name'><b>{post.postType == "anon" ? 'Anonyomous': post.username}</b> </span>
+              <span style={{fontSize:"10px",display:"block"}} className="rollno" ><b>{post.postType == "anon" ? 'Anonyomous': post.name}</b></span>
           </div>
+          
           <div className='dummy' style={{position:"absolute",top:"0",marginTop:"4px",right:"30px"}}>
               <span style={{fontSize:"10px",color:"gray",fontWeight:"bold"}}>
               {moment(post.createdAt).fromNow()} 
@@ -163,13 +164,13 @@ function PostItem({post,alterSizey,userScrolled}) {
     </div>
   {/* bootom section */}
     <div  className='commentsection'>
-        <i  style ={{color: post.upvoted ? "red" : "gray",paddingLeft:"10px"}}
+        <i  style ={{color: post.upvoted ? "red" : "gray",paddingLeft:"10px",cursor:"pointer"}}
                 className="fa-solid fa-arrow-up fa-lg dum"
                 onClick={upvoteClicked}
                 >
             </i>
             <span>{post.votes}</span>
-            <i style ={{color: post.downvoted ? "#3293db" : "gray", marginTop:"-13px"}}
+            <i style ={{color: post.downvoted ? "#3293db" : "gray", marginTop:"-13px",cursor:"pointer"}}
                 className="fa-solid fa-arrow-down fa-lg dum"
                 onClick={downvoteClicked }
                 >
@@ -184,7 +185,7 @@ function PostItem({post,alterSizey,userScrolled}) {
               
                   style={{textDecoration:"none",color:"black"}} >
                   <span className='dum'>
-                    <i onClick={()=>alterSizey()} style={{display:"inline-block", paddingInline:"5px",color:"gray"}} className="fa-regular fa-message fa-lg"></i>
+                    <i onClick={()=>alterSizey()} style={{display:"inline-block", paddingInline:"5px",color:"gray",cursor:"pointer"}} className="fa-regular fa-message fa-lg"></i>
                     <span style={{display:"inline-block", paddingInline:"5px",color:"gray"}}>{post.commentCount}</span>
                   </span>
               </Link>
