@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema({
      },
      description :{
         type:String,
-        default: 'guitarist'
+        default: 'Member Of SREC'
      },
      postcount:{
         type:Number,
