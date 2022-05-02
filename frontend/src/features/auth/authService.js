@@ -54,8 +54,24 @@ const getMe = async(token) =>{
             Authorization: `Bearer ${token}`
         }
     }
-    const response = await axios.get(`${API_URL}/me`,config);
-    //console.log(response.data);
+    const response = await axios.get(`/users/me`,config);
+    
+    return response.data   
+}
+
+
+//Getting other user details
+const getOtherUser = async(id,token) =>{
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    const dummy={
+        id:id
+    }
+    const response = await axios.post(`/users/otheruser`,dummy,config);
+    
     return response.data   
 }
 
@@ -71,7 +87,8 @@ const authService = {
     logout,
     login,
     updateDes,
-    getMe
+    getMe,
+    getOtherUser,
 }
 
 export default authService

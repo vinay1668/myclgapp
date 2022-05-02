@@ -5,6 +5,7 @@ import {useSelector, useDispatch, batch} from "react-redux"
 
 function Profile() {
     const {user} = useSelector((state) => state.auth);
+    const {currentUser} = useSelector((state) => state.auth);
   
     return (
       <div className='sideprofile' style={{position:"fixed", top:"28%",left:"10px",paddingRight:"200px",marginLeft:"0",width:"50%"}}>
@@ -26,12 +27,12 @@ function Profile() {
                   <div style={{display:"flex",flexDirection:'column',marginTop:"85px"}}>
                     <span style={{ fontSize:"13px",fontWeight:"600"}}>
                        <i style={{ marginRight:"10px"}} class="bi bi-megaphone-fill"></i>
-                       <span style={{marginRight:"10px"}}>{user.postcount}</span>
+                       <span style={{marginRight:"10px"}}>{currentUser ? currentUser.postcount:null}</span>
                     </span>
 
                     <span style={{ fontSize:"13px",fontWeight:"600",marginTop:"10px"}}>
                         <i style={{ marginRight:"10px"}} class="bi bi-gift-fill"></i>
-                        <span style={{marginRight:"10px"}} >{user.likecount}</span>
+                        <span style={{marginRight:"10px"}} >{currentUser ? currentUser.likecount:null}</span>
                       </span>
                   </div>
 
@@ -39,7 +40,7 @@ function Profile() {
                 
                   <div style={{paddingTop:"20px",fontWeight:"500",width:"80%",margin:"0 auto",display:"flex"}}>
                      {true ? 
-                     <span style={{margin:"0 auto"}}>{user.description}</span> : 
+                     <span style={{margin:"0 auto"}}>{currentUser? currentUser.description:null}</span> : 
                      <input  style = {{margin:"0 auto",borderTop:"0",borderLeft:"0",borderRight:"0",width:"80%" }} type="email" class="form-control discript" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description" />
                      }
                   

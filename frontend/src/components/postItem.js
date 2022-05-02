@@ -58,6 +58,10 @@ function PostItem({post,alterSizey,userScrolled}) {
 
         // dispatch(updatePostVotes(post._id, voteData))
       }
+      // useEffect(()=>{
+      //   if(post.postType=='anon')
+      //   console.log(post.postType);
+      // },[post])
 
 
 

@@ -8,7 +8,7 @@ router.get('/searchuser', protect,getAllUsers);
 router.post('/',register)
 router.post('/login',login)
 router.get('/me',protect, getMe)
-router.get('/:id', protect, getUser)
+router.post('/otheruser', protect, getUser)
 router.put('/updatedes',protect,updateDes)
 
 module.exports = router

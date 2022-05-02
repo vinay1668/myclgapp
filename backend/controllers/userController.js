@@ -103,7 +103,8 @@ const getMe = asyncHandler(async(req,res) => {
 // @access  Private/Public
 
 const getUser = asyncHandler(async(req,res) => {
-    const user = await User.findById(req.params.id)
+    
+    const user = await User.findById(req.body.id)
     if(!user) {
         res.status(400)
         throw new Error('user not found')

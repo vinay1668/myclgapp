@@ -1,6 +1,10 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import postService from "./postService.js"
 
+
+
+
+
 const initialState = {
     posts: [],
     userPosts:[],
@@ -156,6 +160,7 @@ export const postSlice = createSlice ({
                     state.isLoading = true
                 })
                 .addCase(getUserPosts.fulfilled, (state, action) =>{
+               
                     state.isSuccess = true
                     state.isLoading = false
                     state.userPosts.push(...action.payload)

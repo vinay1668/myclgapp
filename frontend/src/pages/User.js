@@ -7,6 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PostItem from "../components/postItem";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import MessageDash from './Message/MessageDash';
+import { getOtherUser } from "../features/auth/authSlice";
 import Profile from './Profile';
 import AppProfile from "./AppProfile";
 
@@ -15,8 +16,17 @@ function User() {
     const location = useLocation();
     const dispatch = useDispatch()
 
-    const {user} = useSelector((state) => state.auth);
+    const {otherUser} = useSelector((state) => state.auth);
     const {userPosts} = useSelector((state) => state.posts);
+
+    useEffect(()=>{
+      dispatch(getOtherUser(location.state.post.user));
+    },[])
+    // useEffect(()=>{
+    //   console.log(otherUser)
+    // },[otherUser])
+
+
     const [page,setPage] = useState({
         limit: 20,
         skip: 0,
@@ -25,6 +35,8 @@ function User() {
       });
 
     useEffect(() => {
+      
+      //console.log(location.state.post.user);
       dispatch(modifyPaths('/user'));   
        if(!location.state.scrolled){
          dispatch(getUserPosts(page))
@@ -138,11 +150,11 @@ function User() {
                   <div style={{display:"flex",flexDirection:'column',marginTop:"85px"}}>
                     <span style={{ fontSize:"13px",fontWeight:"600"}}>
                        <i style={{ marginRight:"10px"}} class="bi bi-megaphone-fill"></i>
-                       <span style={{marginRight:"10px"}}>{location.state.post.postcount}</span>
+                       <span style={{marginRight:"10px"}}>{otherUser ? otherUser.postcount:null}</span>
                     </span>
                     <span style={{ fontSize:"13px",fontWeight:"600",marginTop:"10px"}}>
                         <i style={{ marginRight:"10px"}} class="bi bi-gift-fill"></i>
-                        <span style={{marginRight:"10px"}} >{location.state.post.likecount}</span>
+                        <span style={{marginRight:"10px"}} >{otherUser ? otherUser.likecount:null}</span>
                       </span>
                   </div>
 
@@ -150,7 +162,7 @@ function User() {
                 
                   <div style={{paddingTop:"20px",fontWeight:"500",width:"80%",margin:"0 auto",display:"flex"}}>
                      {!edit ? 
-                     <span style={{margin:"0 auto",paddingLeft:"20px"}}>My name is Kim Wexler. </span> : 
+                     <span style={{margin:"0 auto",paddingLeft:"20px"}}>{otherUser?otherUser.description:null}</span> : 
                      <input  style = {{margin:"0 auto",borderTop:"0",borderLeft:"0",borderRight:"0",width:"80%" }} type="email" class="form-control discript" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description" />
                      }
                   
@@ -209,8 +221,10 @@ function User() {
     }
     >
           {userPosts.map((post,index) => (
-            <PostItem key ={index} post={post}  />
-          ))}
+           post.postType !== "anon" ?
+            <PostItem key ={index} post={post}  /> : null
+          )
+          )}
     </InfiniteScroll>
 
 

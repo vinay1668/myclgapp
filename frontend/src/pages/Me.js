@@ -13,11 +13,13 @@ import Profile from './Profile';
 import AppProfile from "./AppProfile";
 
 
+
 function User() {
     const location = useLocation();
     const dispatch = useDispatch()
 
     const {user} = useSelector((state) => state.auth);
+    const { currentUser} = useSelector((state) => state.auth);
     const {userPosts} = useSelector((state) => state.posts);
     const [page,setPage] = useState({
         limit: 20,
@@ -25,9 +27,13 @@ function User() {
         id:user.id,
         type:'New',
       });
+    
+    // useEffect(()=>{
+    //   console.log(currentUser)
+    // },[currentUser])
 
     useEffect(() => {
-      //console.log(user)
+       dispatch(getMe());
       dispatch(modifyPaths('/user'));   
        if(!location.state.scrolled){
          dispatch(getUserPosts(page))
@@ -81,7 +87,6 @@ function User() {
           dispatch(updateDes(data))
           setEdit(false)
           dispatch(getMe());
-
         }
 
       }
@@ -158,11 +163,11 @@ function User() {
                   <div style={{display:"flex",flexDirection:'column',marginTop:"85px"}}>
                     <span style={{ fontSize:"13px",fontWeight:"600"}}>
                        <i style={{ marginRight:"10px"}} class="bi bi-megaphone-fill"></i>
-                       <span style={{marginRight:"10px"}}>{user.postcount}</span>
+                       <span style={{marginRight:"10px"}}>{currentUser ? currentUser.postcount:null}</span>
                     </span>
                     <span style={{ fontSize:"13px",fontWeight:"600",marginTop:"10px"}}>
                         <i style={{ marginRight:"10px"}} class="bi bi-gift-fill"></i>
-                        <span style={{marginRight:"10px"}} >{user.likecount}</span>
+                        <span style={{marginRight:"10px"}} >{currentUser? currentUser.likecount:null}</span>
                       </span>
                   </div>
 
@@ -170,7 +175,7 @@ function User() {
                 
                   <div style={{paddingTop:"20px",fontWeight:"500",width:"80%",margin:"0 auto",display:"flex"}}>
                      {!edit ? 
-                     <span style={{margin:"0 auto",paddingLeft:"20px"}}>{user.description}</span> : 
+                     <span style={{margin:"0 auto",paddingLeft:"20px"}}>{currentUser? currentUser.description:null}</span> : 
                      <input  style = {{margin:"0 auto",borderTop:"0",borderLeft:"0",borderRight:"0",width:"80%" }} type="email" class="form-control discript" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description" onChange={(e)=>setDescription(e.target.value)}/>
                      }
                   

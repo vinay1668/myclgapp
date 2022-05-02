@@ -112,7 +112,7 @@ function Dashboard() {
             if(paths !== '/user' ){
               if(paths !== '/post') {
             dispatch(getPosts({limit:page.limit, skip:skip, branch:page.branch, type:page.type, feed: page.feed}))
-            console.log(skip) 
+            //console.log(skip) 
               }
             }     
            }
