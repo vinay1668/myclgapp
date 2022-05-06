@@ -90,21 +90,21 @@ populated as soon as you start entering something in search box (shown in the be
 On the left side of the Top bar, you can see your profile and the logout button. By clicking on the logout button, you will be logged out of this web application.When
 you click on you profile icon you will be redirected to your profile page where all your posts can be viewed at the same page.
 
+In the Post section, you can post either the text or other media but the title for the post is must. You can post image, video or file by clicking on the corresponding button. If you click on buttons other than Post, this will show up. Then you can upload the required file or image from your machine.
 
+![pr8](https://user-images.githubusercontent.com/68241977/167210342-4ff32b1c-e01a-4b14-a79f-09b64ecbc70b.png)
 
+You can choose to be anonyomous if you want by clicking on the incognito icon. If this icons is selected the post will anonyomous (no name and username will be showed in the post) and if not selected the post will be a normal one. As shown below,
 
+![pr9](https://user-images.githubusercontent.com/68241977/167210849-cae87506-f6cf-439e-8434-53652b800e50.png)
 
+After you completely edited your post, click on the post button to post and discard to destroy the post. One can post multiple images, videos, files or any combinations of these.
 
+### Post 
 
+![pr10](https://user-images.githubusercontent.com/68241977/167211738-90831725-8e0c-4520-9344-12d9e2a1f3b6.png)
 
-
-
-
-
-
-
-
-
+The post consists of username and name along with you the profile picture of the person who posted it. Then the title of the post and the actual content.By clicking on the profile icons or username you will be redirected to the profile page of that particular user. One can upvote or downvote the post. The upvote is the uparrow and the downvote is the downarrow. The aggregate count of that post is displayed in the middle. There is a comment icon besides votes and a number that denotes the number of comments for that post.When clicked on the comment icon you will be redirected to the comment page of that post.
 
 
 
