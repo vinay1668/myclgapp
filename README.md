@@ -1,6 +1,13 @@
 
 # MyClgApp
 
+<div>
+   <img src="https://user-images.githubusercontent.com/68241977/167244119-24a5968b-b80d-466e-97fa-db9f53d1777c.png" height="300px" width ="400px" />
+</div>
+
+
+
+
 MyClgApp is a Forum specifically designed for my college (My final year project)
 Uses MongoDB for storing text and IPFS for images,videos,files and the correspondng Hash will be storing in MongoDB
 Uses Socket.io for real time communication.
