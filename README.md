@@ -14,6 +14,9 @@ Uses Socket.io for real time communication.
   
 ## Demo
 
+https://myclgapp.herokuapp.com/
+
+
 ![Pr1](https://user-images.githubusercontent.com/68241977/167200467-fe7c8fe6-7310-4a08-bed6-314b33fd656e.png)
 
 
@@ -73,8 +76,8 @@ After successful registration, you will be redirected to the Homepage of the app
 
 ![Pr1](https://user-images.githubusercontent.com/68241977/167203008-9c5fb70a-ffb5-4d95-bfca-2ae78caa1996.png)
 
-On the left side, you can see your profile which consists of your username, name, branch and description about you which can be editer.
-Along with you profile there exists your total posts and the aggregate votes of all your posts. On right side, there is a chat pane which is used for either one to one
+On the left side, you can see your profile which consists of your username, name, branch and description about you which can be edited.
+Along with you profile there exists your count of total posts and the aggregate votes of all your posts. On right side, there is a chat pane which is used for either one to one
 or group interaction. The middle section consists of Editor for post, filters, and the actual posts.
 
 
@@ -124,7 +127,7 @@ The post consists of username and name along with you the profile picture of the
 
 ![pr23](https://user-images.githubusercontent.com/68241977/167242401-eaf212dc-c74f-490b-b2c5-1624920c09a3.png)
 
-A specific profile page exists for each individual user where all the details of that user will be displayed including all the posts he made starting from the dawn.(There is no delete option for deleting the posts). And even these posts can be filtered using NEW, OLD, TOP and YY/MM (data) which again can be very helpful as the posts and users increases. One can go to their profile page by clicking on the profile icon at the top. One can go to other profiles by clicking on the profile icons of other users ( normally appears along with the post)
+A specific profile page exists for each individual user where all the details of that user will be displayed including all the posts he made starting from the dawn.(There is no delete option for deleting the posts). And even these posts can be filtered using NEW, OLD, TOP and YY/MM (date) which again can be very helpful as the posts and users increases. One can go to their profile page by clicking on the profile icon at the top. One can go to other profiles by clicking on the profile icons of other users ( normally appears along with the post)
 
 ![pr25](https://user-images.githubusercontent.com/68241977/167243338-3bc0570f-8597-48cf-af65-d95eb650c259.png)
 
@@ -135,7 +138,7 @@ There exists a seperate page for the comment section. One can go to the comment 
 
 ![pr27](https://user-images.githubusercontent.com/68241977/167243563-0bd86c80-90fd-4efb-a612-71a3cca59a52.png)
 
-One can comment on any particular post or you can even give comment to a comment ( a subcomment). I implemented 2 Dimensional commenting system.( Initially I wanted to implement it using Tress where there is a multiple nesting of comments i.e., you can give comment to any comment even to sub comment. This kind of feature is most common on forums). One can upvote or downvote any comment just like in posts.
+One can comment on any particular post or you can even give comment to a comment ( a subcomment). I implemented 2 Dimensional commenting system.( Initially I wanted to implement it using Trees where there is a multiple nesting of comments i.e., you can give comment to any comment even to sub comment. This kind of feature is most common on forums). One can upvote or downvote any comment just like in posts.
 
 
 ### One to One chat
