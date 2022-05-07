@@ -100,11 +100,42 @@ You can choose to be anonyomous if you want by clicking on the incognito icon. I
 
 After you completely edited your post, click on the post button to post and discard to destroy the post. One can post multiple images, videos, files or any combinations of these.
 
+
+### Filters
+
+The feed can changed by the user by using the filters available like New, HOT, ALL, CSE, ECE, EEE, MEC, Top (all time, this week, this month, this year). The users can
+even filter by date that is, the feed will start from that particular date. The users can use any combination of these filtes. As you can see the data is very much
+organized here and one can retrieve any specific information. This is a very useful features. These filtes makes this application stand out from other social media applications.
+
+![pr20](https://user-images.githubusercontent.com/68241977/167241094-b6ea4e9f-fb46-45b7-8188-63cd3809986a.png)
+
+There also exists students feed and faculty feed filter. Students feed consists of posts only related to the students and the same applies to the faculty feed.
+
+
+
+
 ### Post 
 
 ![pr10](https://user-images.githubusercontent.com/68241977/167211738-90831725-8e0c-4520-9344-12d9e2a1f3b6.png)
 
 The post consists of username and name along with you the profile picture of the person who posted it. Then the title of the post and the actual content.By clicking on the profile icons or username you will be redirected to the profile page of that particular user. One can upvote or downvote the post. The upvote is the uparrow and the downvote is the downarrow. The aggregate count of that post is displayed in the middle. There is a comment icon besides votes and a number that denotes the number of comments for that post.When clicked on the comment icon you will be redirected to the comment page of that post.
+
+### Profile Page
+
+![pr23](https://user-images.githubusercontent.com/68241977/167242401-eaf212dc-c74f-490b-b2c5-1624920c09a3.png)
+
+A specific profile page exists for each individual user where all the details of that user will be displayed including all the posts he made starting from the dawn.(There is no delete option for deleting the posts). And even these posts can be filtered using NEW, OLD, TOP and YY/MM (data) which again can be very helpful as the posts and users increases. One can go to their profile page by clicking on the profile icon at the top. One can go to other profiles by clicking on the profile icons of other users ( normally appears along with the post)
+
+![pr25](https://user-images.githubusercontent.com/68241977/167243338-3bc0570f-8597-48cf-af65-d95eb650c259.png)
+
+
+### Comment Page
+
+There exists a seperate page for the comment section. One can go to the comment section by clicking on the comment icon which appears along with the post.
+
+![pr27](https://user-images.githubusercontent.com/68241977/167243563-0bd86c80-90fd-4efb-a612-71a3cca59a52.png)
+
+One can comment on any particular post or you can even give comment to a comment ( a subcomment). I implemented 2 Dimensional commenting system.( Initially I wanted to implement it using Tress where there is a multiple nesting of comments i.e., you can give comment to any comment even to sub comment. This kind of feature is most common on forums). One can upvote or downvote any comment just like in posts.
 
 
 ### One to One chat
@@ -128,6 +159,10 @@ There also exists Group chats where many users can interact at once. But these g
 
 One can see the group name, members and the Admin. If you are the admin you can add users and delete users.
 
+
+### Group Chat
+
+- [@vinay1668](https://github.com/vinay1668)
 
 
 
