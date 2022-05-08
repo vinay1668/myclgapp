@@ -170,7 +170,8 @@ There also exists Group chats where many users can interact at once. But these g
 One can see the group name, members and the Admin. If you are the admin you can add users and delete users.
 
 
-### Group Chat
+
+### Made By
 
 - [@vinay1668](https://github.com/vinay1668)
 
